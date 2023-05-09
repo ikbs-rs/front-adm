@@ -4,8 +4,8 @@ const AppFooter = () => {
     return (
         <div className="layout-footer">
             <div>
-                <img src="assets/layout/images/logo-roma.svg" alt="roma-layout" />
-                <p>Premium PrimeReact Application Template</p>
+                <img src="assets/layout/images/logo-ikbs.svg" alt="IKBS" />
+                <p>IKBS Solutions</p>
             </div>
             <div className="footer-icons">
                 <button type="button" className="p-link">

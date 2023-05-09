@@ -9,31 +9,14 @@ import AppConfig from './AppConfig';
 import AppMenu from './AppMenu';
 import AppRightMenu from './AppRightMenu';
 
-import Dashboard from './components/Dashboard';
-import FormLayoutDemo from './components/FormLayoutDemo';
-import InputDemo from './components/InputDemo';
-import FloatLabelDemo from './components/FloatLabelDemo';
-import InvalidStateDemo from './components/InvalidStateDemo';
-import ButtonDemo from './components/ButtonDemo';
-import TableDemo from './components/TableDemo';
-import ListDemo from './components/ListDemo';
-import TreeDemo from './components/TreeDemo';
-import PanelDemo from './components/PanelDemo';
-import OverlayDemo from './components/OverlayDemo';
-import MediaDemo from './components/MediaDemo';
-import MenuDemo from './components/MenuDemo';
-import MessagesDemo from './components/MessagesDemo';
-import FileDemo from './components/FileDemo';
-import ChartDemo from './components/ChartDemo';
-import MiscDemo from './components/MiscDemo';
-import Documentation from './components/Documentation';
+import UserGrp from './components/Dashboard';
+import User from './components/FormLayoutDemo';
+import Roll from './components/InputDemo';
+import Action from './components/FloatLabelDemo';
+import DbParameter from './components/InvalidStateDemo';
+import Message from './components/ButtonDemo';
+import DbmsErr from './components/TableDemo';
 import IconsDemo from './utilities/IconsDemo';
-import BlocksDemo from './components/BlocksDemo';
-import CrudDemo from './pages/CrudDemo';
-import CalendarDemo from './pages/CalendarDemo';
-import TimelineDemo from './pages/TimelineDemo';
-import Invoice from './pages/Invoice';
-import Help from './pages/Help';
 import EmptyPage from './pages/EmptyPage';
 
 import PrimeReact from 'primereact/api';
@@ -43,6 +26,7 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import './App.scss';
+import env from "./configs/env"
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -66,120 +50,31 @@ const App = () => {
     const location = useLocation();
     const inlineUserRef = useRef();
 
-    const menu = [
+    const menu = [  
         {
-            label: 'Favorites',
-            icon: 'pi pi-fw pi-home',
-            items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
-        },
-        {
-            label: 'UI Kit',
+            label: 'Access permission',
             icon: 'pi pi-fw pi-star-fill',
             items: [
-                { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/formlayout' },
-                { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/input' },
-                { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', to: '/floatlabel' },
-                { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', to: '/invalidstate' },
-                { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/button', class: 'rotated-icon' },
-                { label: 'Table', icon: 'pi pi-fw pi-table', to: '/table' },
-                { label: 'List', icon: 'pi pi-fw pi-list', to: '/list' },
-                { label: 'Tree', icon: 'pi pi-fw pi-share-alt', to: '/tree' },
-                { label: 'Panel', icon: 'pi pi-fw pi-tablet', to: '/panel' },
-                { label: 'Overlay', icon: 'pi pi-fw pi-clone', to: '/overlay' },
-                { label: 'Media', icon: 'pi pi-fw pi-image', to: '/media' },
-                { label: 'Menu', icon: 'pi pi-fw pi-bars', to: '/menu' },
-                { label: 'Message', icon: 'pi pi-fw pi-comment', to: '/messages' },
-                { label: 'File', icon: 'pi pi-fw pi-file', to: '/file' },
-                { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', to: '/chart' },
-                { label: 'Misc', icon: 'pi pi-fw pi-circle-off', to: '/misc' }
+                { label: 'User groups', icon: 'pi pi-fw pi-id-card', to: '/usergrp' },
+                { label: 'Users', icon: 'pi pi-users', to: '/user' },
+                { label: 'Rolls', icon: 'pi pi-fw pi-bookmark', to: '/roll' },
+                { label: 'Actions', icon: 'pi pi-map-marker', to: '/action' }
             ]
         },
         {
-            label: 'PrimeBlocks',
+            label: 'Settings',
             icon: 'pi pi-prime',
             items: [
-                { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', to: '/blocks', badge: 'NEW' },
-                { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: 'https://www.primefaces.org/primeblocks-react', target: '_blank' }
+                { label: 'DB parameters', icon: 'pi pi-database', to: '/dbparameter' },
+                { label: 'Messages', icon: 'pi pi-fw pi-clone', to: '/message' },
+                { label: 'DBMS errors', icon: 'pi pi-fw pi-exclamation-triangle', to: '/dbmserr' }
             ]
         },
         {
-            label: 'Utilities',
+            label: 'Module selection',
             icon: 'pi pi-fw pi-compass',
             items: [
-                { label: 'Icons', icon: 'pi pi-fw pi-prime', to: '/icons' },
-                { label: 'PrimeFlex', icon: 'pi pi-fw pi-desktop', url: 'https://www.primefaces.org/primeflex', target: '_blank' }
-            ]
-        },
-        {
-            label: 'Pages',
-            icon: 'pi pi-fw pi-copy',
-            items: [
-                { label: 'Crud', icon: 'pi pi-fw pi-pencil', to: '/crud' },
-                { label: 'Calendar', icon: 'pi pi-fw pi-calendar-plus', to: '/calendar' },
-                { label: 'Timeline', icon: 'pi pi-fw pi-calendar', to: '/timeline' },
-                { label: 'Landing', icon: 'pi pi-fw pi-globe', url: 'assets/pages/landing.html', target: '_blank' },
-                { label: 'Login', icon: 'pi pi-fw pi-sign-in', to: '/login' },
-                { label: 'Error', icon: 'pi pi-fw pi-exclamation-triangle', to: '/error' },
-                { label: '404', icon: 'pi pi-fw pi-times', to: '/notfound' },
-                { label: 'Access Denied', icon: 'pi pi-fw pi-ban', to: '/access' },
-                { label: 'Empty', icon: 'pi pi-fw pi-clone', to: '/empty' }
-            ]
-        },
-        {
-            label: 'Hierarchy',
-            icon: 'pi pi-fw pi-sitemap',
-            items: [
-                {
-                    label: 'Submenu 1',
-                    icon: 'pi pi-fw pi-sign-in',
-                    items: [
-                        {
-                            label: 'Submenu 1.1',
-                            icon: 'pi pi-fw pi-sign-in',
-                            items: [
-                                { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-sign-in' },
-                                { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-sign-in' },
-                                { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-sign-in' }
-                            ]
-                        },
-                        {
-                            label: 'Submenu 1.2',
-                            icon: 'pi pi-fw pi-sign-in',
-                            items: [{ label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-sign-in' }]
-                        }
-                    ]
-                },
-                {
-                    label: 'Submenu 2',
-                    icon: 'pi pi-fw pi-sign-in',
-                    items: [
-                        {
-                            label: 'Submenu 2.1',
-                            icon: 'pi pi-fw pi-sign-in',
-                            items: [
-                                { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-sign-in' },
-                                { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-sign-in' }
-                            ]
-                        },
-                        {
-                            label: 'Submenu 2.2',
-                            icon: 'pi pi-fw pi-sign-in',
-                            items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-sign-in' }]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            label: 'Start',
-            icon: 'pi pi-fw pi-download',
-            items: [
-                { label: 'Docs', icon: 'pi pi-fw pi-file', to: '/documentation' },
-                {
-                    label: 'Buy Now',
-                    icon: 'pi pi-fw pi-money-bill',
-                    command: () => window.open('https://www.primefaces.org/store', '_blank')
-                }
+                { label: 'Back', icon: 'pi pi-sign-out', url: `${env.START_URL}` }
             ]
         }
     ];
@@ -436,7 +331,7 @@ const App = () => {
 
             <AppRightMenu rightPanelMenuActive={rightPanelMenuActive} onRightMenuClick={onRightMenuClick}></AppRightMenu>
 
-            <div className="layout-menu-container" onClick={onMenuClick}>
+            <div className="layout-menu-container" onClick={onMenuClick} >
                 {inlineUser && (
                     <div className="layout-profile">
                         <button type="button" className="p-link layout-profile-button" onClick={onInlineUserClick}>
@@ -482,32 +377,15 @@ const App = () => {
             <div className="layout-main">
                 <div className="layout-content">
                     <Routes>
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path="/formlayout" element={<FormLayoutDemo />} />
-                        <Route path="/input" element={<InputDemo />} />
-                        <Route path="/floatlabel" element={<FloatLabelDemo />} />
-                        <Route path="/invalidstate" element={<InvalidStateDemo />} />
-                        <Route path="/button" element={<ButtonDemo />} />
-                        <Route path="/table" element={<TableDemo />} />
-                        <Route path="/list" element={<ListDemo />} />
-                        <Route path="/tree" element={<TreeDemo />} />
-                        <Route path="/panel" element={<PanelDemo />} />
-                        <Route path="/overlay" element={<OverlayDemo />} />
-                        <Route path="/media" element={<MediaDemo />} />
-                        <Route path="/menu/*" element={<MenuDemo />} />
-                        <Route path="/messages" element={<MessagesDemo />} />
-                        <Route path="/file" element={<FileDemo />} />
-                        <Route path="/chart" element={<ChartDemo />} />
-                        <Route path="/blocks" element={<BlocksDemo />} />
-                        <Route path="/misc" element={<MiscDemo />} />
+                        <Route path="/" element={<EmptyPage />} />
+                        <Route path="/usergrp" element={<UserGrp />} />
+                        <Route path="/user" element={<User />} />
+                        <Route path="/roll" element={<Roll />} />
+                        <Route path="/action" element={<Action />} />
+                        <Route path="/dbparameter" element={<DbParameter />} />
+                        <Route path="/message" element={<Message />} />
+                        <Route path="/dbmserr" element={<DbmsErr />} />
                         <Route path="/icons" element={<IconsDemo />} />
-                        <Route path="/crud" element={<CrudDemo />} />
-                        <Route path="/timeline" element={<TimelineDemo />} />
-                        <Route path="/calendar" element={<CalendarDemo />} />
-                        <Route path="/invoice" element={<Invoice />} />
-                        <Route path="/help" element={<Help />} />
-                        <Route path="/empty" element={<EmptyPage />} />
-                        <Route path="/documentation" element={<Documentation />} />
                     </Routes>
                 </div>
 

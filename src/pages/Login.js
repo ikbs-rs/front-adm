@@ -4,6 +4,7 @@ import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import env from "../configs/env"
 
 export const Login = () => {
     const [checked, setChecked] = useState(false);
@@ -12,6 +13,7 @@ export const Login = () => {
     const handleButtoClick = (parameter) => {
         // Ovde nedostaje kod za logovanje
         let isLoggedIn = true;
+        console.log("**************16**************")
         const usernameInput = document.getElementById("input").value; // Koristimo document.getElementById da bismo dohvatili vrijednost polja Username
         const passwordInput = document.getElementById("password-input").value; // Koristimo document.getElementById da bismo dohvatili vrijednost polja Password
         
@@ -19,27 +21,29 @@ export const Login = () => {
           username: usernameInput,
           password: passwordInput
         };
-
-        // axios
-        // .post("http://localhost:8302/adm/services/sign/in", requestData)
-        // .then((response) => {
-        //   isLoggedIn = response.status === 200; // Ako je status 200, isLoggedIn će biti true
+        console.log("**************24**************")
+        axios
+        .post(`${env.JWT_BACK_URL}/adm/services/sign/in`, requestData)
+        .then((response) => {
+          isLoggedIn = response.status === 200; // Ako je status 200, isLoggedIn će biti true
            if (isLoggedIn) {
              //TODO idi na pocetnu stranicu
-             console.log("if")
-             localStorage.setItem('jwtToken', 'OK');
+             localStorage.setItem('token', response.data.token);
+             localStorage.setItem('refreshToken', response.data.refreshToken);
              navigate('/');
            } else {
              //TODO vrati se na login
-             console.log("else")
              navigate('/login');
            }
-        // })
-        // .catch((error) => {
-        //   console.error(error);
-        //   isLoggedIn = false; // Ako se dogodila pogreška, isLoggedIn će biti false
-        //   //TODO vrati se na login
-        // });        
+        })
+        .catch((error) => {
+            navigate('/login');
+        })
+        .catch((error) => {
+            console.error(error);
+            isLoggedIn = false; // Ako se dogodila pogreška, isLoggedIn će biti false
+            //TODO vrati se na login
+          });        
     }    
 
     return (
