@@ -1,17 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { classNames } from 'primereact/utils';
-import { AdmActionService } from "../../service/model/AdmActionService";
+import { AdmDbmsErrService } from "../../service/model/AdmDbmsErrService";
 import './index.css';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
 
-const AdmAction = (props) => {
-    console.log("ulaz", props.admAction)
-    const [dropdownItem, setDropdownItem] = useState(null);
-    const [dropdownItems, setDropdownItems] = useState(null);
-    const [admAction, setAdmAction] = useState(props.admAction);
+const AdmDbmsErr = (props) => {
+    const [admDbmsErr, setAdmDbmsErr] = useState(props.admDbmsErr);
     const [submitted, setSubmitted] = useState(false);
 
     const toast = useRef(null);
@@ -20,30 +16,17 @@ const AdmAction = (props) => {
         { name: 'No', code: '0' }
     ];
 
-    useEffect(() => {
-        setDropdownItem(findDropdownItemByCode(props.admAction.valid));
-    }, []);
-
-    const findDropdownItemByCode = (code) => {
-        return items.find((item) => item.code === code) || null;
-    };
-
-
-    useEffect(() => {
-        setDropdownItems(items);
-    }, []);
-
     const handleCancelClick = () => {
         props.setVisible(false);
     };
 
     const handleCreateClick = async () => {
         try {
-            setSubmitted(true);            
-                const admActionService = new AdmActionService();
-                const data = await admActionService.postAdmAction(admAction);
-                admAction.id = data
-                props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
+            setSubmitted(true);
+            const admDbmsErrService = new AdmDbmsErrService();
+            const data = await admDbmsErrService.postAdmDbmsErr(admDbmsErr);
+            admDbmsErr.id = data
+            props.handleDialogClose({ obj: admDbmsErr, dbmsErrTip: props.dbmsErrTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -58,9 +41,9 @@ const AdmAction = (props) => {
     const handleSaveClick = async () => {
         try {
             setSubmitted(true);
-            const admActionService = new AdmActionService();
-            await admActionService.putAdmAction(admAction);
-            props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
+            const admDbmsErrService = new AdmDbmsErrService();
+            await admDbmsErrService.putAdmDbmsErr(admDbmsErr);
+            props.handleDialogClose({ obj: admDbmsErr, dbmsErrTip: props.dbmsErrTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -75,9 +58,9 @@ const AdmAction = (props) => {
     const handleDeleteClick = async () => {
         try {
             setSubmitted(true);
-            const admActionService = new AdmActionService();
-            await admActionService.deleteAdmAction(admAction);
-            props.handleDialogClose({ obj: admAction, actionTip: 'DELETE' });
+            const admDbmsErrService = new AdmDbmsErrService();
+            await admDbmsErrService.deleteAdmDbmsErr(admDbmsErr);
+            props.handleDialogClose({ obj: admDbmsErr, dbmsErrTip: 'DELETE' });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -91,18 +74,13 @@ const AdmAction = (props) => {
 
     const onInputChange = (e, type, name) => {
         let val = ''
-        if (type === "options") {
-            setDropdownItem(e.value);
-            val = (e.target && e.target.value && e.target.value.code) || '';
-        } else {
-            val = (e.target && e.target.value) || '';
-        }
+        val = (e.target && e.target.value) || '';
 
-        let _admAction = { ...admAction };
+        let _admDbmsErr = { ...admDbmsErr };
         console.log("onInputChange", val)
-        _admAction[`${name}`] = val;
+        _admDbmsErr[`${name}`] = val;
 
-        setAdmAction(_admAction);
+        setAdmDbmsErr(_admDbmsErr);
     };
 
     return (
@@ -114,35 +92,22 @@ const AdmAction = (props) => {
                         <div className="field col-12 md:col-6">
                             <label htmlFor="code">Code</label>
                             <InputText id="code" autoFocus
-                                value={admAction.code} onChange={(e) => onInputChange(e, "text", 'code')}
+                                value={admDbmsErr.code} onChange={(e) => onInputChange(e, "text", 'code')}
                                 required
-                                className={classNames({ 'p-invalid': submitted && !admAction.code })}
+                                className={classNames({ 'p-invalid': submitted && !admDbmsErr.code })}
                             />
-                            {submitted && !admAction.code && <small className="p-error">Code is required.</small>}
+                            {submitted && !admDbmsErr.code && <small className="p-error">Code is required.</small>}
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="text">Text</label>
                             <InputText
                                 id="text"
-                                value={admAction.text} onChange={(e) => onInputChange(e, "text", 'text')}
+                                value={admDbmsErr.text} onChange={(e) => onInputChange(e, "text", 'text')}
                                 required
-                                className={classNames({ 'p-invalid': submitted && !admAction.text })}
+                                className={classNames({ 'p-invalid': submitted && !admDbmsErr.text })}
                             />
-                            {submitted && !admAction.text && <small className="p-error">Text is required.</small>}
+                            {submitted && !admDbmsErr.text && <small className="p-error">Text is required.</small>}
                         </div>
-                        <div className="field col-12 md:col-3">
-                            <label htmlFor="valid">Valid</label>
-                            <Dropdown id="valid"
-                                value={dropdownItem}
-                                options={dropdownItems}
-                                onChange={(e) => onInputChange(e, "options", 'valid')}
-                                required
-                                optionLabel="name"
-                                placeholder="Select One"
-                                className={classNames({ 'p-invalid': submitted && !admAction.valid })}
-                            />
-                            {submitted && !admAction.valid && <small className="p-error">Valid is required.</small>}
-                        </div>                        
                     </div>
 
                     <div className="flex flex-wrap gap-1">
@@ -157,7 +122,7 @@ const AdmAction = (props) => {
                         ) : null}
                         <div className="flex-grow-1"></div>
                         <div className="flex flex-wrap gap-1">
-                            {(props.actionTip === 'CREATE') ? (
+                            {(props.dbmsErrTip === 'CREATE') ? (
                                 <Button
                                     label="Create"
                                     icon="pi pi-check"
@@ -166,7 +131,7 @@ const AdmAction = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.actionTip !== 'CREATE') ? (
+                            {(props.dbmsErrTip !== 'CREATE') ? (
                                 <Button
                                     label="Save"
                                     icon="pi pi-check"
@@ -175,7 +140,7 @@ const AdmAction = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.actionTip !== 'CREATE') ? (
+                            {(props.dbmsErrTip !== 'CREATE') ? (
                                 <Button
                                     label="Delete"
                                     icon="pi pi-trash"
@@ -192,4 +157,4 @@ const AdmAction = (props) => {
     );
 };
 
-export default AdmAction;
+export default AdmDbmsErr;

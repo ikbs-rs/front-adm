@@ -9,13 +9,13 @@ import AppConfig from './AppConfig';
 import AppMenu from './AppMenu';
 import AppRightMenu from './AppRightMenu';
 
-import UserGrp from './components/Dashboard';
+import UserGrp from './components/model/admUserGrpL';
 import User from './components/model/admAction';
 import Roll from './components/InputDemo';
 import Action from './components/model/admActionL';
-import DbParameter from './components/InvalidStateDemo';
-import Message from './components/ButtonDemo';
-import DbmsErr from './components/TableDemo';
+import DbParameter from './components/model/admDbParameterL';
+import Message from './components/model/admMessageL';
+import DbmsErr from './components/model/admDbmsErrL';
 import IconsDemo from './utilities/IconsDemo';
 import EmptyPage from './pages/EmptyPage';
 

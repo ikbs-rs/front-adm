@@ -1,17 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { classNames } from 'primereact/utils';
-import { AdmActionService } from "../../service/model/AdmActionService";
+import { AdmMessageService } from "../../service/model/AdmMessageService";
 import './index.css';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
 
-const AdmAction = (props) => {
-    console.log("ulaz", props.admAction)
-    const [dropdownItem, setDropdownItem] = useState(null);
-    const [dropdownItems, setDropdownItems] = useState(null);
-    const [admAction, setAdmAction] = useState(props.admAction);
+const AdmMessage = (props) => {
+    const [admMessage, setAdmMessage] = useState(props.admMessage);
     const [submitted, setSubmitted] = useState(false);
 
     const toast = useRef(null);
@@ -20,19 +17,6 @@ const AdmAction = (props) => {
         { name: 'No', code: '0' }
     ];
 
-    useEffect(() => {
-        setDropdownItem(findDropdownItemByCode(props.admAction.valid));
-    }, []);
-
-    const findDropdownItemByCode = (code) => {
-        return items.find((item) => item.code === code) || null;
-    };
-
-
-    useEffect(() => {
-        setDropdownItems(items);
-    }, []);
-
     const handleCancelClick = () => {
         props.setVisible(false);
     };
@@ -40,10 +24,10 @@ const AdmAction = (props) => {
     const handleCreateClick = async () => {
         try {
             setSubmitted(true);            
-                const admActionService = new AdmActionService();
-                const data = await admActionService.postAdmAction(admAction);
-                admAction.id = data
-                props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
+                const admMessageService = new AdmMessageService();
+                const data = await admMessageService.postAdmMessage(admMessage);
+                admMessage.id = data
+                props.handleDialogClose({ obj: admMessage, messageTip: props.messageTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -58,9 +42,9 @@ const AdmAction = (props) => {
     const handleSaveClick = async () => {
         try {
             setSubmitted(true);
-            const admActionService = new AdmActionService();
-            await admActionService.putAdmAction(admAction);
-            props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
+            const admMessageService = new AdmMessageService();
+            await admMessageService.putAdmMessage(admMessage);
+            props.handleDialogClose({ obj: admMessage, messageTip: props.messageTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -75,9 +59,9 @@ const AdmAction = (props) => {
     const handleDeleteClick = async () => {
         try {
             setSubmitted(true);
-            const admActionService = new AdmActionService();
-            await admActionService.deleteAdmAction(admAction);
-            props.handleDialogClose({ obj: admAction, actionTip: 'DELETE' });
+            const admMessageService = new AdmMessageService();
+            await admMessageService.deleteAdmMessage(admMessage);
+            props.handleDialogClose({ obj: admMessage, messageTip: 'DELETE' });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -91,18 +75,13 @@ const AdmAction = (props) => {
 
     const onInputChange = (e, type, name) => {
         let val = ''
-        if (type === "options") {
-            setDropdownItem(e.value);
-            val = (e.target && e.target.value && e.target.value.code) || '';
-        } else {
             val = (e.target && e.target.value) || '';
-        }
 
-        let _admAction = { ...admAction };
+        let _admMessage = { ...admMessage };
         console.log("onInputChange", val)
-        _admAction[`${name}`] = val;
+        _admMessage[`${name}`] = val;
 
-        setAdmAction(_admAction);
+        setAdmMessage(_admMessage);
     };
 
     return (
@@ -114,35 +93,22 @@ const AdmAction = (props) => {
                         <div className="field col-12 md:col-6">
                             <label htmlFor="code">Code</label>
                             <InputText id="code" autoFocus
-                                value={admAction.code} onChange={(e) => onInputChange(e, "text", 'code')}
+                                value={admMessage.code} onChange={(e) => onInputChange(e, "text", 'code')}
                                 required
-                                className={classNames({ 'p-invalid': submitted && !admAction.code })}
+                                className={classNames({ 'p-invalid': submitted && !admMessage.code })}
                             />
-                            {submitted && !admAction.code && <small className="p-error">Code is required.</small>}
+                            {submitted && !admMessage.code && <small className="p-error">Code is required.</small>}
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="text">Text</label>
                             <InputText
                                 id="text"
-                                value={admAction.text} onChange={(e) => onInputChange(e, "text", 'text')}
+                                value={admMessage.text} onChange={(e) => onInputChange(e, "text", 'text')}
                                 required
-                                className={classNames({ 'p-invalid': submitted && !admAction.text })}
+                                className={classNames({ 'p-invalid': submitted && !admMessage.text })}
                             />
-                            {submitted && !admAction.text && <small className="p-error">Text is required.</small>}
-                        </div>
-                        <div className="field col-12 md:col-3">
-                            <label htmlFor="valid">Valid</label>
-                            <Dropdown id="valid"
-                                value={dropdownItem}
-                                options={dropdownItems}
-                                onChange={(e) => onInputChange(e, "options", 'valid')}
-                                required
-                                optionLabel="name"
-                                placeholder="Select One"
-                                className={classNames({ 'p-invalid': submitted && !admAction.valid })}
-                            />
-                            {submitted && !admAction.valid && <small className="p-error">Valid is required.</small>}
-                        </div>                        
+                            {submitted && !admMessage.text && <small className="p-error">Text is required.</small>}
+                        </div>                       
                     </div>
 
                     <div className="flex flex-wrap gap-1">
@@ -157,7 +123,7 @@ const AdmAction = (props) => {
                         ) : null}
                         <div className="flex-grow-1"></div>
                         <div className="flex flex-wrap gap-1">
-                            {(props.actionTip === 'CREATE') ? (
+                            {(props.messageTip === 'CREATE') ? (
                                 <Button
                                     label="Create"
                                     icon="pi pi-check"
@@ -166,7 +132,7 @@ const AdmAction = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.actionTip !== 'CREATE') ? (
+                            {(props.messageTip !== 'CREATE') ? (
                                 <Button
                                     label="Save"
                                     icon="pi pi-check"
@@ -175,7 +141,7 @@ const AdmAction = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.actionTip !== 'CREATE') ? (
+                            {(props.messageTip !== 'CREATE') ? (
                                 <Button
                                     label="Delete"
                                     icon="pi pi-trash"
@@ -192,4 +158,4 @@ const AdmAction = (props) => {
     );
 };
 
-export default AdmAction;
+export default AdmMessage;

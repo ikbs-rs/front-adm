@@ -1,37 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { classNames } from 'primereact/utils';
-import { AdmActionService } from "../../service/model/AdmActionService";
+import { AdmDbParameterService } from "../../service/model/AdmDbParameterService";
 import './index.css';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
 
-const AdmAction = (props) => {
-    console.log("ulaz", props.admAction)
-    const [dropdownItem, setDropdownItem] = useState(null);
-    const [dropdownItems, setDropdownItems] = useState(null);
-    const [admAction, setAdmAction] = useState(props.admAction);
+const AdmDbParameter = (props) => {
+    const [admDbParameter, setAdmDbParameter] = useState(props.admDbParameter);
     const [submitted, setSubmitted] = useState(false);
 
     const toast = useRef(null);
-    const items = [
-        { name: 'Yes', code: '1' },
-        { name: 'No', code: '0' }
-    ];
-
-    useEffect(() => {
-        setDropdownItem(findDropdownItemByCode(props.admAction.valid));
-    }, []);
-
-    const findDropdownItemByCode = (code) => {
-        return items.find((item) => item.code === code) || null;
-    };
-
-
-    useEffect(() => {
-        setDropdownItems(items);
-    }, []);
 
     const handleCancelClick = () => {
         props.setVisible(false);
@@ -39,11 +19,11 @@ const AdmAction = (props) => {
 
     const handleCreateClick = async () => {
         try {
-            setSubmitted(true);            
-                const admActionService = new AdmActionService();
-                const data = await admActionService.postAdmAction(admAction);
-                admAction.id = data
-                props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
+            setSubmitted(true);
+            const admDbParameterService = new AdmDbParameterService();
+            const data = await admDbParameterService.postAdmDbParameter(admDbParameter);
+            admDbParameter.id = data
+            props.handleDialogClose({ obj: admDbParameter, dbParameterTip: props.dbParameterTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -58,9 +38,9 @@ const AdmAction = (props) => {
     const handleSaveClick = async () => {
         try {
             setSubmitted(true);
-            const admActionService = new AdmActionService();
-            await admActionService.putAdmAction(admAction);
-            props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
+            const admDbParameterService = new AdmDbParameterService();
+            await admDbParameterService.putAdmDbParameter(admDbParameter);
+            props.handleDialogClose({ obj: admDbParameter, dbParameterTip: props.dbParameterTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -75,9 +55,9 @@ const AdmAction = (props) => {
     const handleDeleteClick = async () => {
         try {
             setSubmitted(true);
-            const admActionService = new AdmActionService();
-            await admActionService.deleteAdmAction(admAction);
-            props.handleDialogClose({ obj: admAction, actionTip: 'DELETE' });
+            const admDbParameterService = new AdmDbParameterService();
+            await admDbParameterService.deleteAdmDbParameter(admDbParameter);
+            props.handleDialogClose({ obj: admDbParameter, dbParameterTip: 'DELETE' });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -91,18 +71,13 @@ const AdmAction = (props) => {
 
     const onInputChange = (e, type, name) => {
         let val = ''
-        if (type === "options") {
-            setDropdownItem(e.value);
-            val = (e.target && e.target.value && e.target.value.code) || '';
-        } else {
-            val = (e.target && e.target.value) || '';
-        }
+        val = (e.target && e.target.value) || '';
 
-        let _admAction = { ...admAction };
+        let _admDbParameter = { ...admDbParameter };
         console.log("onInputChange", val)
-        _admAction[`${name}`] = val;
+        _admDbParameter[`${name}`] = val;
 
-        setAdmAction(_admAction);
+        setAdmDbParameter(_admDbParameter);
     };
 
     return (
@@ -114,35 +89,39 @@ const AdmAction = (props) => {
                         <div className="field col-12 md:col-6">
                             <label htmlFor="code">Code</label>
                             <InputText id="code" autoFocus
-                                value={admAction.code} onChange={(e) => onInputChange(e, "text", 'code')}
+                                value={admDbParameter.code} onChange={(e) => onInputChange(e, "text", 'code')}
                                 required
-                                className={classNames({ 'p-invalid': submitted && !admAction.code })}
+                                className={classNames({ 'p-invalid': submitted && !admDbParameter.code })}
                             />
-                            {submitted && !admAction.code && <small className="p-error">Code is required.</small>}
+                            {submitted && !admDbParameter.code && <small className="p-error">Code is required.</small>}
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="text">Text</label>
                             <InputText
                                 id="text"
-                                value={admAction.text} onChange={(e) => onInputChange(e, "text", 'text')}
+                                value={admDbParameter.text} onChange={(e) => onInputChange(e, "text", 'text')}
                                 required
-                                className={classNames({ 'p-invalid': submitted && !admAction.text })}
+                                className={classNames({ 'p-invalid': submitted && !admDbParameter.text })}
                             />
-                            {submitted && !admAction.text && <small className="p-error">Text is required.</small>}
+                            {submitted && !admDbParameter.text && <small className="p-error">Text is required.</small>}
                         </div>
-                        <div className="field col-12 md:col-3">
-                            <label htmlFor="valid">Valid</label>
-                            <Dropdown id="valid"
-                                value={dropdownItem}
-                                options={dropdownItems}
-                                onChange={(e) => onInputChange(e, "options", 'valid')}
-                                required
-                                optionLabel="name"
-                                placeholder="Select One"
-                                className={classNames({ 'p-invalid': submitted && !admAction.valid })}
+                        <div className="field col-12 md:col-6">
+                            <label htmlFor="text">Comment</label>
+                            <InputText
+                                id="comment"
+                                value={admDbParameter.comment} onChange={(e) => onInputChange(e, "text", 'comment')}
                             />
-                            {submitted && !admAction.valid && <small className="p-error">Valid is required.</small>}
-                        </div>                        
+                        </div>
+                        <div className="field col-12 md:col-6">
+                            <label htmlFor="text">Version</label>
+                            <InputText
+                                id="version"
+                                value={admDbParameter.version} onChange={(e) => onInputChange(e, "text", 'version')}
+                                required
+                                className={classNames({ 'p-invalid': submitted && !admDbParameter.version })}
+                            />
+                            {submitted && !admDbParameter.version && <small className="p-error">Version is required.</small>}
+                        </div>
                     </div>
 
                     <div className="flex flex-wrap gap-1">
@@ -157,7 +136,7 @@ const AdmAction = (props) => {
                         ) : null}
                         <div className="flex-grow-1"></div>
                         <div className="flex flex-wrap gap-1">
-                            {(props.actionTip === 'CREATE') ? (
+                            {(props.dbParameterTip === 'CREATE') ? (
                                 <Button
                                     label="Create"
                                     icon="pi pi-check"
@@ -166,7 +145,7 @@ const AdmAction = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.actionTip !== 'CREATE') ? (
+                            {(props.dbParameterTip !== 'CREATE') ? (
                                 <Button
                                     label="Save"
                                     icon="pi pi-check"
@@ -175,7 +154,7 @@ const AdmAction = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.actionTip !== 'CREATE') ? (
+                            {(props.dbParameterTip !== 'CREATE') ? (
                                 <Button
                                     label="Delete"
                                     icon="pi pi-trash"
@@ -192,4 +171,4 @@ const AdmAction = (props) => {
     );
 };
 
-export default AdmAction;
+export default AdmDbParameter;

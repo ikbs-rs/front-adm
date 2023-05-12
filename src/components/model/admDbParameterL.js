@@ -7,31 +7,31 @@ import { Button } from "primereact/button";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { Toast } from "primereact/toast";
-import { AdmActionService } from "../../service/model/AdmActionService";
-import AdmAkcija from './admAction';
+import { AdmDbParameterService } from "../../service/model/AdmDbParameterService";
+import DbParameter from './admDbParameter';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 
 
-export default function AdmActionL() {
-  const objName = "adm_action"
-  const emptyAdmAction = EmptyEntities[objName]
+export default function AdmDbParameterL() {
+  const objName = "adm_dbparameter"
+  const emptyAdmDbParameter = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);
-  const [admActions, setAdmActions] = useState([]);
-  const [admAction, setAdmAction] = useState(emptyAdmAction);
+  const [admDbParameters, setAdmDbParameters] = useState([]);
+  const [admDbParameter, setAdmDbParameter] = useState(emptyAdmDbParameter);
   const [filters, setFilters] = useState('');
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const [loading, setLoading] = useState(false);
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
-  const [actionTip, setActionTip] = useState('');
+  const [dbParameterTip, setDbParameterTip] = useState('');
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const admActionService = new AdmActionService();
-        const data = await admActionService.getAdmActionV();
-        setAdmActions(data);
+        const admDbParameterService = new AdmDbParameterService();
+        const data = await admDbParameterService.getAdmDbParameterV();
+        setAdmDbParameters(data);
         initFilters();
       } catch (error) {
         console.error(error);
@@ -44,31 +44,31 @@ export default function AdmActionL() {
   const handleDialogClose = (newObj) => {
     const localObj = { newObj };
 
-    let _admActions = [...admActions];
-    let _admAction = { ...localObj.newObj.obj };
+    let _admDbParameters = [...admDbParameters];
+    let _admDbParameter = { ...localObj.newObj.obj };
 
     //setSubmitted(true);
-    if (localObj.newObj.actionTip === "CREATE") {
-      _admActions.push(_admAction);
-    } else if (localObj.newObj.actionTip === "UPDATE") {
+    if (localObj.newObj.dbParameterTip === "CREATE") {
+      _admDbParameters.push(_admDbParameter);
+    } else if (localObj.newObj.dbParameterTip === "UPDATE") {
       const index = findIndexById(localObj.newObj.obj.id);
-      _admActions[index] = _admAction;
-    } else if ((localObj.newObj.actionTip === "DELETE")) {
-      _admActions = admActions.filter((val) => val.id !== localObj.newObj.obj.id);
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmAction Delete', life: 3000 });
+      _admDbParameters[index] = _admDbParameter;
+    } else if ((localObj.newObj.dbParameterTip === "DELETE")) {
+      _admDbParameters = admDbParameters.filter((val) => val.id !== localObj.newObj.obj.id);
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmDbParameter Delete', life: 3000 });
     } else {
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmAction ?', life: 3000 });
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmDbParameter ?', life: 3000 });
     }
-    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.actionTip}`, life: 3000 });
-    setAdmActions(_admActions);
-    setAdmAction(emptyAdmAction);
+    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.dbParameterTip}`, life: 3000 });
+    setAdmDbParameters(_admDbParameters);
+    setAdmDbParameter(emptyAdmDbParameter);
   };
 
   const findIndexById = (id) => {
     let index = -1;
 
-    for (let i = 0; i < admActions.length; i++) {
-      if (admActions[i].id === id) {
+    for (let i = 0; i < admDbParameters.length; i++) {
+      if (admDbParameters[i].id === id) {
         index = i;
         break;
       }
@@ -78,7 +78,7 @@ export default function AdmActionL() {
   };
 
   const openNew = () => {
-    setAdmActionDialog(emptyAdmAction);
+    setAdmDbParameterDialog(emptyAdmDbParameter);
   };
 
   const onRowSelect = (event) => {
@@ -110,7 +110,14 @@ export default function AdmActionL() {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      valid: { value: null, matchMode: FilterMatchMode.EQUALS },
+      comment: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      version: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },      
     });
     setGlobalFilterValue("");
   };
@@ -135,8 +142,8 @@ export default function AdmActionL() {
         <div className="flex flex-wrap gap-1">
           <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
-        <div className="flex-grow-1" />
-        <b>Action List</b>
+        <div className="flex-grow-1"></div>
+        <b>Db parametri List</b>
         <div className="flex-grow-1"></div>
         <div className="flex flex-wrap gap-1">
           <span className="p-input-icon-left">
@@ -160,45 +167,18 @@ export default function AdmActionL() {
     );
   };
 
-  const validBodyTemplate = (rowData) => {
-    return (
-      <i
-        className={classNames("pi", {
-          "text-green-500 pi-check-circle": rowData.valid,
-          "text-red-500 pi-times-circle": !rowData.valid,
-        })}
-      ></i>
-    );
-  };
-
-  const validFilterTemplate = (options) => {
-    return (
-      <div className="flex align-items-center gap-2">
-        <label htmlFor="verified-filter" className="font-bold">
-          Valid
-        </label>
-        <TriStateCheckbox
-          inputId="verified-filter"
-          value={options.value}
-          onChange={(e) => options.filterCallback(e.value)}
-        />
-      </div>
-    );
-  };
-
   // <--- Dialog
-  const setAdmActionDialog = (admAction) => {
-    console.log("editData", admAction)
+  const setAdmDbParameterDialog = (admDbParameter) => {
     setVisible(true)
-    setActionTip("CREATE")
-    setAdmAction({ ...admAction });
+    setDbParameterTip("CREATE")
+    setAdmDbParameter({ ...admDbParameter });
   }
   //  Dialog --->
 
   const header = renderHeader();
   // heder za filter/>
 
-  const actionTemplate = (rowData) => {
+  const dbParameterTemplate = (rowData) => {
     return (
       <div className="flex flex-wrap gap-1">
 
@@ -207,8 +187,8 @@ export default function AdmActionL() {
           icon="pi pi-pencil"
           style={{ width: '24px', height: '24px' }}
           onClick={() => {
-            setAdmActionDialog(rowData)
-            setActionTip("UPDATE")
+            setAdmDbParameterDialog(rowData)
+            setDbParameterTip("UPDATE")
           }}
           text
           raised ></Button>
@@ -223,9 +203,9 @@ export default function AdmActionL() {
       <DataTable
         dataKey="id"
         selectionMode="single"
-        selection={admAction}
+        selection={admDbParameter}
         loading={loading}
-        value={admActions}
+        value={admDbParameters}
         header={header}
         showGridlines
         removableSort
@@ -238,7 +218,7 @@ export default function AdmActionL() {
         paginator
         rows={10}
         rowsPerPageOptions={[5, 10, 25, 50]}
-        onSelectionChange={(e) => setAdmAction(e.value)}
+        onSelectionChange={(e) => setAdmDbParameter(e.value)}
         onRowSelect={onRowSelect}
         onRowUnselect={onRowUnselect}
       >
@@ -247,37 +227,39 @@ export default function AdmActionL() {
           header="Code"
           sortable
           filter
-          style={{ width: "25%" }}
+          style={{ width: "20%" }}
         ></Column>
         <Column
           field="text"
           header="Text"
           sortable
           filter
-          style={{ width: "60%" }}
+          style={{ width: "30%" }}
         ></Column>
         <Column
-          field="valid"
-          filterField="valid"
-          dataType="numeric"
-          header="Valid"
+          field="comment"
+          header="Comment"
           sortable
           filter
-          filterElement={validFilterTemplate}
-          style={{ width: "15%" }}
-          bodyClassName="text-center"
-          body={validBodyTemplate}
+          style={{ width: "25%" }}
         ></Column>
         <Column
+          field="version"
+          header="Version"
+          sortable
+          filter
+          style={{ width: "25%" }}
+        ></Column>        
+        <Column
           //bodyClassName="text-center"
-          body={actionTemplate}
+          body={dbParameterTemplate}
           exportable={false}
           headerClassName="w-10rem"
           style={{ minWidth: '4rem' }}
         />
       </DataTable>
       <Dialog
-        header="Action"
+        header="DbParameter"
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {
@@ -286,13 +268,13 @@ export default function AdmActionL() {
         }}
       >
         {showMyComponent && (
-          <AdmAkcija
+          <DbParameter
             parameter={"inputTextValue"}
-            admAction={admAction}
+            admDbParameter={admDbParameter}
             handleDialogClose={handleDialogClose}
             setVisible={setVisible}
             dialog={true}
-            actionTip={actionTip}
+            dbParameterTip={dbParameterTip}
           />
         )}
         <div className="p-dialog-header-icons" style={{ display: 'none' }}>

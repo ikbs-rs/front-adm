@@ -7,31 +7,31 @@ import { Button } from "primereact/button";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { Toast } from "primereact/toast";
-import { AdmActionService } from "../../service/model/AdmActionService";
-import AdmAkcija from './admAction';
+import { AdmUserGrpService } from "../../service/model/AdmUserGrpService";
+import AdmAkcija from './admUserGrp';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 
 
-export default function AdmActionL() {
-  const objName = "adm_action"
-  const emptyAdmAction = EmptyEntities[objName]
+export default function AdmUserGrpL() {
+  const objName = "adm_usergrp"
+  const emptyAdmUserGrp = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);
-  const [admActions, setAdmActions] = useState([]);
-  const [admAction, setAdmAction] = useState(emptyAdmAction);
+  const [admUserGrps, setAdmUserGrps] = useState([]);
+  const [admUserGrp, setAdmUserGrp] = useState(emptyAdmUserGrp);
   const [filters, setFilters] = useState('');
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const [loading, setLoading] = useState(false);
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
-  const [actionTip, setActionTip] = useState('');
+  const [userGrpTip, setUserGrpTip] = useState('');
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const admActionService = new AdmActionService();
-        const data = await admActionService.getAdmActionV();
-        setAdmActions(data);
+        const admUserGrpService = new AdmUserGrpService();
+        const data = await admUserGrpService.getAdmUserGrpV();
+        setAdmUserGrps(data);
         initFilters();
       } catch (error) {
         console.error(error);
@@ -44,31 +44,31 @@ export default function AdmActionL() {
   const handleDialogClose = (newObj) => {
     const localObj = { newObj };
 
-    let _admActions = [...admActions];
-    let _admAction = { ...localObj.newObj.obj };
+    let _admUserGrps = [...admUserGrps];
+    let _admUserGrp = { ...localObj.newObj.obj };
 
     //setSubmitted(true);
-    if (localObj.newObj.actionTip === "CREATE") {
-      _admActions.push(_admAction);
-    } else if (localObj.newObj.actionTip === "UPDATE") {
+    if (localObj.newObj.userGrpTip === "CREATE") {
+      _admUserGrps.push(_admUserGrp);
+    } else if (localObj.newObj.userGrpTip === "UPDATE") {
       const index = findIndexById(localObj.newObj.obj.id);
-      _admActions[index] = _admAction;
-    } else if ((localObj.newObj.actionTip === "DELETE")) {
-      _admActions = admActions.filter((val) => val.id !== localObj.newObj.obj.id);
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmAction Delete', life: 3000 });
+      _admUserGrps[index] = _admUserGrp;
+    } else if ((localObj.newObj.userGrpTip === "DELETE")) {
+      _admUserGrps = admUserGrps.filter((val) => val.id !== localObj.newObj.obj.id);
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserGrp Delete', life: 3000 });
     } else {
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmAction ?', life: 3000 });
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserGrp ?', life: 3000 });
     }
-    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.actionTip}`, life: 3000 });
-    setAdmActions(_admActions);
-    setAdmAction(emptyAdmAction);
+    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.userGrpTip}`, life: 3000 });
+    setAdmUserGrps(_admUserGrps);
+    setAdmUserGrp(emptyAdmUserGrp);
   };
 
   const findIndexById = (id) => {
     let index = -1;
 
-    for (let i = 0; i < admActions.length; i++) {
-      if (admActions[i].id === id) {
+    for (let i = 0; i < admUserGrps.length; i++) {
+      if (admUserGrps[i].id === id) {
         index = i;
         break;
       }
@@ -78,7 +78,7 @@ export default function AdmActionL() {
   };
 
   const openNew = () => {
-    setAdmActionDialog(emptyAdmAction);
+    setAdmUserGrpDialog(emptyAdmUserGrp);
   };
 
   const onRowSelect = (event) => {
@@ -136,7 +136,7 @@ export default function AdmActionL() {
           <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
         <div className="flex-grow-1" />
-        <b>Action List</b>
+        <b>User group Lista</b>
         <div className="flex-grow-1"></div>
         <div className="flex flex-wrap gap-1">
           <span className="p-input-icon-left">
@@ -187,18 +187,18 @@ export default function AdmActionL() {
   };
 
   // <--- Dialog
-  const setAdmActionDialog = (admAction) => {
-    console.log("editData", admAction)
+  const setAdmUserGrpDialog = (admUserGrp) => {
+    console.log("editData", admUserGrp)
     setVisible(true)
-    setActionTip("CREATE")
-    setAdmAction({ ...admAction });
+    setUserGrpTip("CREATE")
+    setAdmUserGrp({ ...admUserGrp });
   }
   //  Dialog --->
 
   const header = renderHeader();
   // heder za filter/>
 
-  const actionTemplate = (rowData) => {
+  const userGrpTemplate = (rowData) => {
     return (
       <div className="flex flex-wrap gap-1">
 
@@ -207,8 +207,8 @@ export default function AdmActionL() {
           icon="pi pi-pencil"
           style={{ width: '24px', height: '24px' }}
           onClick={() => {
-            setAdmActionDialog(rowData)
-            setActionTip("UPDATE")
+            setAdmUserGrpDialog(rowData)
+            setUserGrpTip("UPDATE")
           }}
           text
           raised ></Button>
@@ -223,9 +223,9 @@ export default function AdmActionL() {
       <DataTable
         dataKey="id"
         selectionMode="single"
-        selection={admAction}
+        selection={admUserGrp}
         loading={loading}
-        value={admActions}
+        value={admUserGrps}
         header={header}
         showGridlines
         removableSort
@@ -238,7 +238,7 @@ export default function AdmActionL() {
         paginator
         rows={10}
         rowsPerPageOptions={[5, 10, 25, 50]}
-        onSelectionChange={(e) => setAdmAction(e.value)}
+        onSelectionChange={(e) => setAdmUserGrp(e.value)}
         onRowSelect={onRowSelect}
         onRowUnselect={onRowUnselect}
       >
@@ -270,14 +270,14 @@ export default function AdmActionL() {
         ></Column>
         <Column
           //bodyClassName="text-center"
-          body={actionTemplate}
+          body={userGrpTemplate}
           exportable={false}
           headerClassName="w-10rem"
           style={{ minWidth: '4rem' }}
         />
       </DataTable>
       <Dialog
-        header="Action"
+        header="UserGrp"
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {
@@ -288,11 +288,11 @@ export default function AdmActionL() {
         {showMyComponent && (
           <AdmAkcija
             parameter={"inputTextValue"}
-            admAction={admAction}
+            admUserGrp={admUserGrp}
             handleDialogClose={handleDialogClose}
             setVisible={setVisible}
             dialog={true}
-            actionTip={actionTip}
+            userGrpTip={userGrpTip}
           />
         )}
         <div className="p-dialog-header-icons" style={{ display: 'none' }}>
