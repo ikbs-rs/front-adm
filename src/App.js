@@ -41,7 +41,7 @@ const App = () => {
     const [rightPanelMenuActive, setRightPanelMenuActive] = useState(null);
     const [inlineUserMenuActive, setInlineUserMenuActive] = useState(false);
     const [menuActive, setMenuActive] = useState(false);
-    const [topbarColor, setTopbarColor] = useState('layout-topbar-blue');
+    const [topbarColor, setTopbarColor] = useState('layout-topbar-rose');
     const [theme, setTheme] = useState('blue');
     const [configActive, setConfigActive] = useState(false);
     const [inputStyle, setInputStyle] = useState('filled');
