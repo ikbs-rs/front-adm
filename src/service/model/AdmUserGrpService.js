@@ -4,7 +4,7 @@ import Token from "../../utilities/Token";
 
 export class AdmUserGrpService {
   async getAdmUserGrpV() {
-    const url = `${env.ADM_BACK_URL}/adm/usergrp_v`;
+    const url = `${env.ADM_BACK_URL}/adm/usergrp`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       Authorization: tokenLocal.token

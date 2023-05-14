@@ -6,8 +6,10 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
+import DeleteDialog from '../dialog/DeleteDialog';
 
 const AdmUserGrp = (props) => {
+    const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [dropdownItem, setDropdownItem] = useState(null);
     const [dropdownItems, setDropdownItems] = useState(null);
     const [admUserGrp, setAdmUserGrp] = useState(props.admUserGrp);
@@ -71,6 +73,10 @@ const AdmUserGrp = (props) => {
         }
     };
 
+    const showDeleteDialog = () => {
+        setDeleteDialogVisible(true);
+    };
+
     const handleDeleteClick = async () => {
         try {
             setSubmitted(true);
@@ -78,6 +84,7 @@ const AdmUserGrp = (props) => {
             await admUserGrpService.deleteAdmUserGrp(admUserGrp);
             props.handleDialogClose({ obj: admUserGrp, userGrpTip: 'DELETE' });
             props.setVisible(false);
+            hideDeleteDialog();
         } catch (err) {
             toast.current.show({
                 severity: "error",
@@ -102,6 +109,10 @@ const AdmUserGrp = (props) => {
         _admUserGrp[`${name}`] = val;
 
         setAdmUserGrp(_admUserGrp);
+    };
+
+    const hideDeleteDialog = () => {
+        setDeleteDialogVisible(false);
     };
 
     return (
@@ -167,6 +178,15 @@ const AdmUserGrp = (props) => {
                             ) : null}
                             {(props.userGrpTip !== 'CREATE') ? (
                                 <Button
+                                    label="Delete"
+                                    icon="pi pi-trash"
+                                    onClick={showDeleteDialog}
+                                    className="p-button-outlined p-button-danger"
+                                    outlined
+                                />
+                            ) : null}                            
+                            {(props.userGrpTip !== 'CREATE') ? (
+                                <Button
                                     label="Save"
                                     icon="pi pi-check"
                                     onClick={handleSaveClick}
@@ -174,19 +194,17 @@ const AdmUserGrp = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.userGrpTip !== 'CREATE') ? (
-                                <Button
-                                    label="Delete"
-                                    icon="pi pi-trash"
-                                    onClick={handleDeleteClick}
-                                    className="p-button-outlined p-button-danger"
-                                    outlined
-                                />
-                            ) : null}
                         </div>
                     </div>
                 </div>
             </div>
+            <DeleteDialog
+                visible={deleteDialogVisible}
+                inAction="delete"
+                item={admUserGrp.text}
+                onHide={hideDeleteDialog}
+                onDelete={handleDeleteClick}
+            />
         </div>
     );
 };

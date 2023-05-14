@@ -11,6 +11,7 @@ import { AdmDbParameterService } from "../../service/model/AdmDbParameterService
 import DbParameter from './admDbParameter';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
+import './index.css';
 
 
 export default function AdmDbParameterL() {

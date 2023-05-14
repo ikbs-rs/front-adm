@@ -5,8 +5,10 @@ import './index.css';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from "primereact/toast";
+import DeleteDialog from '../dialog/DeleteDialog';
 
 const AdmDbmsErr = (props) => {
+    const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [admDbmsErr, setAdmDbmsErr] = useState(props.admDbmsErr);
     const [submitted, setSubmitted] = useState(false);
 
@@ -55,6 +57,10 @@ const AdmDbmsErr = (props) => {
         }
     };
 
+    const showDeleteDialog = () => {
+        setDeleteDialogVisible(true);
+    };
+
     const handleDeleteClick = async () => {
         try {
             setSubmitted(true);
@@ -62,6 +68,7 @@ const AdmDbmsErr = (props) => {
             await admDbmsErrService.deleteAdmDbmsErr(admDbmsErr);
             props.handleDialogClose({ obj: admDbmsErr, dbmsErrTip: 'DELETE' });
             props.setVisible(false);
+            hideDeleteDialog();
         } catch (err) {
             toast.current.show({
                 severity: "error",
@@ -81,6 +88,10 @@ const AdmDbmsErr = (props) => {
         _admDbmsErr[`${name}`] = val;
 
         setAdmDbmsErr(_admDbmsErr);
+    };
+
+    const hideDeleteDialog = () => {
+        setDeleteDialogVisible(false);
     };
 
     return (
@@ -133,6 +144,15 @@ const AdmDbmsErr = (props) => {
                             ) : null}
                             {(props.dbmsErrTip !== 'CREATE') ? (
                                 <Button
+                                    label="Delete"
+                                    icon="pi pi-trash"
+                                    onClick={showDeleteDialog}
+                                    className="p-button-outlined p-button-danger"
+                                    outlined
+                                />
+                            ) : null}                            
+                            {(props.dbmsErrTip !== 'CREATE') ? (
+                                <Button
                                     label="Save"
                                     icon="pi pi-check"
                                     onClick={handleSaveClick}
@@ -140,19 +160,17 @@ const AdmDbmsErr = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.dbmsErrTip !== 'CREATE') ? (
-                                <Button
-                                    label="Delete"
-                                    icon="pi pi-trash"
-                                    onClick={handleDeleteClick}
-                                    className="p-button-outlined p-button-danger"
-                                    outlined
-                                />
-                            ) : null}
                         </div>
                     </div>
                 </div>
             </div>
+            <DeleteDialog
+                visible={deleteDialogVisible}
+                inAction="delete"
+                item={admDbmsErr.text}
+                onHide={hideDeleteDialog}
+                onDelete={handleDeleteClick}
+            />            
         </div>
     );
 };

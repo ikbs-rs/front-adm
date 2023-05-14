@@ -4,7 +4,7 @@ import Token from "../../utilities/Token";
 
 export class AdmActionService {
   async getAdmActionV() {
-    const url = `${env.ADM_BACK_URL}/adm/action_v`;
+    const url = `${env.ADM_BACK_URL}/adm/action`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       Authorization: tokenLocal.token

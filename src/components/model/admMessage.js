@@ -4,10 +4,11 @@ import { AdmMessageService } from "../../service/model/AdmMessageService";
 import './index.css';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
+import DeleteDialog from '../dialog/DeleteDialog';
 
 const AdmMessage = (props) => {
+    const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [admMessage, setAdmMessage] = useState(props.admMessage);
     const [submitted, setSubmitted] = useState(false);
 
@@ -56,6 +57,10 @@ const AdmMessage = (props) => {
         }
     };
 
+    const showDeleteDialog = () => {
+        setDeleteDialogVisible(true);
+    };
+
     const handleDeleteClick = async () => {
         try {
             setSubmitted(true);
@@ -63,6 +68,7 @@ const AdmMessage = (props) => {
             await admMessageService.deleteAdmMessage(admMessage);
             props.handleDialogClose({ obj: admMessage, messageTip: 'DELETE' });
             props.setVisible(false);
+            hideDeleteDialog();
         } catch (err) {
             toast.current.show({
                 severity: "error",
@@ -82,6 +88,10 @@ const AdmMessage = (props) => {
         _admMessage[`${name}`] = val;
 
         setAdmMessage(_admMessage);
+    };
+
+    const hideDeleteDialog = () => {
+        setDeleteDialogVisible(false);
     };
 
     return (
@@ -134,6 +144,15 @@ const AdmMessage = (props) => {
                             ) : null}
                             {(props.messageTip !== 'CREATE') ? (
                                 <Button
+                                    label="Delete"
+                                    icon="pi pi-trash"
+                                    onClick={showDeleteDialog}
+                                    className="p-button-outlined p-button-danger"
+                                    outlined
+                                />
+                            ) : null}                            
+                            {(props.messageTip !== 'CREATE') ? (
+                                <Button
                                     label="Save"
                                     icon="pi pi-check"
                                     onClick={handleSaveClick}
@@ -141,19 +160,17 @@ const AdmMessage = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.messageTip !== 'CREATE') ? (
-                                <Button
-                                    label="Delete"
-                                    icon="pi pi-trash"
-                                    onClick={handleDeleteClick}
-                                    className="p-button-outlined p-button-danger"
-                                    outlined
-                                />
-                            ) : null}
                         </div>
                     </div>
                 </div>
             </div>
+            <DeleteDialog
+                visible={deleteDialogVisible}
+                inAction="delete"
+                item={admMessage.text}
+                onHide={hideDeleteDialog}
+                onDelete={handleDeleteClick}
+            />            
         </div>
     );
 };

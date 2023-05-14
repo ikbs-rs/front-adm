@@ -9,6 +9,7 @@ import { AdmMessageService } from "../../service/model/AdmMessageService";
 import AdmAkcija from './admMessage';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
+import './index.css';
 
 
 export default function AdmMessageL() {
@@ -159,7 +160,6 @@ export default function AdmMessageL() {
 
   // <--- Dialog
   const setAdmMessageDialog = (admMessage) => {
-    console.log("editData", admMessage)
     setVisible(true)
     setMessageTip("CREATE")
     setAdmMessage({ ...admMessage });

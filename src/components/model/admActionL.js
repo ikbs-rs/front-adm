@@ -7,6 +7,7 @@ import { Button } from "primereact/button";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { Toast } from "primereact/toast";
+import './index.css';
 import { AdmActionService } from "../../service/model/AdmActionService";
 import AdmAkcija from './admAction';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
@@ -188,7 +189,6 @@ export default function AdmActionL() {
 
   // <--- Dialog
   const setAdmActionDialog = (admAction) => {
-    console.log("editData", admAction)
     setVisible(true)
     setActionTip("CREATE")
     setAdmAction({ ...admAction });
@@ -295,11 +295,6 @@ export default function AdmActionL() {
             actionTip={actionTip}
           />
         )}
-        <div className="p-dialog-header-icons" style={{ display: 'none' }}>
-          <button className="p-dialog-header-close p-link">
-            <span className="p-dialog-header-close-icon pi pi-times"></span>
-          </button>
-        </div>
       </Dialog>
     </div>
   );

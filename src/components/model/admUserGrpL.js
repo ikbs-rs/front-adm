@@ -11,6 +11,7 @@ import { AdmUserGrpService } from "../../service/model/AdmUserGrpService";
 import AdmAkcija from './admUserGrp';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
+import './index.css';
 
 
 export default function AdmUserGrpL() {
@@ -188,7 +189,6 @@ export default function AdmUserGrpL() {
 
   // <--- Dialog
   const setAdmUserGrpDialog = (admUserGrp) => {
-    console.log("editData", admUserGrp)
     setVisible(true)
     setUserGrpTip("CREATE")
     setAdmUserGrp({ ...admUserGrp });

@@ -11,6 +11,7 @@ import { AdmDbmsErrService } from "../../service/model/AdmDbmsErrService";
 import AdmAkcija from './admDbmsErr';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
+import './index.css';
 
 
 export default function AdmDbmsErrL() {
@@ -161,7 +162,6 @@ export default function AdmDbmsErrL() {
 
   // <--- Dialog
   const setAdmDbmsErrDialog = (admDbmsErr) => {
-    console.log("editData", admDbmsErr)
     setVisible(true)
     setDbmsErrTip("CREATE")
     setAdmDbmsErr({ ...admDbmsErr });

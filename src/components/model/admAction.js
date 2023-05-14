@@ -6,9 +6,11 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
+import DeleteDialog from '../dialog/DeleteDialog';
 
 const AdmAction = (props) => {
-    console.log("ulaz", props.admAction)
+    //console.log("ulaz", props.admAction)
+    const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [dropdownItem, setDropdownItem] = useState(null);
     const [dropdownItems, setDropdownItems] = useState(null);
     const [admAction, setAdmAction] = useState(props.admAction);
@@ -39,11 +41,11 @@ const AdmAction = (props) => {
 
     const handleCreateClick = async () => {
         try {
-            setSubmitted(true);            
-                const admActionService = new AdmActionService();
-                const data = await admActionService.postAdmAction(admAction);
-                admAction.id = data
-                props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
+            setSubmitted(true);
+            const admActionService = new AdmActionService();
+            const data = await admActionService.postAdmAction(admAction);
+            admAction.id = data
+            props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -72,6 +74,10 @@ const AdmAction = (props) => {
         }
     };
 
+    const showDeleteDialog = () => {
+        setDeleteDialogVisible(true);
+    };
+
     const handleDeleteClick = async () => {
         try {
             setSubmitted(true);
@@ -79,6 +85,7 @@ const AdmAction = (props) => {
             await admActionService.deleteAdmAction(admAction);
             props.handleDialogClose({ obj: admAction, actionTip: 'DELETE' });
             props.setVisible(false);
+            hideDeleteDialog();
         } catch (err) {
             toast.current.show({
                 severity: "error",
@@ -103,6 +110,10 @@ const AdmAction = (props) => {
         _admAction[`${name}`] = val;
 
         setAdmAction(_admAction);
+    };
+
+    const hideDeleteDialog = () => {
+        setDeleteDialogVisible(false);
     };
 
     return (
@@ -142,7 +153,7 @@ const AdmAction = (props) => {
                                 className={classNames({ 'p-invalid': submitted && !admAction.valid })}
                             />
                             {submitted && !admAction.valid && <small className="p-error">Valid is required.</small>}
-                        </div>                        
+                        </div>
                     </div>
 
                     <div className="flex flex-wrap gap-1">
@@ -168,6 +179,15 @@ const AdmAction = (props) => {
                             ) : null}
                             {(props.actionTip !== 'CREATE') ? (
                                 <Button
+                                    label="Delete"
+                                    icon="pi pi-trash"
+                                    onClick={showDeleteDialog}
+                                    className="p-button-outlined p-button-danger"
+                                    outlined
+                                />
+                            ) : null}
+                            {(props.actionTip !== 'CREATE') ? (
+                                <Button
                                     label="Save"
                                     icon="pi pi-check"
                                     onClick={handleSaveClick}
@@ -175,19 +195,17 @@ const AdmAction = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.actionTip !== 'CREATE') ? (
-                                <Button
-                                    label="Delete"
-                                    icon="pi pi-trash"
-                                    onClick={handleDeleteClick}
-                                    className="p-button-outlined p-button-danger"
-                                    outlined
-                                />
-                            ) : null}
                         </div>
                     </div>
                 </div>
             </div>
+            <DeleteDialog
+                visible={deleteDialogVisible}
+                inAction="delete"
+                item={admAction.text}
+                onHide={hideDeleteDialog}
+                onDelete={handleDeleteClick}
+            />
         </div>
     );
 };
