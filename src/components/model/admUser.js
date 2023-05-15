@@ -163,8 +163,8 @@ const AdmUser = (props) => {
             <div className="col-12">
                 <div className="card">
                     <div className="p-fluid formgrid grid">
-                        <div className="field col-12 md:col-4">
-                            <label htmlFor="username">Username</label>
+                        <div className="field col-12 md:col-7">
+                            <label htmlFor="username">Username *</label>
                             <InputText id="username" autoFocus
                                 value={admUser.username} onChange={(e) => onInputChange(e, "text", 'username')}
                                 required
@@ -172,20 +172,66 @@ const AdmUser = (props) => {
                             />
                             {submitted && !admUser.username && <small className="p-error">Username is required.</small>}
                         </div>
-                        <div className="field col-12 md:col-4">
+                        <div className="field col-12 md:col-7">
+                            <label htmlFor="mail">Mail *</label>
+                            <InputText
+                                id="mail"
+                                value={admUser.mail} onChange={(e) => onInputChange(e, "text", 'mail')}
+                                required
+                                className={classNames({ 'p-invalid': submitted && !admUser.mail })}
+                            />
+                            {submitted && !admUser.mail && <small className="p-error">Mail is required.</small>}
+                        </div>                        
+                        <div className="field col-12 md:col-6">
                             <label htmlFor="firstname">Firstname</label>
                             <InputText
                                 id="firstname"
                                 value={admUser.firstname} onChange={(e) => onInputChange(e, "text", 'firstname')}
                             />
                         </div>   
-                        <div className="field col-12 md:col-4">
+                        <div className="field col-12 md:col-6">
                             <label htmlFor="lastname">Lastname</label>
                             <InputText
                                 id="lastname"
                                 value={admUser.lastname} onChange={(e) => onInputChange(e, "text", 'lastname')}
                             />
+                        </div> 
+                        <div className="field col-12 md:col-6">
+                            <label htmlFor="usergrp">UserGrp *</label>
+                            <Dropdown id="usergrp"
+                                value={ddUserGrpItem}
+                                options={ddUserGrpItems}
+                                onChange={(e) => onInputChange(e, "options", 'usergrp')}
+                                required
+                                optionLabel="name"
+                                placeholder="Select One"
+                                className={classNames({ 'p-invalid': submitted && !admUser.usergrp })}
+                            />
+                            {submitted && !admUser.usergrp && <small className="p-error">UserGrp is required.</small>}
+                        </div>                                                      
+                        <div className="field col-12 md:col-6">
+                            <label htmlFor="admin">Admin *</label>
+                            <Dropdown id="admin"
+                                value={ddAdminItem}
+                                options={ddAdminItems}
+                                onChange={(e) => onInputChange(e, "options", 'admin')}
+                                required
+                                optionLabel="name"
+                                placeholder="Select One"
+                                className={classNames({ 'p-invalid': submitted && !admUser.admin })}
+                            />
+                            {submitted && !admUser.admin && <small className="p-error">Admin is required.</small>}
                         </div>   
+                        <div className="field col-12 md:col-7">
+                            <label htmlFor="tip">Tip *</label>
+                            <InputText
+                                id="tip"
+                                value={admUser.tip} onChange={(e) => onInputChange(e, "text", 'tip')}
+                                required
+                                className={classNames({ 'p-invalid': submitted && !admUser.tip })}
+                            />
+                            {submitted && !admUser.tip && <small className="p-error">Tip is required.</small>}
+                        </div>                         
                         <div className="field col-12 md:col-6">
                             <label htmlFor="sapuser">Sapuser</label>
                             <InputText
@@ -199,55 +245,9 @@ const AdmUser = (props) => {
                                 id="aduser"
                                 value={admUser.aduser} onChange={(e) => onInputChange(e, "text", 'aduser')}
                             />
-                        </div>
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="tip">Tip</label>
-                            <InputText
-                                id="tip"
-                                value={admUser.tip} onChange={(e) => onInputChange(e, "text", 'tip')}
-                                required
-                                className={classNames({ 'p-invalid': submitted && !admUser.tip })}
-                            />
-                            {submitted && !admUser.tip && <small className="p-error">Tip is required.</small>}
-                        </div>  
+                        </div>                                                                                             
                         <div className="field col-12 md:col-3">
-                            <label htmlFor="admin">Admin</label>
-                            <Dropdown id="admin"
-                                value={ddAdminItem}
-                                options={ddAdminItems}
-                                onChange={(e) => onInputChange(e, "options", 'admin')}
-                                required
-                                optionLabel="name"
-                                placeholder="Select One"
-                                className={classNames({ 'p-invalid': submitted && !admUser.admin })}
-                            />
-                            {submitted && !admUser.admin && <small className="p-error">Admin is required.</small>}
-                        </div>  
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="mail">Mail</label>
-                            <InputText
-                                id="mail"
-                                value={admUser.mail} onChange={(e) => onInputChange(e, "text", 'mail')}
-                                required
-                                className={classNames({ 'p-invalid': submitted && !admUser.mail })}
-                            />
-                            {submitted && !admUser.mail && <small className="p-error">Mail is required.</small>}
-                        </div>  
-                        <div className="field col-12 md:col-3">
-                            <label htmlFor="usergrp">UserGrp</label>
-                            <Dropdown id="usergrp"
-                                value={ddUserGrpItem}
-                                options={ddUserGrpItems}
-                                onChange={(e) => onInputChange(e, "options", 'usergrp')}
-                                required
-                                optionLabel="name"
-                                placeholder="Select One"
-                                className={classNames({ 'p-invalid': submitted && !admUser.usergrp })}
-                            />
-                            {submitted && !admUser.usergrp && <small className="p-error">UserGrp is required.</small>}
-                        </div>                                                                       
-                        <div className="field col-12 md:col-3">
-                            <label htmlFor="valid">Valid</label>
+                            <label htmlFor="valid">Valid *</label>
                             <Dropdown id="valid"
                                 value={ddValidItem}
                                 options={ddValidItems}

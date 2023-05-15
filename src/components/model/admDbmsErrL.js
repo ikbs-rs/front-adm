@@ -14,7 +14,7 @@ import { Dialog } from 'primereact/dialog';
 import './index.css';
 
 
-export default function AdmDbmsErrL() {
+export default function AdmDbmsErrL(props) {
   const objName = "adm_dbmserr"
   const emptyAdmDbmsErr = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);

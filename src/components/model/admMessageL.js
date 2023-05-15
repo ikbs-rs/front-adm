@@ -12,7 +12,7 @@ import { Dialog } from 'primereact/dialog';
 import './index.css';
 
 
-export default function AdmMessageL() {
+export default function AdmMessageL(props) {
   const objName = "adm_message"
   const emptyAdmMessage = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);

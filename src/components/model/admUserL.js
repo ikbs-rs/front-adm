@@ -9,12 +9,13 @@ import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { Toast } from "primereact/toast";
 import { AdmUserService } from "../../service/model/AdmUserService";
 import AdmUser from './admUser';
+import AdmUserPermissL from './admUserPermissL';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
 
 
-export default function AdmUserL() {
+export default function AdmUserL(props) {
   const objName = "adm_user"
   const emptyAdmUser = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);
@@ -25,6 +26,7 @@ export default function AdmUserL() {
   const [loading, setLoading] = useState(false);
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
+  const [admUserPermissLVisible, setAdmUserPermissLVisible] = useState(false);
   const [userTip, setUserTip] = useState('');
 
   useEffect(() => {
@@ -45,7 +47,6 @@ export default function AdmUserL() {
 
   const handleDialogClose = (newObj) => {
     const localObj = { newObj };
-    //console.log("*-*-*-*--*-*-*-*-*-*-*-", localObj)
 
     let _admUsers = [...admUsers];
     let _admUser = { ...localObj.newObj.obj };
@@ -67,6 +68,10 @@ export default function AdmUserL() {
     setAdmUser(emptyAdmUser);
   };
 
+  const handleAdmPermissLDialogClose = (newObj) => {
+    const localObj = { newObj };
+  };
+
   const findIndexById = (id) => {
     let index = -1;
 
@@ -84,22 +89,16 @@ export default function AdmUserL() {
     setAdmUserDialog(emptyAdmUser);
   };
 
+  const openUserRoll = () => {
+    setAdmUserPermissLDialog();
+  };
+
   const onRowSelect = (event) => {
-    toast.current.show({
-      severity: "info",
-      summary: "User Selected",
-      detail: `Id: ${event.data.id} Name: ${event.data.text}`,
-      life: 3000,
-    });
+    setAdmUser(event.data)
   };
 
   const onRowUnselect = (event) => {
-    toast.current.show({
-      severity: "warn",
-      summary: "User Unselected",
-      detail: `Id: ${event.data.id} Name: ${event.data.text}`,
-      life: 3000,
-    });
+    setAdmUser(emptyAdmUser)
   };
   // <heder za filter
   const initFilters = () => {
@@ -158,6 +157,9 @@ export default function AdmUserL() {
         <div className="flex flex-wrap gap-1">
           <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
+        <div className="flex flex-wrap gap-1">
+          <Button label="Roll" icon="pi pi-video"  onClick={openUserRoll} text raised disabled={!admUser}/>
+        </div>        
         <div className="flex-grow-1" />
         <b>User List</b>
         <div className="flex-grow-1"></div>
@@ -184,11 +186,12 @@ export default function AdmUserL() {
   };
 
   const validBodyTemplate = (rowData) => {
+    const valid = rowData.valid == 1?true:false
     return (
       <i
         className={classNames("pi", {
-          "text-green-500 pi-check-circle": rowData.valid,
-          "text-red-500 pi-times-circle": !rowData.valid,
+          "text-green-500 pi-check-circle": valid,
+          "text-red-500 pi-times-circle": !valid
         })}
       ></i>
     );
@@ -217,8 +220,13 @@ export default function AdmUserL() {
     setVisible(true)
     setUserTip("CREATE")
     setAdmUser({ ...newAdmUser });
-    console.log("DialogTrue", admUser)
   }
+
+  const setAdmUserPermissLDialog = () => {
+    setShowMyComponent(true);
+    setAdmUserPermissLVisible(true);
+
+  }  
   //  Dialog --->
 
   const userTemplate = (rowData) => {
@@ -347,6 +355,26 @@ export default function AdmUserL() {
           />
         )}
       </Dialog>
+      <Dialog
+        header="Userpermiss List"
+        visible={admUserPermissLVisible}
+        style={{ width: '70%' }}
+        onHide={() => {
+          setAdmUserPermissLVisible(false);
+          setShowMyComponent(false);
+        }}
+      >
+        {showMyComponent && (
+          <AdmUserPermissL
+            parameter={"inputTextValue"}
+            admUser={admUser}
+            handleAdmPermissLDialogClose={handleAdmPermissLDialogClose}
+            setAdmUserPermissLVisible={setAdmUserPermissLVisible}
+            dialog={true}
+            lookUp={false}
+          />
+        )}
+      </Dialog>      
     </div>
   );
 }

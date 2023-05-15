@@ -14,7 +14,7 @@ import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 
 
-export default function AdmActionL() {
+export default function AdmActionL(props) {
   const objName = "adm_action"
   const emptyAdmAction = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);
@@ -162,11 +162,12 @@ export default function AdmActionL() {
   };
 
   const validBodyTemplate = (rowData) => {
+    const valid = rowData.valid == 1?true:false
     return (
       <i
         className={classNames("pi", {
-          "text-green-500 pi-check-circle": rowData.valid,
-          "text-red-500 pi-times-circle": !rowData.valid,
+          "text-green-500 pi-check-circle": valid,
+          "text-red-500 pi-times-circle": !valid
         })}
       ></i>
     );

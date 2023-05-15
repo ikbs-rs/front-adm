@@ -14,7 +14,7 @@ import { Dialog } from 'primereact/dialog';
 import './index.css';
 
 
-export default function AdmDbParameterL() {
+export default function AdmDbParameterL(props) {
   const objName = "adm_dbparameter"
   const emptyAdmDbParameter = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);

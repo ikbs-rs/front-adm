@@ -1,38 +1,41 @@
 import React, { useState, useEffect, useRef } from "react";
-import { classNames } from "primereact/utils";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
-import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { Toast } from "primereact/toast";
-import { AdmUserGrpService } from "../../service/model/AdmUserGrpService";
-import AdmAkcija from './admUserGrp';
+import { AdmUserPermissService } from "../../service/model/AdmUserPermissService";
+import AdmUserPermiss from './admUserPermiss';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
 
 
-export default function AdmUserGrpL(props) {
-  const objName = "adm_usergrp"
-  const emptyAdmUserGrp = EmptyEntities[objName]
+export default function AdmUserPermissL(props) {
+  const objName = "adm_userpermiss"
+  const emptyAdmUserPermiss = EmptyEntities[objName]
+  emptyAdmUserPermiss.usr = props.admUser.id
   const [showMyComponent, setShowMyComponent] = useState(true);
-  const [admUserGrps, setAdmUserGrps] = useState([]);
-  const [admUserGrp, setAdmUserGrp] = useState(emptyAdmUserGrp);
+  const [admUserPermisss, setAdmUserPermisss] = useState([]);
+  const [admUserPermiss, setAdmUserPermiss] = useState(emptyAdmUserPermiss);
   const [filters, setFilters] = useState('');
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const [loading, setLoading] = useState(false);
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
-  const [userGrpTip, setUserGrpTip] = useState('');
+  const [userPermissTip, setUserPermissTip] = useState('');
+
+  const handleCancelClick = () => {
+    props.setAdmUserPermissLVisible(false);
+};
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const admUserGrpService = new AdmUserGrpService();
-        const data = await admUserGrpService.getAdmUserGrpV();
-        setAdmUserGrps(data);
+        const admUserPermissService = new AdmUserPermissService();
+        const data = await admUserPermissService.getAdmUserPermissAllByItem(props.admUser);
+        setAdmUserPermisss(data);
         initFilters();
       } catch (error) {
         console.error(error);
@@ -45,31 +48,31 @@ export default function AdmUserGrpL(props) {
   const handleDialogClose = (newObj) => {
     const localObj = { newObj };
 
-    let _admUserGrps = [...admUserGrps];
-    let _admUserGrp = { ...localObj.newObj.obj };
+    let _admUserPermisss = [...admUserPermisss];
+    let _admUserPermiss = { ...localObj.newObj.obj };
 
     //setSubmitted(true);
-    if (localObj.newObj.userGrpTip === "CREATE") {
-      _admUserGrps.push(_admUserGrp);
-    } else if (localObj.newObj.userGrpTip === "UPDATE") {
+    if (localObj.newObj.userPermissTip === "CREATE") {
+      _admUserPermisss.push(_admUserPermiss);
+    } else if (localObj.newObj.userPermissTip === "UPDATE") {
       const index = findIndexById(localObj.newObj.obj.id);
-      _admUserGrps[index] = _admUserGrp;
-    } else if ((localObj.newObj.userGrpTip === "DELETE")) {
-      _admUserGrps = admUserGrps.filter((val) => val.id !== localObj.newObj.obj.id);
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserGrp Delete', life: 3000 });
+      _admUserPermisss[index] = _admUserPermiss;
+    } else if ((localObj.newObj.userPermissTip === "DELETE")) {
+      _admUserPermisss = admUserPermisss.filter((val) => val.id !== localObj.newObj.obj.id);
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserPermiss Delete', life: 3000 });
     } else {
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserGrp ?', life: 3000 });
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserPermiss ?', life: 3000 });
     }
-    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.userGrpTip}`, life: 3000 });
-    setAdmUserGrps(_admUserGrps);
-    setAdmUserGrp(emptyAdmUserGrp);
+    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.userPermissTip}`, life: 3000 });
+    setAdmUserPermisss(_admUserPermisss);
+    setAdmUserPermiss(emptyAdmUserPermiss);
   };
 
   const findIndexById = (id) => {
     let index = -1;
 
-    for (let i = 0; i < admUserGrps.length; i++) {
-      if (admUserGrps[i].id === id) {
+    for (let i = 0; i < admUserPermisss.length; i++) {
+      if (admUserPermisss[i].id === id) {
         index = i;
         break;
       }
@@ -79,7 +82,7 @@ export default function AdmUserGrpL(props) {
   };
 
   const openNew = () => {
-    setAdmUserGrpDialog(emptyAdmUserGrp);
+    setAdmUserPermissDialog(emptyAdmUserPermiss);
   };
 
   const onRowSelect = (event) => {
@@ -103,15 +106,14 @@ export default function AdmUserGrpL(props) {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      code: {
+      rcode: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      text: {
+      rtext: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      valid: { value: null, matchMode: FilterMatchMode.EQUALS },
     });
     setGlobalFilterValue("");
   };
@@ -133,11 +135,14 @@ export default function AdmUserGrpL(props) {
   const renderHeader = () => {
     return (
       <div className="flex card-container">
+        <div className="flex flex-wrap gap-1" />
+          <Button label="Cancel" icon="pi pi-times" onClick={handleCancelClick} text raised 
+        />          
         <div className="flex flex-wrap gap-1">
           <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
-        <div className="flex-grow-1" />
-        <b>User group Lista</b>
+        <div className="flex-grow-1"></div>
+        <b>Roll List</b>
         <div className="flex-grow-1"></div>
         <div className="flex flex-wrap gap-1">
           <span className="p-input-icon-left">
@@ -161,45 +166,18 @@ export default function AdmUserGrpL(props) {
     );
   };
 
-  const validBodyTemplate = (rowData) => {
-    const valid = rowData.valid == 1?true:false
-    return (
-      <i
-        className={classNames("pi", {
-          "text-green-500 pi-check-circle": valid,
-          "text-red-500 pi-times-circle": !valid
-        })}
-      ></i>
-    );
-  };
-
-  const validFilterTemplate = (options) => {
-    return (
-      <div className="flex align-items-center gap-2">
-        <label htmlFor="verified-filter" className="font-bold">
-          Valid
-        </label>
-        <TriStateCheckbox
-          inputId="verified-filter"
-          value={options.value}
-          onChange={(e) => options.filterCallback(e.value)}
-        />
-      </div>
-    );
-  };
-
   // <--- Dialog
-  const setAdmUserGrpDialog = (admUserGrp) => {
+  const setAdmUserPermissDialog = (admUserPermiss) => {
     setVisible(true)
-    setUserGrpTip("CREATE")
-    setAdmUserGrp({ ...admUserGrp });
+    setUserPermissTip("CREATE")
+    setAdmUserPermiss({ ...admUserPermiss });
   }
   //  Dialog --->
 
   const header = renderHeader();
   // heder za filter/>
 
-  const userGrpTemplate = (rowData) => {
+  const userPermissTemplate = (rowData) => {
     return (
       <div className="flex flex-wrap gap-1">
 
@@ -208,8 +186,8 @@ export default function AdmUserGrpL(props) {
           icon="pi pi-pencil"
           style={{ width: '24px', height: '24px' }}
           onClick={() => {
-            setAdmUserGrpDialog(rowData)
-            setUserGrpTip("UPDATE")
+            setAdmUserPermissDialog(rowData)
+            setUserPermissTip("UPDATE")
           }}
           text
           raised ></Button>
@@ -221,64 +199,73 @@ export default function AdmUserGrpL(props) {
   return (
     <div className="card">
       <Toast ref={toast} />
+      <div className="col-12">
+        <div className="card">
+          <div className="p-fluid formgrid grid">
+            <div className="field col-12 md:col-6">
+              <label htmlFor="code">Username</label>
+              <InputText id="code" 
+                value={props.admUser.username}
+                disabled={true}
+              />
+            </div>
+            <div className="field col-12 md:col-6">
+              <label htmlFor="text">Mail</label>
+              <InputText
+                id="mail"
+                value={props.admUser.mail}
+                disabled={true}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
       <DataTable
         dataKey="id"
         selectionMode="single"
-        selection={admUserGrp}
+        selection={admUserPermiss}
         loading={loading}
-        value={admUserGrps}
+        value={admUserPermisss}
         header={header}
         showGridlines
         removableSort
         filters={filters}
         scrollable
-        scrollHeight="750px"
+        scrollHeight="550px"
         virtualScrollerOptions={{ itemSize: 46 }}
         tableStyle={{ minWidth: "50rem" }}
         metaKeySelection={false}
         paginator
         rows={10}
         rowsPerPageOptions={[5, 10, 25, 50]}
-        onSelectionChange={(e) => setAdmUserGrp(e.value)}
+        onSelectionChange={(e) => setAdmUserPermiss(e.value)}
         onRowSelect={onRowSelect}
         onRowUnselect={onRowUnselect}
       >
         <Column
           //bodyClassName="text-center"
-          body={userGrpTemplate}
+          body={userPermissTemplate}
           exportable={false}
           headerClassName="w-10rem"
           style={{ minWidth: '4rem' }}
-        />        
+        />
         <Column
-          field="code"
-          header="Code"
+          field="rcode"
+          header="Roll code"
           sortable
           filter
-          style={{ width: "25%" }}
+          style={{ width: "20%" }}
         ></Column>
         <Column
-          field="text"
-          header="Text"
+          field="rtext"
+          header="Roll"
           sortable
           filter
-          style={{ width: "60%" }}
-        ></Column>
-        <Column
-          field="valid"
-          filterField="valid"
-          dataType="numeric"
-          header="Valid"
-          sortable
-          filter
-          filterElement={validFilterTemplate}
-          style={{ width: "15%" }}
-          bodyClassName="text-center"
-          body={validBodyTemplate}
+          style={{ width: "75%" }}
         ></Column>
       </DataTable>
       <Dialog
-        header="UserGrp"
+        header="UserPermiss"
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {
@@ -287,13 +274,14 @@ export default function AdmUserGrpL(props) {
         }}
       >
         {showMyComponent && (
-          <AdmAkcija
+          <AdmUserPermiss
             parameter={"inputTextValue"}
-            admUserGrp={admUserGrp}
+            admUserPermiss={admUserPermiss}
+            admUser={props.admUser}
             handleDialogClose={handleDialogClose}
             setVisible={setVisible}
             dialog={true}
-            userGrpTip={userGrpTip}
+            userPermissTip={userPermissTip}
           />
         )}
         <div className="p-dialog-header-icons" style={{ display: 'none' }}>
