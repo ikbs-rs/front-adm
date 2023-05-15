@@ -1,39 +1,40 @@
 import React, { useState, useEffect, useRef } from "react";
-import { classNames } from "primereact/utils";
 import { DataTable } from "primereact/datatable";
+import { classNames } from "primereact/utils";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { Toast } from "primereact/toast";
-import { AdmUserGrpService } from "../../service/model/AdmUserGrpService";
-import AdmAkcija from './admUserGrp';
+import { AdmUserService } from "../../service/model/AdmUserService";
+import AdmUser from './admUser';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
 
 
-export default function AdmUserGrpL() {
-  const objName = "adm_usergrp"
-  const emptyAdmUserGrp = EmptyEntities[objName]
+export default function AdmUserL() {
+  const objName = "adm_user"
+  const emptyAdmUser = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);
-  const [admUserGrps, setAdmUserGrps] = useState([]);
-  const [admUserGrp, setAdmUserGrp] = useState(emptyAdmUserGrp);
+  const [admUsers, setAdmUsers] = useState([]);
+  const [admUser, setAdmUser] = useState(emptyAdmUser);
   const [filters, setFilters] = useState('');
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const [loading, setLoading] = useState(false);
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
-  const [userGrpTip, setUserGrpTip] = useState('');
+  const [userTip, setUserTip] = useState('');
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const admUserGrpService = new AdmUserGrpService();
-        const data = await admUserGrpService.getAdmUserGrpV();
-        setAdmUserGrps(data);
+        const admUserService = new AdmUserService();
+        const data = await admUserService.getAdmUserV();
+        setAdmUsers(data);
         initFilters();
+        setLoading(false)
       } catch (error) {
         console.error(error);
         // Obrada greške ako je potrebna
@@ -44,32 +45,33 @@ export default function AdmUserGrpL() {
 
   const handleDialogClose = (newObj) => {
     const localObj = { newObj };
+    //console.log("*-*-*-*--*-*-*-*-*-*-*-", localObj)
 
-    let _admUserGrps = [...admUserGrps];
-    let _admUserGrp = { ...localObj.newObj.obj };
+    let _admUsers = [...admUsers];
+    let _admUser = { ...localObj.newObj.obj };
 
     //setSubmitted(true);
-    if (localObj.newObj.userGrpTip === "CREATE") {
-      _admUserGrps.push(_admUserGrp);
-    } else if (localObj.newObj.userGrpTip === "UPDATE") {
+    if (localObj.newObj.userTip === "CREATE") {
+      _admUsers.push(_admUser);
+    } else if (localObj.newObj.userTip === "UPDATE") {
       const index = findIndexById(localObj.newObj.obj.id);
-      _admUserGrps[index] = _admUserGrp;
-    } else if ((localObj.newObj.userGrpTip === "DELETE")) {
-      _admUserGrps = admUserGrps.filter((val) => val.id !== localObj.newObj.obj.id);
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserGrp Delete', life: 3000 });
+      _admUsers[index] = _admUser;
+    } else if ((localObj.newObj.userTip === "DELETE")) {
+      _admUsers = admUsers.filter((val) => val.id !== localObj.newObj.obj.id);
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUser Delete', life: 3000 });
     } else {
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserGrp ?', life: 3000 });
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUser ?', life: 3000 });
     }
-    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.userGrpTip}`, life: 3000 });
-    setAdmUserGrps(_admUserGrps);
-    setAdmUserGrp(emptyAdmUserGrp);
+    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.userTip}`, life: 3000 });
+    setAdmUsers(_admUsers);
+    setAdmUser(emptyAdmUser);
   };
 
   const findIndexById = (id) => {
     let index = -1;
 
-    for (let i = 0; i < admUserGrps.length; i++) {
-      if (admUserGrps[i].id === id) {
+    for (let i = 0; i < admUsers.length; i++) {
+      if (admUsers[i].id === id) {
         index = i;
         break;
       }
@@ -79,13 +81,13 @@ export default function AdmUserGrpL() {
   };
 
   const openNew = () => {
-    setAdmUserGrpDialog(emptyAdmUserGrp);
+    setAdmUserDialog(emptyAdmUser);
   };
 
   const onRowSelect = (event) => {
     toast.current.show({
       severity: "info",
-      summary: "Action Selected",
+      summary: "User Selected",
       detail: `Id: ${event.data.id} Name: ${event.data.text}`,
       life: 3000,
     });
@@ -94,7 +96,7 @@ export default function AdmUserGrpL() {
   const onRowUnselect = (event) => {
     toast.current.show({
       severity: "warn",
-      summary: "Action Unselected",
+      summary: "User Unselected",
       detail: `Id: ${event.data.id} Name: ${event.data.text}`,
       life: 3000,
     });
@@ -103,14 +105,34 @@ export default function AdmUserGrpL() {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      code: {
+      username: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      text: {
+      firstname: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
+      lastname: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      mail: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      gtext: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      tip: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      created_at: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },      
       valid: { value: null, matchMode: FilterMatchMode.EQUALS },
     });
     setGlobalFilterValue("");
@@ -137,7 +159,7 @@ export default function AdmUserGrpL() {
           <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
         <div className="flex-grow-1" />
-        <b>User group Lista</b>
+        <b>User List</b>
         <div className="flex-grow-1"></div>
         <div className="flex flex-wrap gap-1">
           <span className="p-input-icon-left">
@@ -185,20 +207,21 @@ export default function AdmUserGrpL() {
         />
       </div>
     );
-  };
-
-  // <--- Dialog
-  const setAdmUserGrpDialog = (admUserGrp) => {
-    setVisible(true)
-    setUserGrpTip("CREATE")
-    setAdmUserGrp({ ...admUserGrp });
-  }
-  //  Dialog --->
+  };  
 
   const header = renderHeader();
   // heder za filter/>
 
-  const userGrpTemplate = (rowData) => {
+  // <--- Dialog
+  const setAdmUserDialog = (newAdmUser) => {
+    setVisible(true)
+    setUserTip("CREATE")
+    setAdmUser({ ...newAdmUser });
+    console.log("DialogTrue", admUser)
+  }
+  //  Dialog --->
+
+  const userTemplate = (rowData) => {
     return (
       <div className="flex flex-wrap gap-1">
 
@@ -207,8 +230,8 @@ export default function AdmUserGrpL() {
           icon="pi pi-pencil"
           style={{ width: '24px', height: '24px' }}
           onClick={() => {
-            setAdmUserGrpDialog(rowData)
-            setUserGrpTip("UPDATE")
+            setAdmUserDialog(rowData)
+            setUserTip("UPDATE")
           }}
           text
           raised ></Button>
@@ -223,9 +246,9 @@ export default function AdmUserGrpL() {
       <DataTable
         dataKey="id"
         selectionMode="single"
-        selection={admUserGrp}
+        selection={admUser}
         loading={loading}
-        value={admUserGrps}
+        value={admUsers}
         header={header}
         showGridlines
         removableSort
@@ -238,31 +261,59 @@ export default function AdmUserGrpL() {
         paginator
         rows={10}
         rowsPerPageOptions={[5, 10, 25, 50]}
-        onSelectionChange={(e) => setAdmUserGrp(e.value)}
+        onSelectionChange={(e) => setAdmUser(e.value)}
         onRowSelect={onRowSelect}
         onRowUnselect={onRowUnselect}
       >
         <Column
           //bodyClassName="text-center"
-          body={userGrpTemplate}
+          body={userTemplate}
           exportable={false}
           headerClassName="w-10rem"
           style={{ minWidth: '4rem' }}
         />        
         <Column
-          field="code"
-          header="Code"
+          field="username"
+          header="Username"
           sortable
           filter
-          style={{ width: "25%" }}
+          style={{ width: "10%" }}
         ></Column>
         <Column
-          field="text"
-          header="Text"
+          field="firstname"
+          header="First Name"
           sortable
           filter
-          style={{ width: "60%" }}
+          style={{ width: "15%" }}
+        ></Column>   
+        <Column
+          field="lastname"
+          header="Last Name"
+          sortable
+          filter
+          style={{ width: "20%" }}
+        ></Column>              
+        <Column
+          field="mail"
+          header="Mail"
+          sortable
+          filter
+          style={{ width: "15%" }}
         ></Column>
+        <Column
+          field="gtext"
+          header="Group"
+          sortable
+          filter
+          style={{ width: "30%" }}
+        ></Column> 
+        <Column
+          field="tip"
+          header="Tip"
+          sortable
+          filter
+          style={{ width: "5%" }}
+        ></Column>                       
         <Column
           field="valid"
           filterField="valid"
@@ -274,10 +325,10 @@ export default function AdmUserGrpL() {
           style={{ width: "15%" }}
           bodyClassName="text-center"
           body={validBodyTemplate}
-        ></Column>
+        ></Column>        
       </DataTable>
       <Dialog
-        header="UserGrp"
+        header="User"
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {
@@ -286,20 +337,15 @@ export default function AdmUserGrpL() {
         }}
       >
         {showMyComponent && (
-          <AdmAkcija
+          <AdmUser
             parameter={"inputTextValue"}
-            admUserGrp={admUserGrp}
+            admUser={admUser}
             handleDialogClose={handleDialogClose}
             setVisible={setVisible}
             dialog={true}
-            userGrpTip={userGrpTip}
+            userTip={userTip}
           />
         )}
-        <div className="p-dialog-header-icons" style={{ display: 'none' }}>
-          <button className="p-dialog-header-close p-link">
-            <span className="p-dialog-header-close-icon pi pi-times"></span>
-          </button>
-        </div>
       </Dialog>
     </div>
   );

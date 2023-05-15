@@ -214,26 +214,26 @@ export default function AdmMessageL() {
         onRowUnselect={onRowUnselect}
       >
         <Column
-          field="code"
-          header="Code"
-          sortable
-          filter
-          style={{ width: "25%" }}
-        ></Column>
-        <Column
-          field="text"
-          header="Text"
-          sortable
-          filter
-          style={{ width: "60%" }}
-        ></Column>
-        <Column
           //bodyClassName="text-center"
           body={messageTemplate}
           exportable={false}
           headerClassName="w-10rem"
           style={{ minWidth: '4rem' }}
         />
+        <Column
+          field="code"
+          header="Code"
+          sortable
+          filter
+          style={{ width: "20%" }}
+        ></Column>
+        <Column
+          field="text"
+          header="Text"
+          sortable
+          filter
+          style={{ width: "75%" }}
+        ></Column>
       </DataTable>
       <Dialog
         header="Message"

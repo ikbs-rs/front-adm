@@ -243,6 +243,13 @@ export default function AdmActionL() {
         onRowUnselect={onRowUnselect}
       >
         <Column
+          //bodyClassName="text-center"
+          body={actionTemplate}
+          exportable={false}
+          headerClassName="w-10rem"
+          style={{ minWidth: '4rem' }}
+        />        
+        <Column
           field="code"
           header="Code"
           sortable
@@ -268,13 +275,6 @@ export default function AdmActionL() {
           bodyClassName="text-center"
           body={validBodyTemplate}
         ></Column>
-        <Column
-          //bodyClassName="text-center"
-          body={actionTemplate}
-          exportable={false}
-          headerClassName="w-10rem"
-          style={{ minWidth: '4rem' }}
-        />
       </DataTable>
       <Dialog
         header="Action"

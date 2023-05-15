@@ -216,26 +216,26 @@ export default function AdmDbmsErrL() {
         onRowUnselect={onRowUnselect}
       >
         <Column
+          //bodyClassName="text-center"
+          body={dbmsErrTemplate}
+          exportable={false}
+          headerClassName="w-10rem"
+          style={{ minWidth: '4rem' }}
+        />        
+        <Column
           field="code"
           header="Code"
           sortable
           filter
-          style={{ width: "25%" }}
+          style={{ width: "20%" }}
         ></Column>
         <Column
           field="text"
           header="Text"
           sortable
           filter
-          style={{ width: "60%" }}
+          style={{ width: "75%" }}
         ></Column>
-        <Column
-          //bodyClassName="text-center"
-          body={dbmsErrTemplate}
-          exportable={false}
-          headerClassName="w-10rem"
-          style={{ minWidth: '4rem' }}
-        />
       </DataTable>
       <Dialog
         header="DbmsErr"
