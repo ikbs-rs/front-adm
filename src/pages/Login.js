@@ -12,8 +12,9 @@ export const Login = () => {
     const [checked, setChecked] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const sl = ''
 
-    const handleButtoClick = (parameter) => {
+    const handleButtonClick = (parameter) => {
         // Ovde nedostaje kod za logovanje
         let isLoggedIn = true;
         const usernameInput = document.getElementById("input").value; // Koristimo document.getElementById da bismo dohvatili vrijednost polja Username
@@ -24,7 +25,7 @@ export const Login = () => {
             password: passwordInput
         };
 
-        dispatch(setLanguage('en')); // Postavite željeni jezik umesto 'en'
+        //dispatch(setLanguage('en')); // Postavite željeni jezik umesto 'en'
 
         axios
             .post(`${env.JWT_BACK_URL}/adm/services/sign/in`, requestData)
@@ -34,7 +35,9 @@ export const Login = () => {
                     //TODO idi na pocetnu stranicu
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('refreshToken', response.data.refreshToken);
-                    navigate('/');
+                    const newUrl = `${window.location.pathname}?sl=${sl}`;
+                    window.location.replace(newUrl);
+                    //navigate('/');
                 } else {
                     //TODO vrati se na login
                     navigate('/login');
@@ -96,7 +99,7 @@ export const Login = () => {
                         </div>
 
                         <div className="col-12 sm:col-6 md:col-6">
-                            <Button label="Sign In" icon="pi pi-check" onClick={() => handleButtoClick('app')} />
+                            <Button label="Sign In" icon="pi pi-check" onClick={() => handleButtonClick('app')} />
                         </div>
                     </div>
                 </div>

@@ -27,8 +27,13 @@ import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import './App.scss';
 import env from "./configs/env"
+import { useDispatch } from 'react-redux';
+import { setLanguage } from './store/actions';
 
 const App = () => {
+    const dispatch = useDispatch();
+    const urlParams = new URLSearchParams(window.location.search);
+    let selectedLanguage = urlParams.get('sl');
     const [layoutMode, setLayoutMode] = useState('static');
     const [lightMenu, setLightMenu] = useState(true);
     const [overlayMenuActive, setOverlayMenuActive] = useState(false);
@@ -74,7 +79,7 @@ const App = () => {
             label: 'Module selection',
             icon: 'pi pi-fw pi-compass',
             items: [
-                { label: 'Back', icon: 'pi pi-sign-out', url: `${env.START_URL}` }
+                { label: 'Back', icon: 'pi pi-sign-out', url: `${env.START_URL}?sl=${selectedLanguage}` }
             ]
         }
     ];
@@ -84,6 +89,12 @@ const App = () => {
     let rightMenuClick;
     let userMenuClick;
     let configClick = false;
+
+    useEffect(() => {      
+      if (selectedLanguage) {
+        dispatch(setLanguage(selectedLanguage)); // Postavi jezik iz URL-a u globalni store
+      }
+    }, [dispatch]);
 
     useEffect(() => {
         copyTooltipRef && copyTooltipRef.current && copyTooltipRef.current.updateTargetEvents();
