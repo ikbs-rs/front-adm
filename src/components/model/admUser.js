@@ -10,7 +10,6 @@ import { Dropdown } from 'primereact/dropdown';
 import { AdmUserGrpService } from "../../service/model/AdmUserGrpService";
 
 const AdmUser = (props) => {
-    //console.log("Ulaz:", props)
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [admUser, setAdmUser] = useState(props.admUser);
     const [submitted, setSubmitted] = useState(false);
@@ -133,7 +132,6 @@ const AdmUser = (props) => {
         let val = ''
         if (type === "options") {
             if (name==='usergrp') {
-                console.log(e.value)
                 setDdUserGrpItem(e.value);
                 admUser.gtext= e.value.name
             } else if (name==='valid') {
@@ -147,7 +145,6 @@ const AdmUser = (props) => {
         }
 
         let _admUser = { ...admUser };
-        //console.log("onInputChange", val)
         _admUser[`${name}`] = val;
 
         setAdmUser(_admUser);

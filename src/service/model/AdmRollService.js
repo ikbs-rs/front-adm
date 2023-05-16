@@ -21,7 +21,7 @@ export class AdmRollService {
 
   async postAdmRoll(newObj) {
     try {
-      if (newObj.code.trim() === '' || newObj.text.trim() === '' || newObj.valid === null) {
+      if (newObj.code.trim() === '' || newObj.name.trim() === '' || newObj.valid === null) {
         throw new Error(
           "Items must be filled!"
         );
@@ -36,7 +36,6 @@ export class AdmRollService {
 
 
       const response = await axios.post(url, jsonObj, { headers });
-      //console.log("**************"  , response, "****************")
       return response.data.items;
     } catch (error) {
       console.error(error);
@@ -47,7 +46,7 @@ export class AdmRollService {
 
   async putAdmRoll(newObj) {
     try {
-      if (newObj.code.trim() === '' || newObj.text.trim() === '' || newObj.valid === null) {
+      if (newObj.code.trim() === '' || newObj.name.trim() === '' || newObj.valid === null) {
         throw new Error(
           "Items must be filled!"
         );
@@ -61,7 +60,6 @@ export class AdmRollService {
       const jsonObj = JSON.stringify(newObj)
 
       const response = await axios.put(url, jsonObj, { headers });
-      //console.log("**************"  , response, "****************")
       return response.data.items;
     } catch (error) {
       console.error(error);

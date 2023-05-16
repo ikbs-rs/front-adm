@@ -36,7 +36,7 @@ export class AdmUserPermissService {
 
   async postAdmUserPermiss(newObj) {
     try {
-      if (newObj.code.trim() === '' || newObj.text.trim() === '') {
+      if (newObj.roll === null || newObj.usr === null) {
         throw new Error(
           "Items must be filled!"
         );
@@ -61,7 +61,7 @@ export class AdmUserPermissService {
 
   async putAdmUserPermiss(newObj) {
     try {
-      if (newObj.code.trim() === '' || newObj.text.trim() === '') {
+      if (newObj.roll === null || newObj.usr === null) {
         throw new Error(
           "Items must be filled!"
         );
@@ -75,7 +75,6 @@ export class AdmUserPermissService {
       const jsonObj = JSON.stringify(newObj)
 
       const response = await axios.put(url, jsonObj, { headers });
-      //console.log("**************"  , response, "****************")
       return response.data.items;
     } catch (error) {
       console.error(error);

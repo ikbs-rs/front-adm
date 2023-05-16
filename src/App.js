@@ -11,7 +11,7 @@ import AppRightMenu from './AppRightMenu';
 
 import UserGrp from './components/model/admUserGrpL';
 import User from './components/model/admUserL';
-import Roll from './components/InputDemo';
+import Roll from './components/model/admRollL';
 import Action from './components/model/admActionL';
 import DbParameter from './components/model/admDbParameterL';
 import Message from './components/model/admMessageL';

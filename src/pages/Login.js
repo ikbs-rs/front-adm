@@ -5,46 +5,50 @@ import { Checkbox } from 'primereact/checkbox';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import env from "../configs/env"
+import { useDispatch } from 'react-redux';
+import { setLanguage } from '../store/actions';
 
 export const Login = () => {
     const [checked, setChecked] = useState(false);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleButtoClick = (parameter) => {
         // Ovde nedostaje kod za logovanje
         let isLoggedIn = true;
-        console.log("**************16**************")
         const usernameInput = document.getElementById("input").value; // Koristimo document.getElementById da bismo dohvatili vrijednost polja Username
         const passwordInput = document.getElementById("password-input").value; // Koristimo document.getElementById da bismo dohvatili vrijednost polja Password
-        
+
         const requestData = {
-          username: usernameInput,
-          password: passwordInput
+            username: usernameInput,
+            password: passwordInput
         };
-        console.log("**************24**************")
+
+        dispatch(setLanguage('en')); // Postavite željeni jezik umesto 'en'
+
         axios
-        .post(`${env.JWT_BACK_URL}/adm/services/sign/in`, requestData)
-        .then((response) => {
-          isLoggedIn = response.status === 200; // Ako je status 200, isLoggedIn će biti true
-           if (isLoggedIn) {
-             //TODO idi na pocetnu stranicu
-             localStorage.setItem('token', response.data.token);
-             localStorage.setItem('refreshToken', response.data.refreshToken);
-             navigate('/');
-           } else {
-             //TODO vrati se na login
-             navigate('/login');
-           }
-        })
-        .catch((error) => {
-            navigate('/login');
-        })
-        .catch((error) => {
-            console.error(error);
-            isLoggedIn = false; // Ako se dogodila pogreška, isLoggedIn će biti false
-            //TODO vrati se na login
-          });        
-    }    
+            .post(`${env.JWT_BACK_URL}/adm/services/sign/in`, requestData)
+            .then((response) => {
+                isLoggedIn = response.status === 200; // Ako je status 200, isLoggedIn će biti true
+                if (isLoggedIn) {
+                    //TODO idi na pocetnu stranicu
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('refreshToken', response.data.refreshToken);
+                    navigate('/');
+                } else {
+                    //TODO vrati se na login
+                    navigate('/login');
+                }
+            })
+            .catch((error) => {
+                navigate('/login');
+            })
+            .catch((error) => {
+                console.error(error);
+                isLoggedIn = false; // Ako se dogodila pogreška, isLoggedIn će biti false
+                //TODO vrati se na login
+            });
+    }
 
     return (
         <div className="login-body">
@@ -67,6 +71,19 @@ export const Login = () => {
                                 <InputText id="password-input" type="password" />
                             </div>
                         </div>
+                        <div className="col-12 language-container">
+                            <label>Language</label>
+                            <div className="login-input">
+                                <select onChange={(e) => dispatch(setLanguage(e.target.value))}>
+                                    <option value="en">English</option>
+                                    <option value="sr-Cyrl">Srpski (ćirilica)</option>
+                                    <option value="sr-Latn">Srpski (latinica)</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    {/* Dodajte ostale jezike po potrebi */}
+                                </select>
+                            </div>
+                        </div>
                         <div className="col-12 sm:col-6 md:col-6 rememberme-container">
                             <Checkbox checked={checked} onChange={(e) => setChecked(e.checked)} />
                             <label> Remember me</label>
@@ -79,7 +96,7 @@ export const Login = () => {
                         </div>
 
                         <div className="col-12 sm:col-6 md:col-6">
-                            <Button label="Sign In" icon="pi pi-check" onClick={() => handleButtoClick('app')}/>
+                            <Button label="Sign In" icon="pi pi-check" onClick={() => handleButtoClick('app')} />
                         </div>
                     </div>
                 </div>
