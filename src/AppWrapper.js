@@ -16,6 +16,7 @@ const AppWrapper = (props) => {
     const search = window.location.search;
     const params = new URLSearchParams(search);
     const sl = params.get('sl');
+    localStorage.setItem('sl', sl||"en")
 
     useEffect(() => {
       const token = localStorage.getItem('token');      

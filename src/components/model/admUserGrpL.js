@@ -12,10 +12,13 @@ import AdmAkcija from './admUserGrp';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
+import { translations } from "../../configs/translations";
+import AdmUserGrp from "./admUserGrp";
 
 
 export default function AdmUserGrpL(props) {
   const objName = "adm_usergrp"
+  const selectedLanguage = localStorage.getItem('sl')||'en'
   const emptyAdmUserGrp = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);
   const [admUserGrps, setAdmUserGrps] = useState([]);
@@ -31,7 +34,7 @@ export default function AdmUserGrpL(props) {
     async function fetchData() {
       try {
         const admUserGrpService = new AdmUserGrpService();
-        const data = await admUserGrpService.getAdmUserGrpV();
+        const data = await admUserGrpService.getAdmUserGrp();
         setAdmUserGrps(data);
         initFilters();
       } catch (error) {
@@ -86,7 +89,7 @@ export default function AdmUserGrpL(props) {
     toast.current.show({
       severity: "info",
       summary: "Action Selected",
-      detail: `Id: ${event.data.id} Name: ${event.data.text}`,
+      detail: `Id: ${event.data.id} Name: ${event.data.textx}`,
       life: 3000,
     });
   };
@@ -95,7 +98,7 @@ export default function AdmUserGrpL(props) {
     toast.current.show({
       severity: "warn",
       summary: "Action Unselected",
-      detail: `Id: ${event.data.id} Name: ${event.data.text}`,
+      detail: `Id: ${event.data.id} Name: ${event.data.textx}`,
       life: 3000,
     });
   };
@@ -107,7 +110,7 @@ export default function AdmUserGrpL(props) {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      text: {
+      textx: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
@@ -134,10 +137,10 @@ export default function AdmUserGrpL(props) {
     return (
       <div className="flex card-container">
         <div className="flex flex-wrap gap-1">
-          <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} text raised />
+          <Button label={translations[selectedLanguage].New} icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
         <div className="flex-grow-1" />
-        <b>User group Lista</b>
+        <b>{translations[selectedLanguage].UsergroupLista}</b>
         <div className="flex-grow-1"></div>
         <div className="flex flex-wrap gap-1">
           <span className="p-input-icon-left">
@@ -145,13 +148,13 @@ export default function AdmUserGrpL(props) {
             <InputText
               value={globalFilterValue}
               onChange={onGlobalFilterChange}
-              placeholder="Keyword Search"
+              placeholder={translations[selectedLanguage].KeywordSearch}
             />
           </span>
           <Button
             type="button"
             icon="pi pi-filter-slash"
-            label="Clear"
+            label={translations[selectedLanguage].Clear}
             outlined
             onClick={clearFilter}
             text raised
@@ -177,7 +180,7 @@ export default function AdmUserGrpL(props) {
     return (
       <div className="flex align-items-center gap-2">
         <label htmlFor="verified-filter" className="font-bold">
-          Valid
+        {translations[selectedLanguage].Valid}
         </label>
         <TriStateCheckbox
           inputId="verified-filter"
@@ -252,14 +255,14 @@ export default function AdmUserGrpL(props) {
         />        
         <Column
           field="code"
-          header="Code"
+          header={translations[selectedLanguage].Code}
           sortable
           filter
           style={{ width: "25%" }}
         ></Column>
         <Column
-          field="text"
-          header="Text"
+          field="textx"
+          header={translations[selectedLanguage].Text}
           sortable
           filter
           style={{ width: "60%" }}
@@ -268,7 +271,7 @@ export default function AdmUserGrpL(props) {
           field="valid"
           filterField="valid"
           dataType="numeric"
-          header="Valid"
+          header={translations[selectedLanguage].Valid}
           sortable
           filter
           filterElement={validFilterTemplate}
@@ -278,7 +281,7 @@ export default function AdmUserGrpL(props) {
         ></Column>
       </DataTable>
       <Dialog
-        header="UserGrp"
+        header={translations[selectedLanguage].Usergroup}
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {
@@ -287,7 +290,7 @@ export default function AdmUserGrpL(props) {
         }}
       >
         {showMyComponent && (
-          <AdmAkcija
+          <AdmUserGrp
             parameter={"inputTextValue"}
             admUserGrp={admUserGrp}
             handleDialogClose={handleDialogClose}
@@ -301,7 +304,7 @@ export default function AdmUserGrpL(props) {
             <span className="p-dialog-header-close-icon pi pi-times"></span>
           </button>
         </div>
-      </Dialog>
+      </Dialog>      
     </div>
   );
 }

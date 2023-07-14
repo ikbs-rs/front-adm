@@ -8,8 +8,10 @@ import { Toast } from "primereact/toast";
 import DeleteDialog from '../dialog/DeleteDialog';
 import { Dropdown } from 'primereact/dropdown';
 import { AdmUserGrpService } from "../../service/model/AdmUserGrpService";
+import { translations } from "../../configs/translations";
 
 const AdmUser = (props) => {
+    const selectedLanguage = localStorage.getItem('sl')||'en'
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [admUser, setAdmUser] = useState(props.admUser);
     const [submitted, setSubmitted] = useState(false);
@@ -22,8 +24,8 @@ const AdmUser = (props) => {
 
     const toast = useRef(null);
     const yesNoItems = [
-        { name: 'Yes', code: '1' },
-        { name: 'No', code: '0' }
+        { name: `${translations[selectedLanguage].Yes}`, code: '1' },
+        { name: `${translations[selectedLanguage].No}`, code: '0' }
     ];
 
     useEffect(() => {
@@ -41,11 +43,6 @@ const AdmUser = (props) => {
         }
         fetchData();
       }, []);
-
-    const userGrpItems = [
-        { name: 'Yes', code: '1' },
-        { name: 'No', code: '0' }
-    ];
    
     const findDdYesNoItemByCode = (code) => {
         return yesNoItems.find((item) => item.code === code) || null;
@@ -161,40 +158,40 @@ const AdmUser = (props) => {
                 <div className="card">
                     <div className="p-fluid formgrid grid">
                         <div className="field col-12 md:col-7">
-                            <label htmlFor="username">Username *</label>
+                            <label htmlFor="username">{translations[selectedLanguage].Username} *</label>
                             <InputText id="username" autoFocus
                                 value={admUser.username} onChange={(e) => onInputChange(e, "text", 'username')}
                                 required
                                 className={classNames({ 'p-invalid': submitted && !admUser.username })}
                             />
-                            {submitted && !admUser.username && <small className="p-error">Username is required.</small>}
+                            {submitted && !admUser.username && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
                         <div className="field col-12 md:col-7">
-                            <label htmlFor="mail">Mail *</label>
+                            <label htmlFor="mail">{translations[selectedLanguage].Mail} *</label>
                             <InputText
                                 id="mail"
                                 value={admUser.mail} onChange={(e) => onInputChange(e, "text", 'mail')}
                                 required
                                 className={classNames({ 'p-invalid': submitted && !admUser.mail })}
                             />
-                            {submitted && !admUser.mail && <small className="p-error">Mail is required.</small>}
+                            {submitted && !admUser.mail && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>                        
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="firstname">Firstname</label>
+                            <label htmlFor="firstname">{translations[selectedLanguage].FirstName}</label>
                             <InputText
                                 id="firstname"
                                 value={admUser.firstname} onChange={(e) => onInputChange(e, "text", 'firstname')}
                             />
                         </div>   
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="lastname">Lastname</label>
+                            <label htmlFor="lastname">{translations[selectedLanguage].LastName}</label>
                             <InputText
                                 id="lastname"
                                 value={admUser.lastname} onChange={(e) => onInputChange(e, "text", 'lastname')}
                             />
                         </div> 
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="usergrp">UserGrp *</label>
+                            <label htmlFor="usergrp">{translations[selectedLanguage].Usergroup} *</label>
                             <Dropdown id="usergrp"
                                 value={ddUserGrpItem}
                                 options={ddUserGrpItems}
@@ -204,10 +201,10 @@ const AdmUser = (props) => {
                                 placeholder="Select One"
                                 className={classNames({ 'p-invalid': submitted && !admUser.usergrp })}
                             />
-                            {submitted && !admUser.usergrp && <small className="p-error">UserGrp is required.</small>}
+                            {submitted && !admUser.usergrp && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>                                                      
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="admin">Admin *</label>
+                            <label htmlFor="admin">{translations[selectedLanguage].Admin} *</label>
                             <Dropdown id="admin"
                                 value={ddAdminItem}
                                 options={ddAdminItems}
@@ -217,34 +214,34 @@ const AdmUser = (props) => {
                                 placeholder="Select One"
                                 className={classNames({ 'p-invalid': submitted && !admUser.admin })}
                             />
-                            {submitted && !admUser.admin && <small className="p-error">Admin is required.</small>}
+                            {submitted && !admUser.admin && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>   
                         <div className="field col-12 md:col-7">
-                            <label htmlFor="tip">Tip *</label>
+                            <label htmlFor="tip">{translations[selectedLanguage].Type} *</label>
                             <InputText
                                 id="tip"
                                 value={admUser.tip} onChange={(e) => onInputChange(e, "text", 'tip')}
                                 required
                                 className={classNames({ 'p-invalid': submitted && !admUser.tip })}
                             />
-                            {submitted && !admUser.tip && <small className="p-error">Tip is required.</small>}
+                            {submitted && !admUser.tip && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>                         
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="sapuser">Sapuser</label>
+                            <label htmlFor="sapuser">{translations[selectedLanguage].Sapuser}</label>
                             <InputText
                                 id="sapuser"
                                 value={admUser.sapuser} onChange={(e) => onInputChange(e, "text", 'sapuser')}
                             />
                         </div> 
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="aduser">Aduser</label>
+                            <label htmlFor="aduser">{translations[selectedLanguage].ADuser}</label>
                             <InputText
                                 id="aduser"
                                 value={admUser.aduser} onChange={(e) => onInputChange(e, "text", 'aduser')}
                             />
                         </div>                                                                                             
                         <div className="field col-12 md:col-3">
-                            <label htmlFor="valid">Valid *</label>
+                            <label htmlFor="valid">{translations[selectedLanguage].Valid} *</label>
                             <Dropdown id="valid"
                                 value={ddValidItem}
                                 options={ddValidItems}
@@ -254,7 +251,7 @@ const AdmUser = (props) => {
                                 placeholder="Select One"
                                 className={classNames({ 'p-invalid': submitted && !admUser.valid })}
                             />
-                            {submitted && !admUser.valid && <small className="p-error">Valid is required.</small>}
+                            {submitted && !admUser.valid && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>                                                                                                                                        
                     </div>
 

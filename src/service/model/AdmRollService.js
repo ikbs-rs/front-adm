@@ -3,8 +3,9 @@ import env from "../../configs/env"
 import Token from "../../utilities/Token";
 
 export class AdmRollService {
-  async getAdmRollV() {
-    const url = `${env.ADM_BACK_URL}/adm/roll`;
+  async getAdmRollX() {
+    const selectedLanguage = localStorage.getItem('sl') || 'en'
+    const url = `${env.ADM_BACK_URL}/adm/x/roll/?sl=${selectedLanguage}`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       Authorization: tokenLocal.token
@@ -21,19 +22,20 @@ export class AdmRollService {
 
   async postAdmRoll(newObj) {
     try {
-      if (newObj.code.trim() === '' || newObj.name.trim() === '' || newObj.valid === null) {
+      const selectedLanguage = localStorage.getItem('sl') || 'en'
+      if (newObj.code.trim() === '' || newObj.text.trim() === '' || newObj.valid === null) {
         throw new Error(
           "Items must be filled!"
         );
       }
-      const url = `${env.ADM_BACK_URL}/adm/roll`;
+      const url = `${env.ADM_BACK_URL}/adm/x/roll/?sl=${selectedLanguage}`;
+
       const tokenLocal = await Token.getTokensLS();
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': tokenLocal.token
       };
       const jsonObj = JSON.stringify(newObj)
-
 
       const response = await axios.post(url, jsonObj, { headers });
       return response.data.items;
@@ -46,12 +48,13 @@ export class AdmRollService {
 
   async putAdmRoll(newObj) {
     try {
-      if (newObj.code.trim() === '' || newObj.name.trim() === '' || newObj.valid === null) {
+      const selectedLanguage = localStorage.getItem('sl') || 'en'
+      if (newObj.code.trim() === '' || newObj.text.trim() === '' || newObj.valid === null) {
         throw new Error(
           "Items must be filled!"
         );
       }
-      const url = `${env.ADM_BACK_URL}/adm/roll`;
+      const url = `${env.ADM_BACK_URL}/adm/x/roll/?sl=${selectedLanguage}`;
       const tokenLocal = await Token.getTokensLS();
       const headers = {
         'Content-Type': 'application/json',

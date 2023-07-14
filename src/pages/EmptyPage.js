@@ -1,12 +1,14 @@
 import React from 'react';
+import { translations } from "../configs/translations";
 
 const EmptyPage = () => {
+    const selectedLanguage = localStorage.getItem('sl')||'en'
     return (
         <div className="grid">
             <div className="col-12">
                 <div className="card">
-                    <h5>System administration </h5>
-                    <p>The System Administration module enables the administration of user access rights.</p>
+                    <h5>{translations[selectedLanguage].SystemAdministration } </h5>
+                    <p>{translations[selectedLanguage]._eptyPage }</p>
                 </div>
             </div>
         </div>

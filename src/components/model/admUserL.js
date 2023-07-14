@@ -13,10 +13,12 @@ import AdmUserPermissL from './admUserPermissL';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
+import { translations } from "../../configs/translations";
 
 
 export default function AdmUserL(props) {
   const objName = "adm_user"
+  const selectedLanguage = localStorage.getItem('sl')||'en'
   const emptyAdmUser = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);
   const [admUsers, setAdmUsers] = useState([]);
@@ -155,13 +157,13 @@ export default function AdmUserL(props) {
     return (
       <div className="flex card-container">
         <div className="flex flex-wrap gap-1">
-          <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} text raised />
+          <Button label={translations[selectedLanguage].New} icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
         <div className="flex flex-wrap gap-1">
-          <Button label="Roll" icon="pi pi-video"  onClick={openUserRoll} text raised disabled={!admUser}/>
+          <Button label={translations[selectedLanguage].Roll} icon="pi pi-video"  onClick={openUserRoll} text raised disabled={!admUser}/>
         </div>        
         <div className="flex-grow-1" />
-        <b>User List</b>
+        <b>{translations[selectedLanguage].UsersList}</b>
         <div className="flex-grow-1"></div>
         <div className="flex flex-wrap gap-1">
           <span className="p-input-icon-left">
@@ -175,7 +177,7 @@ export default function AdmUserL(props) {
           <Button
             type="button"
             icon="pi pi-filter-slash"
-            label="Clear"
+            label={translations[selectedLanguage].Clear}
             outlined
             onClick={clearFilter}
             text raised
@@ -201,7 +203,7 @@ export default function AdmUserL(props) {
     return (
       <div className="flex align-items-center gap-2">
         <label htmlFor="verified-filter" className="font-bold">
-          Valid
+        {translations[selectedLanguage].Valid}
         </label>
         <TriStateCheckbox
           inputId="verified-filter"
@@ -282,42 +284,42 @@ export default function AdmUserL(props) {
         />        
         <Column
           field="username"
-          header="Username"
+          header={translations[selectedLanguage].Username}
           sortable
           filter
           style={{ width: "10%" }}
         ></Column>
         <Column
           field="firstname"
-          header="First Name"
+          header={translations[selectedLanguage].FirstName}
           sortable
           filter
           style={{ width: "15%" }}
         ></Column>   
         <Column
           field="lastname"
-          header="Last Name"
+          header={translations[selectedLanguage].LastName}
           sortable
           filter
           style={{ width: "20%" }}
         ></Column>              
         <Column
           field="mail"
-          header="Mail"
+          header={translations[selectedLanguage].Mail}
           sortable
           filter
           style={{ width: "15%" }}
         ></Column>
         <Column
           field="gtext"
-          header="Group"
+          header={translations[selectedLanguage].Group}
           sortable
           filter
           style={{ width: "30%" }}
         ></Column> 
         <Column
           field="tip"
-          header="Tip"
+          header={translations[selectedLanguage].Type}
           sortable
           filter
           style={{ width: "5%" }}
@@ -326,7 +328,7 @@ export default function AdmUserL(props) {
           field="valid"
           filterField="valid"
           dataType="numeric"
-          header="Valid"
+          header={translations[selectedLanguage].Valid}
           sortable
           filter
           filterElement={validFilterTemplate}
@@ -336,7 +338,7 @@ export default function AdmUserL(props) {
         ></Column>        
       </DataTable>
       <Dialog
-        header="User"
+        header={translations[selectedLanguage].User}
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {
@@ -356,7 +358,7 @@ export default function AdmUserL(props) {
         )}
       </Dialog>
       <Dialog
-        header="Userpermiss List"
+        header={translations[selectedLanguage].Userpermiss}
         visible={admUserPermissLVisible}
         style={{ width: '70%' }}
         onHide={() => {

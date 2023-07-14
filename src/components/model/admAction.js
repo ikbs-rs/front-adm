@@ -7,9 +7,12 @@ import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
 import DeleteDialog from '../dialog/DeleteDialog';
+import { translations } from "../../configs/translations";
 
 const AdmAction = (props) => {
     //console.log("ulaz", props.admAction)
+    let i = 0
+    const selectedLanguage = localStorage.getItem('sl')||'en'
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [dropdownItem, setDropdownItem] = useState(null);
     const [dropdownItems, setDropdownItems] = useState(null);
@@ -18,9 +21,29 @@ const AdmAction = (props) => {
 
     const toast = useRef(null);
     const items = [
-        { name: 'Yes', code: '1' },
-        { name: 'No', code: '0' }
+        { name: `${translations[selectedLanguage].Yes}`, code: '1' },
+        { name: `${translations[selectedLanguage].No}`, code: '0' }
     ];
+
+   /* useEffect(() => {
+        async function fetchData() {
+            try {
+                ++i
+                if (i<22){
+              const admActionService = new AdmActionService();
+              console.log(props.admAction.id, "fetchAdmAction Props")
+              const data = await admActionService.getAdmAction(props.admAction.id); // Pretpostavljamo da postoji metoda `getAdmAction` koja vraća ažurirane podatke
+              console.log(data, 'fetchAdmAction -*-*-*-*-*-*-*-*-*-*-')
+              setAdmAction(data); // Ažurirajte `admAction` sa podacima iz baze
+                }
+            } catch (err) {
+              // Obrada greške prilikom dohvatanja podataka iz baze
+              console.error(err);
+            }
+          };
+        // Funkcija koja se poziva prilikom učitavanja komponente
+         fetchData();
+       }, []);*/
 
     useEffect(() => {
         setDropdownItem(findDropdownItemByCode(props.admAction.valid));
@@ -106,8 +129,8 @@ const AdmAction = (props) => {
         }
 
         let _admAction = { ...admAction };
-        console.log("onInputChange", val)
         _admAction[`${name}`] = val;
+        if (name===`textx`) _admAction[`text`] = val
 
         setAdmAction(_admAction);
     };
@@ -123,26 +146,30 @@ const AdmAction = (props) => {
                 <div className="card">
                     <div className="p-fluid formgrid grid">
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="code">Code</label>
+                            <label htmlFor="code">{translations[selectedLanguage].Code}</label>
                             <InputText id="code" autoFocus
-                                value={admAction.code} onChange={(e) => onInputChange(e, "text", 'code')}
+                            value={admAction && admAction.code}
+                            onChange={(e) => onInputChange(e, "text", 'code')}
+                               //value={admAction.textx} onChange={(e) => onInputChange(e, "text", 'textx')}
                                 required
                                 className={classNames({ 'p-invalid': submitted && !admAction.code })}
                             />
-                            {submitted && !admAction.code && <small className="p-error">Code is required.</small>}
+                            {submitted && !admAction.code && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="text">Text</label>
+                            <label htmlFor="text">{translations[selectedLanguage].Text}</label>
                             <InputText
-                                id="text"
-                                value={admAction.text} onChange={(e) => onInputChange(e, "text", 'text')}
+                                id="textx"
+                                value={admAction && admAction.textx}
+                            onChange={(e) => onInputChange(e, "text", 'textx')}
+                                //value={admAction.textx} onChange={(e) => onInputChange(e, "text", 'textx')}
                                 required
-                                className={classNames({ 'p-invalid': submitted && !admAction.text })}
+                                className={classNames({ 'p-invalid': submitted && !admAction.textx })}
                             />
-                            {submitted && !admAction.text && <small className="p-error">Text is required.</small>}
+                            {submitted && !admAction.textx && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
                         <div className="field col-12 md:col-3">
-                            <label htmlFor="valid">Valid</label>
+                            <label htmlFor="valid">{translations[selectedLanguage].Valid}</label>
                             <Dropdown id="valid"
                                 value={dropdownItem}
                                 options={dropdownItems}
@@ -152,14 +179,14 @@ const AdmAction = (props) => {
                                 placeholder="Select One"
                                 className={classNames({ 'p-invalid': submitted && !admAction.valid })}
                             />
-                            {submitted && !admAction.valid && <small className="p-error">Valid is required.</small>}
+                            {submitted && !admAction.valid && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
                     </div>
 
                     <div className="flex flex-wrap gap-1">
                         {props.dialog ? (
                             <Button
-                                label="Cancel"
+                                label={translations[selectedLanguage].Cancel}
                                 icon="pi pi-times"
                                 className="p-button-outlined p-button-secondary"
                                 onClick={handleCancelClick}
@@ -170,7 +197,7 @@ const AdmAction = (props) => {
                         <div className="flex flex-wrap gap-1">
                             {(props.actionTip === 'CREATE') ? (
                                 <Button
-                                    label="Create"
+                                    label={translations[selectedLanguage].Create}
                                     icon="pi pi-check"
                                     onClick={handleCreateClick}
                                     severity="success"
@@ -179,7 +206,7 @@ const AdmAction = (props) => {
                             ) : null}
                             {(props.actionTip !== 'CREATE') ? (
                                 <Button
-                                    label="Delete"
+                                    label={translations[selectedLanguage].Delete}
                                     icon="pi pi-trash"
                                     onClick={showDeleteDialog}
                                     className="p-button-outlined p-button-danger"
@@ -188,7 +215,7 @@ const AdmAction = (props) => {
                             ) : null}
                             {(props.actionTip !== 'CREATE') ? (
                                 <Button
-                                    label="Save"
+                                    label={translations[selectedLanguage].Save}
                                     icon="pi pi-check"
                                     onClick={handleSaveClick}
                                     severity="success"
@@ -202,7 +229,8 @@ const AdmAction = (props) => {
             <DeleteDialog
                 visible={deleteDialogVisible}
                 inAction="delete"
-                item={admAction.text}
+                item={admAction ? admAction.text : null}
+                //item={admAction.text}
                 onHide={hideDeleteDialog}
                 onDelete={handleDeleteClick}
             />

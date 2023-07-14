@@ -7,40 +7,41 @@ import { Button } from "primereact/button";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { Toast } from "primereact/toast";
-import { AdmRollService } from "../../service/model/AdmRollService";
-import AdmRollactL from './admRollactL';
-import AdmRollstrL from './admRollstrL';
+import { AdmRollstrService } from "../../service/model/AdmRollstrService";
+import AdmRollstr from './admRollstr';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
 import { translations } from "../../configs/translations";
-import AdmRoll from "./admRoll";
 
 
-export default function AdmRollL(props) {
-  const objName = "adm_roll"
+export default function AdmRollstrL(props) {
+  const objName = "adm_rollstr"
   const selectedLanguage = localStorage.getItem('sl')||'en'
-  const emptyAdmRoll = EmptyEntities[objName]
+  const emptyAdmRollstr = EmptyEntities[objName]
+  emptyAdmRollstr.roll = props.admRoll.id
   const [showMyComponent, setShowMyComponent] = useState(true);
-  const [admRolls, setAdmRolls] = useState([]);
-  const [admRoll, setAdmRoll] = useState(emptyAdmRoll);
+  const [admRollstrs, setAdmRollstrs] = useState([]);
+  const [admRollstr, setAdmRollstr] = useState(emptyAdmRollstr);
   const [filters, setFilters] = useState('');
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const [loading, setLoading] = useState(false);
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
-  const [rollTip, setRollTip] = useState('');
-  const [admRollactLVisible, setAdmRollactLVisible] = useState(false);
-  const [admRollstrLVisible, setAdmRollstrLVisible] = useState(false);
+  const [rollstrTip, setRollstrTip] = useState('');
   let i = 0
+  const handleCancelClick = () => {
+    props.setAdmRollstrLVisible(false);
+  };
+
   useEffect(() => {
     async function fetchData() {
       try {
         ++i
         if (i < 2) {
-          const admRollService = new AdmRollService();
-          const data = await admRollService.getAdmRollX();
-          setAdmRolls(data);
+          const admRollstrService = new AdmRollstrService();
+          const data = await admRollstrService.getAdmRollstrRoll(props.admRoll.id);
+          setAdmRollstrs(data);
           initFilters();
         }
       } catch (error) {
@@ -54,35 +55,31 @@ export default function AdmRollL(props) {
   const handleDialogClose = (newObj) => {
     const localObj = { newObj };
 
-    let _admRolls = [...admRolls];
-    let _admRoll = { ...localObj.newObj.obj };
+    let _admRollstrs = [...admRollstrs];
+    let _admRollstr = { ...localObj.newObj.obj };
 
     //setSubmitted(true);
-    if (localObj.newObj.rollTip === "CREATE") {
-      _admRolls.push(_admRoll);
-    } else if (localObj.newObj.rollTip === "UPDATE") {
+    if (localObj.newObj.rollstrTip === "CREATE") {
+      _admRollstrs.push(_admRollstr);
+    } else if (localObj.newObj.rollstrTip === "UPDATE") {
       const index = findIndexById(localObj.newObj.obj.id);
-      _admRolls[index] = _admRoll;
-    } else if ((localObj.newObj.rollTip === "DELETE")) {
-      _admRolls = admRolls.filter((val) => val.id !== localObj.newObj.obj.id);
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmRoll Delete', life: 3000 });
+      _admRollstrs[index] = _admRollstr;
+    } else if ((localObj.newObj.rollstrTip === "DELETE")) {
+      _admRollstrs = admRollstrs.filter((val) => val.id !== localObj.newObj.obj.id);
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmRollstr Delete', life: 3000 });
     } else {
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmRoll ?', life: 3000 });
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmRollstr ?', life: 3000 });
     }
-    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.rollTip}`, life: 3000 });
-    setAdmRolls(_admRolls);
-    setAdmRoll(emptyAdmRoll);
-  };
-
-  const handleAdmRollactLDialogClose = (newObj) => {
-    const localObj = { newObj };
+    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.rollstrTip}`, life: 3000 });
+    setAdmRollstrs(_admRollstrs);
+    setAdmRollstr(emptyAdmRollstr);
   };
 
   const findIndexById = (id) => {
     let index = -1;
 
-    for (let i = 0; i < admRolls.length; i++) {
-      if (admRolls[i].id === id) {
+    for (let i = 0; i < admRollstrs.length; i++) {
+      if (admRollstrs[i].id === id) {
         index = i;
         break;
       }
@@ -92,22 +89,14 @@ export default function AdmRollL(props) {
   };
 
   const openNew = () => {
-    setAdmRollDialog(emptyAdmRoll);
-  };
-
-  const openRollstr = () => {
-    setAdmRollstrLDialog();
-  };
-
-  const openRollAct = () => {
-    setAdmRollactLDialog();
+    setAdmRollstrDialog(emptyAdmRollstr);
   };
 
   const onRowSelect = (event) => {
     toast.current.show({
       severity: "info",
       summary: "Action Selected",
-      detail: `Id: ${event.data.id} Name: ${event.data.textx}`,
+      detail: `Id: ${event.data.id} Name: ${event.data.text}`,
       life: 3000,
     });
   };
@@ -116,7 +105,7 @@ export default function AdmRollL(props) {
     toast.current.show({
       severity: "warn",
       summary: "Action Unselected",
-      detail: `Id: ${event.data.id} Name: ${event.data.textx}`,
+      detail: `Id: ${event.data.id} Name: ${event.data.text}`,
       life: 3000,
     });
   };
@@ -124,16 +113,24 @@ export default function AdmRollL(props) {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      code: {
+      ocode: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      textx: {
+      otext: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],       
+      },
+      o1code: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      strukturna: { value: null, matchMode: FilterMatchMode.EQUALS },
-      valid: { value: null, matchMode: FilterMatchMode.EQUALS },
+      o1text: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],       
+      },      
+      onoff: { value: null, matchMode: FilterMatchMode.EQUALS },
+      hijerarhija: { value: null, matchMode: FilterMatchMode.EQUALS },      
     });
     setGlobalFilterValue("");
   };
@@ -155,24 +152,14 @@ export default function AdmRollL(props) {
   const renderHeader = () => {
     return (
       <div className="flex card-container">
+        <div className="flex flex-wrap gap-1" />
+        <Button label="Cancel" icon="pi pi-times" onClick={handleCancelClick} text raised
+        />
         <div className="flex flex-wrap gap-1">
           <Button label={translations[selectedLanguage].New} icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
-        <div className="flex flex-wrap gap-1">
-          <Button label={translations[selectedLanguage].Structures} icon="pi pi-building" onClick={openRollstr} text raised disabled={!admRoll} />
-        </div>
-        <div className="flex flex-wrap gap-1">
-          <Button label={translations[selectedLanguage].Actions} icon="pi pi-shield" onClick={openRollAct} text raised disabled={!admRoll} />
-        </div>
-        <div className="flex flex-wrap gap-1">
-          <Button label={translations[selectedLanguage].Links} icon="pi pi-sitemap" onClick={openNew} text raised disabled={!admRoll} />
-        </div>
-        <div className="flex flex-wrap gap-1">
-          <Button label={translations[selectedLanguage].Users} icon="pi pi-users" onClick={openNew} text raised disabled={!admRoll} />
-        </div>
-        <div className="flex-grow-1" />
-        <b>{translations[selectedLanguage].RollsLista}</b>
         <div className="flex-grow-1"></div>
+        <b>{translations[selectedLanguage].RollsList}</b>
         <div className="flex-grow-1"></div>
         <div className="flex flex-wrap gap-1">
           <span className="p-input-icon-left">
@@ -195,9 +182,8 @@ export default function AdmRollL(props) {
       </div>
     );
   };
-
-  const validBodyTemplate = (rowData) => {
-    const valid = rowData.valid == 1 ? true : false
+  const onoffBodyTemplate = (rowData) => {
+    const valid = rowData.onoff == 1 ? true : false
     return (
       <i
         className={classNames("pi", {
@@ -207,24 +193,36 @@ export default function AdmRollL(props) {
       ></i>
     );
   };
-
-  const strukturnaBodyTemplate = (rowData) => {
-    const strukturna = rowData.strukturna == 'D' ? true : false
+  const hijerarhijaBodyTemplate = (rowData) => {
+    const valid = rowData.hijerarhija == 1 ? true : false
     return (
       <i
         className={classNames("pi", {
-          "text-green-500 pi-check-circle": strukturna,
-          "text-red-500 pi-times-circle": !strukturna
+          "text-green-500 pi-check-circle": valid,
+          "text-red-500 pi-times-circle": !valid
         })}
       ></i>
     );
+  };   
+  const onoffFilterTemplate = (options) => {
+    return (
+      <div className="flex align-items-center gap-2">
+        <label htmlFor="verified-filter" className="font-bold">
+        {translations[selectedLanguage].On_off}
+        </label>
+        <TriStateCheckbox
+          inputId="verified-filter"
+          value={options.value}
+          onChange={(e) => options.filterCallback(e.value)}
+        />
+      </div>
+    );
   };  
-
-  const validFilterTemplate = (options) => {
+  const hijerarhijaFilterTemplate = (options) => {
     return (
       <div className="flex align-items-center gap-2">
         <label htmlFor="verified-filter" className="font-bold">
-        label={translations[selectedLanguage].Valid}
+        {translations[selectedLanguage].Hijerarhija}
         </label>
         <TriStateCheckbox
           inputId="verified-filter"
@@ -233,44 +231,20 @@ export default function AdmRollL(props) {
         />
       </div>
     );
-  };
-
-  const strukturnaFilterTemplate = (options) => {
-    return (
-      <div className="flex align-items-center gap-2">
-        <label htmlFor="verified-filter" className="font-bold">
-        label={translations[selectedLanguage].Structures}
-        </label>
-        <TriStateCheckbox
-          inputId="verified-filter"
-          value={options.value}
-          onChange={(e) => options.filterCallback(e.value)}
-        />
-      </div>
-    );
-  };
+  }; 
+        
   // <--- Dialog
-  const setAdmRollDialog = (admRoll) => {
+  const setAdmRollstrDialog = (admRollstr) => {
     setVisible(true)
-    setRollTip("CREATE")
-    setAdmRoll({ ...admRoll });
+    setRollstrTip("CREATE")
+    setAdmRollstr({ ...admRollstr });
   }
-  const setAdmRollstrLDialog = () => {
-    setShowMyComponent(true);
-    setAdmRollstrLVisible(true);
-
-  }   
-  const setAdmRollactLDialog = () => {
-    setShowMyComponent(true);
-    setAdmRollactLVisible(true);
-
-  }    
   //  Dialog --->
 
   const header = renderHeader();
   // heder za filter/>
 
-  const rollTemplate = (rowData) => {
+  const rollstrTemplate = (rowData) => {
     return (
       <div className="flex flex-wrap gap-1">
 
@@ -279,8 +253,8 @@ export default function AdmRollL(props) {
           icon="pi pi-pencil"
           style={{ width: '24px', height: '24px' }}
           onClick={() => {
-            setAdmRollDialog(rowData)
-            setRollTip("UPDATE")
+            setAdmRollstrDialog(rowData)
+            setRollstrTip("UPDATE")
           }}
           text
           raised ></Button>
@@ -292,80 +266,107 @@ export default function AdmRollL(props) {
   return (
     <div className="card">
       <Toast ref={toast} />
+      <div className="col-12">
+        <div className="card">
+          <div className="p-fluid formgrid grid">
+            <div className="field col-12 md:col-6">
+              <label htmlFor="code">{translations[selectedLanguage].Code}</label>
+              <InputText id="code"
+                value={props.admRoll.code}
+                disabled={true}
+              />
+            </div>
+            <div className="field col-12 md:col-6">
+              <label htmlFor="text">{translations[selectedLanguage].Text}</label>
+              <InputText
+                id="text"
+                value={props.admRoll.textx}
+                disabled={true}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
       <DataTable
         dataKey="id"
         selectionMode="single"
-        selection={admRoll}
+        selection={admRollstr}
         loading={loading}
-        value={admRolls}
+        value={admRollstrs}
         header={header}
         showGridlines
         removableSort
         filters={filters}
         scrollable
-        sortField="code"
-        sortOrder={1}
-        scrollHeight="750px"
+        scrollHeight="550px"
         virtualScrollerOptions={{ itemSize: 46 }}
         tableStyle={{ minWidth: "50rem" }}
         metaKeySelection={false}
         paginator
         rows={10}
         rowsPerPageOptions={[5, 10, 25, 50]}
-        onSelectionChange={(e) => setAdmRoll(e.value)}
+        onSelectionChange={(e) => setAdmRollstr(e.value)}
         onRowSelect={onRowSelect}
         onRowUnselect={onRowUnselect}
       >
         <Column
           //bodyClassName="text-center"
-          body={rollTemplate}
+          body={rollstrTemplate}
           exportable={false}
           headerClassName="w-10rem"
           style={{ minWidth: '4rem' }}
         />
         <Column
-          field="code"
-          header={translations[selectedLanguage].Code}
+          field="ocode"
+          header={translations[selectedLanguage].ObjtpCode}
           sortable
           filter
-          style={{ width: "25%" }}
-        ></Column>
-        <Column
-          field="textx"
-          header={translations[selectedLanguage].Text}
-          sortable
-          filter
-          style={{ width: "60%" }}
-        ></Column>
-        
-        <Column
-          field="strukturna"
-          filterField="strukturna"
-          dataType="text"
-          header={translations[selectedLanguage].Structures}
-          sortable
-          filter
-          filterElement={strukturnaFilterTemplate}
           style={{ width: "15%" }}
-          bodyClassName="text-center"
-          body={strukturnaBodyTemplate}
-        ></Column>       
-   
+        ></Column>
         <Column
-          field="valid"
-          filterField="valid"
-          dataType="numeric"
-          header={translations[selectedLanguage].Valid}
+          field="otext"
+          header={translations[selectedLanguage].ObjtpText}
           sortable
           filter
-          filterElement={validFilterTemplate}
-          style={{ width: "15%" }}
-          bodyClassName="text-center"
-          body={validBodyTemplate}
+          style={{ width: "30%" }}
         ></Column>
+        <Column
+          field="o1code"
+          header={translations[selectedLanguage].ObjCode}
+          sortable
+          filter
+          style={{ width: "15%" }}
+        ></Column>
+        <Column
+          field="o1text"
+          header={translations[selectedLanguage].ObjText}
+          sortable
+          filter
+          style={{ width: "30%" }}
+        ></Column>        
+        <Column
+          field="onoff"
+          header={translations[selectedLanguage].On_off}
+          sortable
+          filter
+          filterElement={onoffFilterTemplate}
+          style={{ width: "10%" }}
+          bodyClassName="text-center"
+          body={onoffBodyTemplate}
+        ></Column> 
+        <Column
+          field="hijerarhija"
+          header={translations[selectedLanguage].Hijerarhija}
+          sortable
+          filter
+          filterElement={hijerarhijaFilterTemplate}
+          style={{ width: "10%" }}
+          bodyClassName="text-center"
+          body={hijerarhijaBodyTemplate}
+        ></Column>                          
       </DataTable>
       <Dialog
-        header={translations[selectedLanguage].Roll}
+        header={translations[selectedLanguage].Rollaction}
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {
@@ -374,61 +375,22 @@ export default function AdmRollL(props) {
         }}
       >
         {showMyComponent && (
-          <AdmRoll
+          <AdmRollstr
             parameter={"inputTextValue"}
-            admRoll={admRoll}
+            admRollstr={admRollstr}
+            admRoll={props.admRoll}
             handleDialogClose={handleDialogClose}
             setVisible={setVisible}
             dialog={true}
-            rollTip={rollTip}
+            rollstrTip={rollstrTip}
           />
         )}
-      </Dialog>
-      <Dialog
-        header={translations[selectedLanguage].Rollstructures}
-        visible={admRollstrLVisible}
-        style={{ width: '70%' }}
-        onHide={() => {
-          setAdmRollstrLVisible(false);
-          setShowMyComponent(false);
-        }}
-      >
-        {showMyComponent && (
-          <AdmRollstrL
-            parameter={"inputTextValue"}
-            admRoll={admRoll}
-            handleAdmRollactLDialogClose={handleAdmRollactLDialogClose}
-            setAdmRollstrLVisible={setAdmRollstrLVisible}
-            dialog={true}
-            lookUp={false}
-          />
-        )}
-      </Dialog>      
-      <Dialog
-        header={translations[selectedLanguage].Rollactions}
-        visible={admRollactLVisible}
-        style={{ width: '70%' }}
-        onHide={() => {
-          setAdmRollactLVisible(false);
-          setShowMyComponent(false);
-        }}
-      >
-        {showMyComponent && (
-          <AdmRollactL
-            parameter={"inputTextValue"}
-            admRoll={admRoll}
-            handleAdmRollactLDialogClose={handleAdmRollactLDialogClose}
-            setAdmRollactLVisible={setAdmRollactLVisible}
-            dialog={true}
-            lookUp={false}
-          />
-        )}
-      </Dialog> 
-      <div className="p-dialog-header-icons" style={{ display: 'none' }}>
+        <div className="p-dialog-header-icons" style={{ display: 'none' }}>
           <button className="p-dialog-header-close p-link">
             <span className="p-dialog-header-close-icon pi pi-times"></span>
           </button>
-        </div>             
+        </div>
+      </Dialog>
     </div>
   );
 }

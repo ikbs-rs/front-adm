@@ -12,7 +12,7 @@ export const Login = () => {
     const [checked, setChecked] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const sl = ''
+    const sl = 'en'
 
     const handleButtonClick = (parameter) => {
         // Ovde nedostaje kod za logovanje
@@ -35,9 +35,9 @@ export const Login = () => {
                     //TODO idi na pocetnu stranicu
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('refreshToken', response.data.refreshToken);
-                    const newUrl = `${window.location.pathname}?sl=${sl}`;
-                    window.location.replace(newUrl);
-                    //navigate('/');
+                    //const newUrl = `${window.location.pathname}?sl=${sl}`;
+                    //window.location.replace(newUrl);
+                    navigate('/');
                 } else {
                     //TODO vrati se na login
                     navigate('/login');

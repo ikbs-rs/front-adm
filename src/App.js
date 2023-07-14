@@ -29,11 +29,13 @@ import './App.scss';
 import env from "./configs/env"
 import { useDispatch } from 'react-redux';
 import { setLanguage } from './store/actions';
+import { translations } from "./configs/translations";
 
 const App = () => {
     const dispatch = useDispatch();
     const urlParams = new URLSearchParams(window.location.search);
-    let selectedLanguage = urlParams.get('sl');
+    let selectedLanguage = localStorage.getItem('sl')
+    //let selectedLanguage = urlParams.get('sl');
     const [layoutMode, setLayoutMode] = useState('static');
     const [lightMenu, setLightMenu] = useState(true);
     const [overlayMenuActive, setOverlayMenuActive] = useState(false);
@@ -57,29 +59,30 @@ const App = () => {
 
     const menu = [  
         {
-            label: 'Access permission',
+            label: translations[selectedLanguage].ACCESS_PERMISSION,
             icon: 'pi pi-fw pi-star-fill',
             items: [
-                { label: 'User groups', icon: 'pi pi-fw pi-id-card', to: '/usergrp' },
-                { label: 'Users', icon: 'pi pi-users', to: '/user' },
-                { label: 'Rolls', icon: 'pi pi-fw pi-bookmark', to: '/roll' },
-                { label: 'Actions', icon: 'pi pi-map-marker', to: '/action' }
+                { label: translations[selectedLanguage].Usergroups, icon: 'pi pi-fw pi-id-card', to: '/usergrp' },
+                { label: translations[selectedLanguage].Users, icon: 'pi pi-users', to: '/user' },
+                { label: translations[selectedLanguage].Rolls, icon: 'pi pi-fw pi-bookmark', to: '/roll' },
+                { label: translations[selectedLanguage].Actions, icon: 'pi pi-map-marker', to: '/action' }
             ]
         },
         {
-            label: 'Settings',
+            label: translations[selectedLanguage].Settings,
             icon: 'pi pi-prime',
             items: [
-                { label: 'DB parameters', icon: 'pi pi-database', to: '/dbparameter' },
-                { label: 'Messages', icon: 'pi pi-fw pi-clone', to: '/message' },
-                { label: 'DBMS errors', icon: 'pi pi-fw pi-exclamation-triangle', to: '/dbmserr' }
+                { label: translations[selectedLanguage].DBparameters, icon: 'pi pi-database', to: '/dbparameter' },
+                { label: translations[selectedLanguage].Messages, icon: 'pi pi-fw pi-clone', to: '/message' },
+                { label: translations[selectedLanguage].DBMSerrors, icon: 'pi pi-fw pi-exclamation-triangle', to: '/dbmserr' }
             ]
         },
         {
-            label: 'Module selection',
+            label: translations[selectedLanguage].Moduleselection,
             icon: 'pi pi-fw pi-compass',
             items: [
-                { label: 'Back', icon: 'pi pi-sign-out', url: `${env.START_URL}?sl=${selectedLanguage}` }
+                { label: translations[selectedLanguage].Back, icon: 'pi pi-sign-out', url: `${env.START_URL}` },
+                { /*label: 'Back', icon: 'pi pi-sign-out', url: `${env.START_URL}?sl=${selectedLanguage}` */}
             ]
         }
     ];

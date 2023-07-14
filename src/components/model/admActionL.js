@@ -12,10 +12,12 @@ import { AdmActionService } from "../../service/model/AdmActionService";
 import AdmAkcija from './admAction';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
-
+import { translations } from "../../configs/translations";
 
 export default function AdmActionL(props) {
+  let i = 0
   const objName = "adm_action"
+  const selectedLanguage = localStorage.getItem('sl')||'en'
   const emptyAdmAction = EmptyEntities[objName]
   const [showMyComponent, setShowMyComponent] = useState(true);
   const [admActions, setAdmActions] = useState([]);
@@ -30,10 +32,13 @@ export default function AdmActionL(props) {
   useEffect(() => {
     async function fetchData() {
       try {
+        ++i
+        if (i<2) {  
         const admActionService = new AdmActionService();
-        const data = await admActionService.getAdmActionV();
+        const data = await admActionService.getAdmActions();
         setAdmActions(data);
         initFilters();
+        }
       } catch (error) {
         console.error(error);
         // Obrada greške ako je potrebna
@@ -86,7 +91,7 @@ export default function AdmActionL(props) {
     toast.current.show({
       severity: "info",
       summary: "Action Selected",
-      detail: `Id: ${event.data.id} Name: ${event.data.text}`,
+      detail: `Id: ${event.data.id} Name: ${event.data.textx}`,
       life: 3000,
     });
   };
@@ -95,7 +100,7 @@ export default function AdmActionL(props) {
     toast.current.show({
       severity: "warn",
       summary: "Action Unselected",
-      detail: `Id: ${event.data.id} Name: ${event.data.text}`,
+      detail: `Id: ${event.data.id} Name: ${event.data.textx}`,
       life: 3000,
     });
   };
@@ -107,7 +112,7 @@ export default function AdmActionL(props) {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      text: {
+      textx: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
@@ -134,10 +139,10 @@ export default function AdmActionL(props) {
     return (
       <div className="flex card-container">
         <div className="flex flex-wrap gap-1">
-          <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} text raised />
+          <Button label={translations[selectedLanguage].New} icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
         <div className="flex-grow-1" />
-        <b>Action List</b>
+        <b>{translations[selectedLanguage].ActionList}</b>
         <div className="flex-grow-1"></div>
         <div className="flex flex-wrap gap-1">
           <span className="p-input-icon-left">
@@ -145,13 +150,13 @@ export default function AdmActionL(props) {
             <InputText
               value={globalFilterValue}
               onChange={onGlobalFilterChange}
-              placeholder="Keyword Search"
+              placeholder={translations[selectedLanguage].KeywordSearch}
             />
           </span>
           <Button
             type="button"
             icon="pi pi-filter-slash"
-            label="Clear"
+            label={translations[selectedLanguage].Clear}
             outlined
             onClick={clearFilter}
             text raised
@@ -177,7 +182,7 @@ export default function AdmActionL(props) {
     return (
       <div className="flex align-items-center gap-2">
         <label htmlFor="verified-filter" className="font-bold">
-          Valid
+        {translations[selectedLanguage].Valid}
         </label>
         <TriStateCheckbox
           inputId="verified-filter"
@@ -232,6 +237,8 @@ export default function AdmActionL(props) {
         removableSort
         filters={filters}
         scrollable
+        sortField="code"        
+        sortOrder={1}
         scrollHeight="750px"
         virtualScrollerOptions={{ itemSize: 46 }}
         tableStyle={{ minWidth: "50rem" }}
@@ -252,14 +259,14 @@ export default function AdmActionL(props) {
         />        
         <Column
           field="code"
-          header="Code"
+          header={translations[selectedLanguage].Code}
           sortable
           filter
           style={{ width: "25%" }}
         ></Column>
         <Column
-          field="text"
-          header="Text"
+          field="textx"
+          header={translations[selectedLanguage].Text}
           sortable
           filter
           style={{ width: "60%" }}
@@ -268,7 +275,7 @@ export default function AdmActionL(props) {
           field="valid"
           filterField="valid"
           dataType="numeric"
-          header="Valid"
+          header={translations[selectedLanguage].Valid}
           sortable
           filter
           filterElement={validFilterTemplate}
@@ -278,7 +285,7 @@ export default function AdmActionL(props) {
         ></Column>
       </DataTable>
       <Dialog
-        header="Action"
+        header={translations[selectedLanguage].Action}
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {

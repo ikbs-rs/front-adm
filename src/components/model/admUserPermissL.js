@@ -10,10 +10,12 @@ import AdmUserPermiss from './admUserPermiss';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
+import { translations } from "../../configs/translations";
 
 
 export default function AdmUserPermissL(props) {
   const objName = "adm_userpermiss"
+  const selectedLanguage = localStorage.getItem('sl')||'en'
   const emptyAdmUserPermiss = EmptyEntities[objName]
   emptyAdmUserPermiss.usr = props.admUser.id
   const [showMyComponent, setShowMyComponent] = useState(true);
@@ -25,18 +27,21 @@ export default function AdmUserPermissL(props) {
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
   const [userPermissTip, setUserPermissTip] = useState('');
-
+  let i = 0
   const handleCancelClick = () => {
     props.setAdmUserPermissLVisible(false);
-};
+  };
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const admUserPermissService = new AdmUserPermissService();
-        const data = await admUserPermissService.getAdmUserPermissAllByItem(props.admUser);
-        setAdmUserPermisss(data);
-        initFilters();
+        ++i
+        if (i < 2) {
+          const admUserPermissService = new AdmUserPermissService();
+          const data = await admUserPermissService.getAdmUserPermissRoll(props.admUser.id);
+          setAdmUserPermisss(data);
+          initFilters();
+        }
       } catch (error) {
         console.error(error);
         // Obrada greške ako je potrebna
@@ -136,13 +141,13 @@ export default function AdmUserPermissL(props) {
     return (
       <div className="flex card-container">
         <div className="flex flex-wrap gap-1" />
-          <Button label="Cancel" icon="pi pi-times" onClick={handleCancelClick} text raised 
-        />          
+        <Button label="Cancel" icon="pi pi-times" onClick={handleCancelClick} text raised
+        />
         <div className="flex flex-wrap gap-1">
-          <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} text raised />
+          <Button label={translations[selectedLanguage].New} icon="pi pi-plus" severity="success" onClick={openNew} text raised />
         </div>
         <div className="flex-grow-1"></div>
-        <b>Roll List</b>
+        <b>{translations[selectedLanguage].RollsList}</b>
         <div className="flex-grow-1"></div>
         <div className="flex flex-wrap gap-1">
           <span className="p-input-icon-left">
@@ -150,13 +155,13 @@ export default function AdmUserPermissL(props) {
             <InputText
               value={globalFilterValue}
               onChange={onGlobalFilterChange}
-              placeholder="Keyword Search"
+              placeholder={translations[selectedLanguage].KeywordSearch}
             />
           </span>
           <Button
             type="button"
             icon="pi pi-filter-slash"
-            label="Clear"
+            label={translations[selectedLanguage].Clear}
             outlined
             onClick={clearFilter}
             text raised
@@ -203,14 +208,14 @@ export default function AdmUserPermissL(props) {
         <div className="card">
           <div className="p-fluid formgrid grid">
             <div className="field col-12 md:col-6">
-              <label htmlFor="code">Username</label>
-              <InputText id="code" 
+              <label htmlFor="code">{translations[selectedLanguage].Username}</label>
+              <InputText id="code"
                 value={props.admUser.username}
                 disabled={true}
               />
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="text">Mail</label>
+              <label htmlFor="text">{translations[selectedLanguage].Mail}</label>
               <InputText
                 id="mail"
                 value={props.admUser.mail}
@@ -251,21 +256,21 @@ export default function AdmUserPermissL(props) {
         />
         <Column
           field="rcode"
-          header="Roll code"
+          header={translations[selectedLanguage].Rollcode}
           sortable
           filter
           style={{ width: "20%" }}
         ></Column>
         <Column
           field="rtext"
-          header="Roll"
+          header={translations[selectedLanguage].Roll}
           sortable
           filter
           style={{ width: "75%" }}
         ></Column>
       </DataTable>
       <Dialog
-        header="UserPermiss"
+        header={translations[selectedLanguage].Userspermiss}
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {

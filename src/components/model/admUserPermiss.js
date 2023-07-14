@@ -8,8 +8,10 @@ import { Toast } from "primereact/toast";
 import DeleteDialog from '../dialog/DeleteDialog';
 import { Dropdown } from 'primereact/dropdown';
 import { AdmRollService } from "../../service/model/AdmRollService";
+import { translations } from "../../configs/translations";
 
 const AdmUserPermiss = (props) => {
+    const selectedLanguage = localStorage.getItem('sl')||'en'
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [admUserPermiss, setAdmUserPermiss] = useState(props.admUserPermiss);
     const [submitted, setSubmitted] = useState(false);
@@ -22,8 +24,8 @@ const AdmUserPermiss = (props) => {
         async function fetchData() {
             try {
                 const admRollService = new AdmRollService();
-                const data = await admRollService.getAdmRollV();
-                const dataDD = data.map(({ name, id }) => ({ name: name, code: id }));
+                const data = await admRollService.getAdmRollX();
+                const dataDD = data.map(({ textx, id }) => ({ name: textx, code: id }));
                 setDdRollItems(dataDD);
                 setDdRollItem(dataDD.find((item) => item.code === props.admUserPermiss.roll) || null);
             } catch (error) {
@@ -123,14 +125,14 @@ const AdmUserPermiss = (props) => {
                 <div className="card">
                     <div className="p-fluid formgrid grid">
                         <div className="field col-12 md:col-12">
-                            <label htmlFor="code">Username</label>
+                            <label htmlFor="code">{translations[selectedLanguage].Username}</label>
                             <InputText id="code"
                                 value={props.admUser.username}
                                 disabled={true}
                             />
                         </div>
                         <div className="field col-12 md:col-12">
-                            <label htmlFor="text">Mail</label>
+                            <label htmlFor="text">{translations[selectedLanguage].Mail}</label>
                             <InputText
                                 id="mail"
                                 value={props.admUser.mail}
@@ -144,7 +146,7 @@ const AdmUserPermiss = (props) => {
                 <div className="card">
                     <div className="p-fluid formgrid grid">
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="roll">Roll *</label>
+                            <label htmlFor="roll">{translations[selectedLanguage].Roll} *</label>
                             <Dropdown id="roll"
                                 value={ddRollItem}
                                 options={ddRollItems}
@@ -154,14 +156,14 @@ const AdmUserPermiss = (props) => {
                                 placeholder="Select One"
                                 className={classNames({ 'p-invalid': submitted && !admUserPermiss.roll })}
                             />
-                            {submitted && !admUserPermiss.roll && <small className="p-error">Roll is required.</small>}
+                            {submitted && !admUserPermiss.roll && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
                     </div>
 
                     <div className="flex flex-wrap gap-1">
                         {props.dialog ? (
                             <Button
-                                label="Cancel"
+                                label={translations[selectedLanguage].Cancel}
                                 icon="pi pi-times"
                                 className="p-button-outlined p-button-secondary"
                                 onClick={handleCancelClick}
@@ -172,7 +174,7 @@ const AdmUserPermiss = (props) => {
                         <div className="flex flex-wrap gap-1">
                             {(props.userPermissTip === 'CREATE') ? (
                                 <Button
-                                    label="Create"
+                                    label={translations[selectedLanguage].Create}
                                     icon="pi pi-check"
                                     onClick={handleCreateClick}
                                     severity="success"
@@ -181,7 +183,7 @@ const AdmUserPermiss = (props) => {
                             ) : null}
                             {(props.userPermissTip !== 'CREATE') ? (
                                 <Button
-                                    label="Delete"
+                                    label={translations[selectedLanguage].Delete}
                                     icon="pi pi-trash"
                                     onClick={showDeleteDialog}
                                     className="p-button-outlined p-button-danger"
@@ -190,7 +192,7 @@ const AdmUserPermiss = (props) => {
                             ) : null}
                             {(props.userPermissTip !== 'CREATE') ? (
                                 <Button
-                                    label="Save"
+                                    label={translations[selectedLanguage].Save}
                                     icon="pi pi-check"
                                     onClick={handleSaveClick}
                                     severity="success"

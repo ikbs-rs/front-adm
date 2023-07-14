@@ -7,8 +7,10 @@ import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
 import DeleteDialog from '../dialog/DeleteDialog';
+import { translations } from "../../configs/translations";
 
 const AdmUserGrp = (props) => {
+    const selectedLanguage = localStorage.getItem('sl')||'en'
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [dropdownItem, setDropdownItem] = useState(null);
     const [dropdownItems, setDropdownItems] = useState(null);
@@ -17,8 +19,8 @@ const AdmUserGrp = (props) => {
 
     const toast = useRef(null);
     const items = [
-        { name: 'Yes', code: '1' },
-        { name: 'No', code: '0' }
+        { name: `${translations[selectedLanguage].Yes}`, code: '1' },
+        { name: `${translations[selectedLanguage].No}`, code: '0' }
     ];
 
     useEffect(() => {
@@ -105,8 +107,8 @@ const AdmUserGrp = (props) => {
         }
 
         let _admUserGrp = { ...admUserGrp };
-        console.log("onInputChange", val)
         _admUserGrp[`${name}`] = val;
+        if (name===`textx`) _admUserGrp[`text`] = val
 
         setAdmUserGrp(_admUserGrp);
     };
@@ -122,26 +124,26 @@ const AdmUserGrp = (props) => {
                 <div className="card">
                     <div className="p-fluid formgrid grid">
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="code">Code</label>
+                            <label htmlFor="code">{translations[selectedLanguage].Code}</label>
                             <InputText id="code" autoFocus
                                 value={admUserGrp.code} onChange={(e) => onInputChange(e, "text", 'code')}
                                 required
                                 className={classNames({ 'p-invalid': submitted && !admUserGrp.code })}
                             />
-                            {submitted && !admUserGrp.code && <small className="p-error">Code is required.</small>}
+                            {submitted && !admUserGrp.code && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="text">Text</label>
+                            <label htmlFor="textx">{translations[selectedLanguage].Text}</label>
                             <InputText
-                                id="text"
-                                value={admUserGrp.text} onChange={(e) => onInputChange(e, "text", 'text')}
+                                id="textx"
+                                value={admUserGrp.textx} onChange={(e) => onInputChange(e, "text", 'textx')}
                                 required
                                 className={classNames({ 'p-invalid': submitted && !admUserGrp.text })}
                             />
-                            {submitted && !admUserGrp.text && <small className="p-error">Text is required.</small>}
+                            {submitted && !admUserGrp.textx && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
                         <div className="field col-12 md:col-3">
-                            <label htmlFor="valid">Valid</label>
+                            <label htmlFor="valid">{translations[selectedLanguage].Valid}</label>
                             <Dropdown id="valid"
                                 value={dropdownItem}
                                 options={dropdownItems}
@@ -151,14 +153,14 @@ const AdmUserGrp = (props) => {
                                 placeholder="Select One"
                                 className={classNames({ 'p-invalid': submitted && !admUserGrp.valid })}
                             />
-                            {submitted && !admUserGrp.valid && <small className="p-error">Valid is required.</small>}
+                            {submitted && !admUserGrp.valid && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>                        
                     </div>
 
                     <div className="flex flex-wrap gap-1">
                         {props.dialog ? (
                             <Button
-                                label="Cancel"
+                                label={translations[selectedLanguage].Cancel}
                                 icon="pi pi-times"
                                 className="p-button-outlined p-button-secondary"
                                 onClick={handleCancelClick}
@@ -169,7 +171,7 @@ const AdmUserGrp = (props) => {
                         <div className="flex flex-wrap gap-1">
                             {(props.userGrpTip === 'CREATE') ? (
                                 <Button
-                                    label="Create"
+                                    label={translations[selectedLanguage].Create}
                                     icon="pi pi-check"
                                     onClick={handleCreateClick}
                                     severity="success"
@@ -178,7 +180,7 @@ const AdmUserGrp = (props) => {
                             ) : null}
                             {(props.userGrpTip !== 'CREATE') ? (
                                 <Button
-                                    label="Delete"
+                                    label={translations[selectedLanguage].Delete}
                                     icon="pi pi-trash"
                                     onClick={showDeleteDialog}
                                     className="p-button-outlined p-button-danger"
@@ -187,7 +189,7 @@ const AdmUserGrp = (props) => {
                             ) : null}                            
                             {(props.userGrpTip !== 'CREATE') ? (
                                 <Button
-                                    label="Save"
+                                    label={translations[selectedLanguage].Save}
                                     icon="pi pi-check"
                                     onClick={handleSaveClick}
                                     severity="success"

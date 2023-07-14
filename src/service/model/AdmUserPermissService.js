@@ -3,8 +3,10 @@ import env from "../../configs/env"
 import Token from "../../utilities/Token";
 
 export class AdmUserPermissService {
-  async getAdmUserPermissV() {
-    const url = `${env.ADM_BACK_URL}/adm/userpermiss`;
+
+  async getAdmUserPermissRoll(objId) {
+    const selectedLanguage = localStorage.getItem('sl') || 'en'
+    const url = `${env.ADM_BACK_URL}/adm/userpermiss/getallouter/usr/${objId}/?sl=${selectedLanguage}&outer=adm_roll`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       Authorization: tokenLocal.token
@@ -12,7 +14,7 @@ export class AdmUserPermissService {
 
     try {
       const response = await axios.get(url, { headers });
-      return response.data.items;
+      return response.data.item;
     } catch (error) {
       console.error(error);
       throw error;
@@ -26,6 +28,7 @@ export class AdmUserPermissService {
       Authorization: tokenLocal.token
     };
     try {
+      console.log(url)
       const response = await axios.get(url, { headers });
       return response.data.item;
     } catch (error) {
@@ -48,8 +51,6 @@ export class AdmUserPermissService {
         'Authorization': tokenLocal.token
       };
       const jsonObj = JSON.stringify(newObj)
-
-
       const response = await axios.post(url, jsonObj, { headers });
       return response.data.items;
     } catch (error) {
