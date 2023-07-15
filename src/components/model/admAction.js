@@ -24,12 +24,12 @@ const AdmAction = (props) => {
         { name: `${translations[selectedLanguage].Yes}`, code: '1' },
         { name: `${translations[selectedLanguage].No}`, code: '0' }
     ];
-
-   /* useEffect(() => {
+/***   KOD ZA DOHVATANJE SLOGA IZ BAZE
+    useEffect(() => {
         async function fetchData() {
             try {
                 ++i
-                if (i<22){
+            if (i<2){
               const admActionService = new AdmActionService();
               console.log(props.admAction.id, "fetchAdmAction Props")
               const data = await admActionService.getAdmAction(props.admAction.id); // Pretpostavljamo da postoji metoda `getAdmAction` koja vraća ažurirane podatke
@@ -43,8 +43,8 @@ const AdmAction = (props) => {
           };
         // Funkcija koja se poziva prilikom učitavanja komponente
          fetchData();
-       }, []);*/
-
+    }, []);
+*/
     useEffect(() => {
         setDropdownItem(findDropdownItemByCode(props.admAction.valid));
     }, []);
@@ -145,7 +145,7 @@ const AdmAction = (props) => {
             <div className="col-12">
                 <div className="card">
                     <div className="p-fluid formgrid grid">
-                        <div className="field col-12 md:col-6">
+                        <div className="field col-12 md:col-7">
                             <label htmlFor="code">{translations[selectedLanguage].Code}</label>
                             <InputText id="code" autoFocus
                             value={admAction && admAction.code}
@@ -156,7 +156,7 @@ const AdmAction = (props) => {
                             />
                             {submitted && !admAction.code && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
-                        <div className="field col-12 md:col-6">
+                        <div className="field col-12 md:col-9">
                             <label htmlFor="text">{translations[selectedLanguage].Text}</label>
                             <InputText
                                 id="textx"
@@ -168,7 +168,7 @@ const AdmAction = (props) => {
                             />
                             {submitted && !admAction.textx && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
-                        <div className="field col-12 md:col-3">
+                        <div className="field col-12 md:col-4">
                             <label htmlFor="valid">{translations[selectedLanguage].Valid}</label>
                             <Dropdown id="valid"
                                 value={dropdownItem}

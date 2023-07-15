@@ -13,6 +13,7 @@ export class AdmRollstrService {
         };
 
         try {
+            console.log("*-*-*-*-*-*AAAA", url)
             const response = await axios.get(url, { headers });
             return response.data.item;
         } catch (error) {

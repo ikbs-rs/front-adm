@@ -109,7 +109,7 @@ const AdmDbmsErr = (props) => {
                             />
                             {submitted && !admDbmsErr.code && <small className="p-error">Code is required.</small>}
                         </div>
-                        <div className="field col-12 md:col-6">
+                        <div className="field col-12 md:col-8">
                             <label htmlFor="text">Text</label>
                             <InputText
                                 id="text"

@@ -13,15 +13,16 @@ import env from "../../configs/env"
 import axios from 'axios';
 import Token from "../../utilities/Token";
 
-const AdmRollact = (props) => {
+const AdmRollstr = (props) => {
+    console.log(`PROPS`, props.admRollstr)
     const selectedLanguage = localStorage.getItem('sl') || 'en'
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [admRollstr, setAdmRollact] = useState(props.admRollstr);
     const [submitted, setSubmitted] = useState(false);
-    const [ddObjtp, setDdObjtp] = useState(null);
-    const [ddObjtps, setDdObjtps] = useState(null);
-    const [ddObj, setDdObj] = useState(null);
-    const [ddObjs, setDdObjs] = useState(null);
+    const [ddObjTpItem, setDdObjTpItem] = useState(null);
+    const [ddObjTpItems, setDdObjTpItems] = useState(null);
+    const [ddObjItem, setDdObjItem] = useState(null);
+    const [ddObjItems, setDdObjItems] = useState(null);
     const [onoff, setOnoff] = useState(props.admRollstr.onoff == 1);
     const [hijerarhija, setHijerarhija] = useState(props.admRollstr.hijerarhija == 1);
 
@@ -39,8 +40,8 @@ const AdmRollact = (props) => {
                 const response = await axios.get(url, { headers });
                 const data = response.data.items;
                 const dataDD = data.map(({ textx, id }) => ({ name: textx, code: id }));
-                setDdObjtps(dataDD);
-                setDdObjtp(dataDD.find((item) => item.roll === props.admRollstr.objtp) || null);
+                setDdObjTpItems(dataDD);
+                setDdObjTpItem(dataDD.find((item) => item.roll === props.admRollstr.objtp) || null);
             } catch (error) {
                 console.error(error);
                 // Obrada greške ako je potrebna
@@ -50,28 +51,28 @@ const AdmRollact = (props) => {
     }, []);
 
     useEffect(() => {
-        async function fetchData() {
+        async function fetchData() {            
             try {
-                const tp = admRollstr.tp||-1
+                const tp = admRollstr.objtp||-1
                 const url = `${env.CMN_BACK_URL}/cmn/x/obj/getall/tp/${tp}/?sl=${selectedLanguage}`;
                 const tokenLocal = await Token.getTokensLS();
+                console.log(url, "-", admRollstr.tp, "Objekat lista************-*-*-*-*-*-", tp)
                 const headers = {
                     Authorization: tokenLocal.token
                 };
 
                 const response = await axios.get(url, { headers });
                 const data = response.data.items;
-                console.log(response.data.items, '*-*-*-*-*-')
                 const dataDD = data.map(({ textx, id }) => ({ name: textx, code: id }));
-                setDdObjs(dataDD);
-                setDdObj(dataDD.find((item) => item.roll === props.admRollstr.obj) || null);
+                setDdObjItems(dataDD);
+                setDdObjItem(dataDD.find((item) => item.roll === props.admRollstr.obj) || null);
             } catch (error) {
                 console.error(error);
                 // Obrada greške ako je potrebna
             }
         }
         fetchData();
-    }, [admRollstr.tp]);    
+    }, [admRollstr.objtp]);    
 
     const handleCancelClick = () => {
         props.setVisible(false);
@@ -141,15 +142,16 @@ const AdmRollact = (props) => {
     const onInputChange = (e, type, name) => {
         let val = ''
         if (type === "options") {
-            setDdObjtp(e.value);
             switch (name) {
-                case "onoff":
-                    admRollstr.otext = e.value.name
-                    admRollstr.ocode = e.value.code
+                case "objtp":
+                    setDdObjTpItem(e.value);
+                    admRollstr.objtp= e.value.code
+                    admRollstr.nobjtp= e.value.name
                     break;
-                case "hijerarhija":
-                    admRollstr.o1text = e.value.name
-                    admRollstr.o2code = e.value.code
+                case "obj":
+                    setDdObjItem(e.value);
+                    admRollstr.obj = e.value.code
+                    admRollstr.nobj = e.value.name
                     break;
                 default:
                     console.error("Pogresan naziv polja")
@@ -211,8 +213,8 @@ const AdmRollact = (props) => {
                         <div className="field col-12 md:col-7">
                             <label htmlFor="objtp">{translations[selectedLanguage].ObjtpText} *</label>
                             <Dropdown id="objtp"
-                                value={ddObjtp}
-                                options={ddObjtps}
+                                value={ddObjTpItem}
+                                options={ddObjTpItems}
                                 onChange={(e) => onInputChange(e, "options", 'objtp')}
                                 required
                                 optionLabel="name"
@@ -223,9 +225,9 @@ const AdmRollact = (props) => {
                         </div>
                         <div className="field col-12 md:col-7">
                             <label htmlFor="obj">{translations[selectedLanguage].ObjText} *</label>
-                            <Dropdown id="ob"
-                                value={ddObj}
-                                options={ddObjs}
+                            <Dropdown id="obj"
+                                value={ddObjItem}
+                                options={ddObjItems}
                                 onChange={(e) => onInputChange(e, "options", 'obj')}
                                 required
                                 optionLabel="name"
@@ -304,4 +306,4 @@ const AdmRollact = (props) => {
     );
 };
 
-export default AdmRollact;
+export default AdmRollstr;

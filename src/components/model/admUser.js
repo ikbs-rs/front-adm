@@ -32,7 +32,7 @@ const AdmUser = (props) => {
         async function fetchData() {
           try {
             const admUserGrpService = new AdmUserGrpService();
-            const data = await admUserGrpService.getAdmUserGrpV();
+            const data = await admUserGrpService.getAdmUserGrp();
             const dataDD = data.map(({ text, id }) => ({ name: text, code: id }));         
             setDdUserGrpItems(dataDD);
             setDdUserGrpItem(dataDD.find((item) => item.code === props.admUser.usergrp) || null);
@@ -42,7 +42,7 @@ const AdmUser = (props) => {
           }
         }
         fetchData();
-      }, []);
+    }, []);
    
     const findDdYesNoItemByCode = (code) => {
         return yesNoItems.find((item) => item.code === code) || null;
