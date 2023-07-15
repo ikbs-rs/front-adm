@@ -14,6 +14,7 @@ import axios from 'axios';
 import Token from "../../utilities/Token";
 
 const AdmRollstr = (props) => {
+    let ii = 0
     console.log(`PROPS`, props.admRollstr)
     const selectedLanguage = localStorage.getItem('sl') || 'en'
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
@@ -53,6 +54,8 @@ const AdmRollstr = (props) => {
     useEffect(() => {
         async function fetchData() {            
             try {
+                ++ii
+                console.log("Redosled", ii)
                 const tp = admRollstr.objtp||-1
                 const url = `${env.CMN_BACK_URL}/cmn/x/obj/getall/tp/${tp}/?sl=${selectedLanguage}`;
                 const tokenLocal = await Token.getTokensLS();
@@ -147,6 +150,8 @@ const AdmRollstr = (props) => {
                     setDdObjTpItem(e.value);
                     admRollstr.objtp= e.value.code
                     admRollstr.nobjtp= e.value.name
+                    ++ii
+                    console.log("Redosled", ii)
                     break;
                 case "obj":
                     setDdObjItem(e.value);
