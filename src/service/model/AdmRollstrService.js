@@ -13,7 +13,6 @@ export class AdmRollstrService {
         };
 
         try {
-            console.log("*-*-*-*-*-*AAAA", url)
             const response = await axios.get(url, { headers });
             return response.data.item;
         } catch (error) {
@@ -60,7 +59,7 @@ export class AdmRollstrService {
     async postAdmRollstr(newObj) {
         try {
             const selectedLanguage = localStorage.getItem('sl') || 'en'
-            if (newObj.action === null || newObj.roll === null) {
+            if (newObj.obj === null || newObj.objtp === null) {
                 throw new Error(
                     "Items must be filled!"
                 );
@@ -72,7 +71,6 @@ export class AdmRollstrService {
                 'Authorization': tokenLocal.token
             };
             const jsonObj = JSON.stringify(newObj)
-
             const response = await axios.post(url, jsonObj, { headers });
             return response.data.items;
         } catch (error) {
@@ -84,7 +82,7 @@ export class AdmRollstrService {
     async putAdmRollstr(newObj) {
         try {
             const selectedLanguage = localStorage.getItem('sl') || 'en'
-            if (newObj.action === null || newObj.roll === null)  {
+            if (newObj.obj === null || newObj.objtp === null)  {
                 throw new Error(
                     "Items must be filled!"
                 );

@@ -253,6 +253,8 @@ export default function AdmRollstrL(props) {
           icon="pi pi-pencil"
           style={{ width: '24px', height: '24px' }}
           onClick={() => {
+            rowData.nobj=rowData.o1text
+            rowData.nobjtp = rowData.otext
             setAdmRollstrDialog(rowData)
             setRollstrTip("UPDATE")
           }}
@@ -366,7 +368,7 @@ export default function AdmRollstrL(props) {
         ></Column>                          
       </DataTable>
       <Dialog
-        header={translations[selectedLanguage].Rollaction}
+        header={translations[selectedLanguage].Rollstructure}
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {

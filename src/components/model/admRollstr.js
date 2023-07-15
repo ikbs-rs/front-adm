@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { classNames } from 'primereact/utils';
-import { AdmRollactService } from "../../service/model/AdmRollactService";
+import { AdmRollstrService } from "../../service/model/AdmRollstrService";
 import './index.css';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -14,11 +14,10 @@ import axios from 'axios';
 import Token from "../../utilities/Token";
 
 const AdmRollstr = (props) => {
-    let ii = 0
-    console.log(`PROPS`, props.admRollstr)
+
     const selectedLanguage = localStorage.getItem('sl') || 'en'
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
-    const [admRollstr, setAdmRollact] = useState(props.admRollstr);
+    const [admRollstr, setAdmRollstr] = useState(props.admRollstr);
     const [submitted, setSubmitted] = useState(false);
     const [ddObjTpItem, setDdObjTpItem] = useState(null);
     const [ddObjTpItems, setDdObjTpItems] = useState(null);
@@ -42,7 +41,7 @@ const AdmRollstr = (props) => {
                 const data = response.data.items;
                 const dataDD = data.map(({ textx, id }) => ({ name: textx, code: id }));
                 setDdObjTpItems(dataDD);
-                setDdObjTpItem(dataDD.find((item) => item.roll === props.admRollstr.objtp) || null);
+                setDdObjTpItem(dataDD.find((item) => item.code === props.admRollstr.objtp) || null);
             } catch (error) {
                 console.error(error);
                 // Obrada greške ako je potrebna
@@ -54,21 +53,17 @@ const AdmRollstr = (props) => {
     useEffect(() => {
         async function fetchData() {            
             try {
-                ++ii
-                console.log("Redosled", ii)
                 const tp = admRollstr.objtp||-1
                 const url = `${env.CMN_BACK_URL}/cmn/x/obj/getall/tp/${tp}/?sl=${selectedLanguage}`;
                 const tokenLocal = await Token.getTokensLS();
-                console.log(url, "-", admRollstr.tp, "Objekat lista************-*-*-*-*-*-", tp)
                 const headers = {
                     Authorization: tokenLocal.token
                 };
-
                 const response = await axios.get(url, { headers });
-                const data = response.data.items;
-                const dataDD = data.map(({ textx, id }) => ({ name: textx, code: id }));
+                const data = response.data.item;
+                const dataDD = data.map(({ text, id }) => ({ name: text, code: id }));
                 setDdObjItems(dataDD);
-                setDdObjItem(dataDD.find((item) => item.roll === props.admRollstr.obj) || null);
+                setDdObjItem(dataDD.find((item) => item.code === props.admRollstr.obj) || null);
             } catch (error) {
                 console.error(error);
                 // Obrada greške ako je potrebna
@@ -84,12 +79,12 @@ const AdmRollstr = (props) => {
     const handleCreateClick = async () => {
         try {
             setSubmitted(true);
-            admRollstr.onoff = onoff ? 1 : null;
-            admRollstr.hijerarhija = hijerarhija ? 1 : null;
-            const admRollstrService = new AdmRollactService();
-            const dataId = await admRollstrService.postAdmRollAct(admRollstr);
+            admRollstr.onoff = onoff ? 1 : 0;
+            admRollstr.hijerarhija = hijerarhija ? 1 : 0;
+            const admRollstrService = new AdmRollstrService();
+            const dataId = await admRollstrService.postAdmRollstr(admRollstr);
             admRollstr.id = dataId
-            props.handleDialogClose({ obj: admRollstr, rollactTip: props.rollactTip });
+            props.handleDialogClose({ obj: admRollstr, rollstrTip: props.rollstrTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -104,11 +99,11 @@ const AdmRollstr = (props) => {
     const handleSaveClick = async () => {
         try {
             setSubmitted(true);
-            admRollstr.onoff = onoff ? 1 : null;
-            admRollstr.hijerarhija = hijerarhija ? 1 : null;
-            const admRollstrService = new AdmRollactService();
-            await admRollstrService.putAdmRollAct(admRollstr);
-            props.handleDialogClose({ obj: admRollstr, rollactTip: props.rollactTip });
+            admRollstr.onoff = onoff ? 1 : 0;
+            admRollstr.hijerarhija = hijerarhija ? 1 : 0;
+            const admRollstrService = new AdmRollstrService();
+            await admRollstrService.putAdmRollstr(admRollstr);
+            props.handleDialogClose({ obj: admRollstr, rollstrTip: props.rollstrTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -127,9 +122,9 @@ const AdmRollstr = (props) => {
     const handleDeleteClick = async () => {
         try {
             setSubmitted(true);
-            const admRollstrService = new AdmRollactService();
-            await admRollstrService.deleteAdmRollAct(admRollstr);
-            props.handleDialogClose({ obj: admRollstr, rollactTip: 'DELETE' });
+            const admRollstrService = new AdmRollstrService();
+            await admRollstrService.deleteAdmRollstr(admRollstr);
+            props.handleDialogClose({ obj: admRollstr, rollstrTip: 'DELETE' });
             props.setVisible(false);
             hideDeleteDialog();
         } catch (err) {
@@ -150,20 +145,22 @@ const AdmRollstr = (props) => {
                     setDdObjTpItem(e.value);
                     admRollstr.objtp= e.value.code
                     admRollstr.nobjtp= e.value.name
-                    ++ii
-                    console.log("Redosled", ii)
+                    admRollstr.ocode= e.value.code
+                    admRollstr.otext= e.value.name
                     break;
                 case "obj":
                     setDdObjItem(e.value);
                     admRollstr.obj = e.value.code
                     admRollstr.nobj = e.value.name
+                    admRollstr.o1code= e.value.code
+                    admRollstr.o1text= e.value.name                    
                     break;
                 default:
                     console.error("Pogresan naziv polja")
             }            
             val = (e.target && e.target.value && e.target.value.code) || '';
         } else if (type === "inputSwitch") {
-            val = (e.target && e.target.value) ? 1 : null
+            val = (e.target && e.target.value) ? 1 : 0
             switch (name) {
                 case "onoff":
                     setOnoff(e.value)
@@ -180,8 +177,7 @@ const AdmRollstr = (props) => {
 
         let _admRollstr = { ...admRollstr };
         _admRollstr[`${name}`] = val;
-
-        setAdmRollact(_admRollstr);
+        setAdmRollstr(_admRollstr);
     };
 
     const hideDeleteDialog = () => {
@@ -246,13 +242,13 @@ const AdmRollstr = (props) => {
                     <div className="flex flex-wrap gap-1">
                         <div className="p-fluid formgrid grid">
                             <div className="field col-12 md:col-7">
-                                <label htmlFor="roll">{translations[selectedLanguage].Creation}</label>
+                                <label htmlFor="roll">{translations[selectedLanguage].On_off}</label>
                                 <InputSwitch inputId="onoff" checked={onoff} onChange={(e) => onInputChange(e, "inputSwitch", 'onoff')} />
                             </div>
                         </div>
                         <div className="p-fluid formgrid grid">
                             <div className="field col-12 md:col-7">
-                                <label htmlFor="roll">{translations[selectedLanguage].Updation}</label>
+                                <label htmlFor="roll">{translations[selectedLanguage].Hijerarhija}</label>
                                 <InputSwitch inputId="hijerarhija" checked={hijerarhija} onChange={(e) => onInputChange(e, "inputSwitch", 'hijerarhija')} />
                             </div>
                         </div>
@@ -269,7 +265,7 @@ const AdmRollstr = (props) => {
                         ) : null}
                         <div className="flex-grow-1"></div>
                         <div className="flex flex-wrap gap-1">
-                            {(props.rollactTip === 'CREATE') ? (
+                            {(props.rollstrTip === 'CREATE') ? (
                                 <Button
                                     label={translations[selectedLanguage].Create}
                                     icon="pi pi-check"
@@ -278,7 +274,7 @@ const AdmRollstr = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.rollactTip !== 'CREATE') ? (
+                            {(props.rollstrTip !== 'CREATE') ? (
                                 <Button
                                     label={translations[selectedLanguage].Delete}
                                     icon="pi pi-trash"
@@ -287,7 +283,7 @@ const AdmRollstr = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.rollactTip !== 'CREATE') ? (
+                            {(props.rollstrTip !== 'CREATE') ? (
                                 <Button
                                     label={translations[selectedLanguage].Save}
                                     icon="pi pi-check"

@@ -39,6 +39,7 @@ export class AdmUserPermissService {
 
   async postAdmUserPermiss(newObj) {
     try {
+      console.log("888888****", newObj)
       if (newObj.roll === null || newObj.usr === null) {
         throw new Error(
           "Items must be filled!"

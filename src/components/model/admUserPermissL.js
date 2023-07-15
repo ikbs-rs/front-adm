@@ -55,6 +55,7 @@ export default function AdmUserPermissL(props) {
 
     let _admUserPermisss = [...admUserPermisss];
     let _admUserPermiss = { ...localObj.newObj.obj };
+    console.log(_admUserPermiss)
 
     //setSubmitted(true);
     if (localObj.newObj.userPermissTip === "CREATE") {

@@ -12,7 +12,6 @@ export class AdmRollService {
     };
 
     try {
-      console.log("Url: ", url)
       const response = await axios.get(url, { headers });
       return response.data.items;
     } catch (error) {
