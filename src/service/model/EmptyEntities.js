@@ -134,6 +134,17 @@ const EmptyEntities =
       "site": null,
       "usr": null,
       "roll": null
+    },
+    "adm_userpermiss_vu": {
+      "id": null,
+      "site": null,
+      "usr": null,
+      "roll": null,
+      "oid": null,
+      "username": "",
+      "mail": "",
+      "firstname": "",
+      "lastname": ""     
     }
   }
 

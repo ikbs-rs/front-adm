@@ -19,6 +19,22 @@ export class AdmUserService {
     }
   }
 
+  async getAdmUser(objId) {
+    const url = `${env.ADM_BACK_URL}/adm/user/${objId}`;
+    const tokenLocal = await Token.getTokensLS();
+    const headers = {
+      Authorization: tokenLocal.token
+    };
+
+    try {
+      const response = await axios.get(url, { headers });
+      return response.data.item;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }  
+
   async postAdmUser(newObj) {
     try {
       if ((newObj.username.trim() === '' || !newObj.username)

@@ -7,31 +7,32 @@ import { Button } from "primereact/button";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { Toast } from "primereact/toast";
-import { AdmRollstrService } from "../../service/model/AdmRollstrService";
-import AdmRollstr from './admRollstr';
+import { AdmUserPermissService } from "../../service/model/AdmUserPermissService";
+import AdmUserpermissU from './admUserPermissU';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
 import { translations } from "../../configs/translations";
 
 
-export default function AdmRollstrL(props) {
-  const objName = "adm_rollstr"
+export default function AdmUserpermissUL(props) {
+
+  const objName = "adm_userpermiss_vu"
   const selectedLanguage = localStorage.getItem('sl')||'en'
-  const emptyAdmRollstr = EmptyEntities[objName]
-  emptyAdmRollstr.roll = props.admRoll.id
+  const emptyAdmUserpermissU = EmptyEntities[objName]
+  emptyAdmUserpermissU.roll = props.admRoll.id
   const [showMyComponent, setShowMyComponent] = useState(true);
-  const [admRollstrs, setAdmRollstrs] = useState([]);
-  const [admRollstr, setAdmRollstr] = useState(emptyAdmRollstr);
+  const [admUserpermissUs, setAdmUserpermissUs] = useState([]);
+  const [admUserpermissU, setAdmUserpermissU] = useState(emptyAdmUserpermissU);
   const [filters, setFilters] = useState('');
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const [loading, setLoading] = useState(false);
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
-  const [rollstrTip, setRollstrTip] = useState('');
+  const [userpermisUTip, setUserpermisUTip] = useState('');
   let i = 0
   const handleCancelClick = () => {
-    props.setAdmRollstrLVisible(false);
+    props.setAdmUserPermissULVisible(false);
   };
 
   useEffect(() => {
@@ -39,9 +40,9 @@ export default function AdmRollstrL(props) {
       try {
         ++i
         if (i < 2) {
-          const admRollstrService = new AdmRollstrService();
-          const data = await admRollstrService.getAdmRollstrRoll(props.admRoll.id);
-          setAdmRollstrs(data);
+          const admUserpermissUService = new AdmUserPermissService();
+          const data = await admUserpermissUService.getAdmUserpermissUser(props.admRoll.id);
+          setAdmUserpermissUs(data);
           initFilters();
         }
       } catch (error) {
@@ -55,31 +56,31 @@ export default function AdmRollstrL(props) {
   const handleDialogClose = (newObj) => {
     const localObj = { newObj };
 
-    let _admRollstrs = [...admRollstrs];
-    let _admRollstr = { ...localObj.newObj.obj };
+    let _admUserpermissUs = [...admUserpermissUs];
+    let _admUserpermissU = { ...localObj.newObj.obj };
 
     //setSubmitted(true);
-    if (localObj.newObj.rollstrTip === "CREATE") {
-      _admRollstrs.push(_admRollstr);
-    } else if (localObj.newObj.rollstrTip === "UPDATE") {
+    if (localObj.newObj.userpermisUTip === "CREATE") {
+      _admUserpermissUs.push(_admUserpermissU);
+    } else if (localObj.newObj.userpermisUTip === "UPDATE") {
       const index = findIndexById(localObj.newObj.obj.id);
-      _admRollstrs[index] = _admRollstr;
-    } else if ((localObj.newObj.rollstrTip === "DELETE")) {
-      _admRollstrs = admRollstrs.filter((val) => val.id !== localObj.newObj.obj.id);
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmRollstr Delete', life: 3000 });
+      _admUserpermissUs[index] = _admUserpermissU;
+    } else if ((localObj.newObj.userpermisUTip === "DELETE")) {
+      _admUserpermissUs = admUserpermissUs.filter((val) => val.id !== localObj.newObj.obj.id);
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserpermissU Delete', life: 3000 });
     } else {
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmRollstr ?', life: 3000 });
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'AdmUserpermissU ?', life: 3000 });
     }
-    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.rollstrTip}`, life: 3000 });
-    setAdmRollstrs(_admRollstrs);
-    setAdmRollstr(emptyAdmRollstr);
+    toast.current.show({ severity: 'success', summary: 'Successful', detail: `{${objName}} ${localObj.newObj.userpermisUTip}`, life: 3000 });
+    setAdmUserpermissUs(_admUserpermissUs);
+    setAdmUserpermissU(emptyAdmUserpermissU);
   };
 
   const findIndexById = (id) => {
     let index = -1;
 
-    for (let i = 0; i < admRollstrs.length; i++) {
-      if (admRollstrs[i].id === id) {
+    for (let i = 0; i < admUserpermissUs.length; i++) {
+      if (admUserpermissUs[i].id === id) {
         index = i;
         break;
       }
@@ -89,7 +90,7 @@ export default function AdmRollstrL(props) {
   };
 
   const openNew = () => {
-    setAdmRollstrDialog(emptyAdmRollstr);
+    setAdmUserpermissUDialog(emptyAdmUserpermissU);
   };
 
   const onRowSelect = (event) => {
@@ -234,10 +235,10 @@ export default function AdmRollstrL(props) {
   }; 
         
   // <--- Dialog
-  const setAdmRollstrDialog = (admRollstr) => {
+  const setAdmUserpermissUDialog = (admUserpermissU) => {
     setVisible(true)
-    setRollstrTip("CREATE")
-    setAdmRollstr({ ...admRollstr });
+    setUserpermisUTip("CREATE")
+    setAdmUserpermissU({ ...admUserpermissU });
   }
   //  Dialog --->
 
@@ -255,8 +256,8 @@ export default function AdmRollstrL(props) {
           onClick={() => {
             rowData.nobj=rowData.o1text
             rowData.nobjtp = rowData.otext
-            setAdmRollstrDialog(rowData)
-            setRollstrTip("UPDATE")
+            setAdmUserpermissUDialog(rowData)
+            setUserpermisUTip("UPDATE")
           }}
           text
           raised ></Button>
@@ -292,9 +293,9 @@ export default function AdmRollstrL(props) {
       <DataTable
         dataKey="id"
         selectionMode="single"
-        selection={admRollstr}
+        selection={admUserpermissU}
         loading={loading}
-        value={admRollstrs}
+        value={admUserpermissUs}
         header={header}
         showGridlines
         removableSort
@@ -307,7 +308,7 @@ export default function AdmRollstrL(props) {
         paginator
         rows={10}
         rowsPerPageOptions={[5, 10, 25, 50]}
-        onSelectionChange={(e) => setAdmRollstr(e.value)}
+        onSelectionChange={(e) => setAdmUserpermissU(e.value)}
         onRowSelect={onRowSelect}
         onRowUnselect={onRowUnselect}
       >
@@ -319,56 +320,36 @@ export default function AdmRollstrL(props) {
           style={{ minWidth: '4rem' }}
         />
         <Column
-          field="ocode"
-          header={translations[selectedLanguage].ObjtpCode}
+          field="username"
+          header={translations[selectedLanguage].Username}
           sortable
           filter
           style={{ width: "15%" }}
         ></Column>
         <Column
-          field="otext"
-          header={translations[selectedLanguage].ObjtpText}
+          field="mail"
+          header={translations[selectedLanguage].Mail}
           sortable
           filter
           style={{ width: "30%" }}
         ></Column>
         <Column
-          field="o1code"
-          header={translations[selectedLanguage].ObjCode}
+          field="firstname"
+          header={translations[selectedLanguage].FirstName}
           sortable
           filter
           style={{ width: "15%" }}
         ></Column>
         <Column
-          field="o1text"
-          header={translations[selectedLanguage].ObjText}
+          field="lastname"
+          header={translations[selectedLanguage].LastName}
           sortable
           filter
           style={{ width: "30%" }}
-        ></Column>        
-        <Column
-          field="onoff"
-          header={translations[selectedLanguage].On_off}
-          sortable
-          filter
-          filterElement={onoffFilterTemplate}
-          style={{ width: "10%" }}
-          bodyClassName="text-center"
-          body={onoffBodyTemplate}
-        ></Column> 
-        <Column
-          field="hijerarhija"
-          header={translations[selectedLanguage].Hijerarhija}
-          sortable
-          filter
-          filterElement={hijerarhijaFilterTemplate}
-          style={{ width: "10%" }}
-          bodyClassName="text-center"
-          body={hijerarhijaBodyTemplate}
-        ></Column>                          
+        ></Column>                                 
       </DataTable>
       <Dialog
-        header={translations[selectedLanguage].Rollstructure}
+        header={translations[selectedLanguage].Userpermiss}
         visible={visible}
         style={{ width: '70%' }}
         onHide={() => {
@@ -377,14 +358,14 @@ export default function AdmRollstrL(props) {
         }}
       >
         {showMyComponent && (
-          <AdmRollstr
+          <AdmUserpermissU
             parameter={"inputTextValue"}
-            admRollstr={admRollstr}
+            admUserpermissU={admUserpermissU}
             admRoll={props.admRoll}
             handleDialogClose={handleDialogClose}
             setVisible={setVisible}
             dialog={true}
-            rollstrTip={rollstrTip}
+            userpermisUTip={userpermisUTip}
           />
         )}
         <div className="p-dialog-header-icons" style={{ display: 'none' }}>
