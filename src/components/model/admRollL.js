@@ -10,6 +10,8 @@ import { Toast } from "primereact/toast";
 import { AdmRollService } from "../../service/model/AdmRollService";
 import AdmRollactL from './admRollactL';
 import AdmRollstrL from './admRollstrL';
+import AdmRolllinkL from './admRolllinkL';
+import AdmUserPermissUL from './admUserPermissUL';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
@@ -32,6 +34,8 @@ export default function AdmRollL(props) {
   const [rollTip, setRollTip] = useState('');
   const [admRollactLVisible, setAdmRollactLVisible] = useState(false);
   const [admRollstrLVisible, setAdmRollstrLVisible] = useState(false);
+  const [admRolllinkLVisible, setAdmRolllinkLVisible] = useState(false);
+  const [admUserPermissULVisible, setAdmUserPermissULVisible] = useState(false);
   let i = 0
   useEffect(() => {
     async function fetchData() {
@@ -78,6 +82,14 @@ export default function AdmRollL(props) {
     const localObj = { newObj };
   };
 
+  const handleAdmRolllinkLDialogClose = (newObj) => {
+    const localObj = { newObj };
+  };
+
+  const handleAdmUserPermissULDialogClose = (newObj) => {
+    const localObj = { newObj };
+  };
+
   const findIndexById = (id) => {
     let index = -1;
 
@@ -101,6 +113,14 @@ export default function AdmRollL(props) {
 
   const openRollAct = () => {
     setAdmRollactLDialog();
+  };
+  
+  const openRolllink = () => {
+    setAdmRolllinkLDialog();
+  };
+  
+  const openUserpermissU = () => {
+    setAdmUserpermissULDialog();
   };
 
   const onRowSelect = (event) => {
@@ -165,10 +185,10 @@ export default function AdmRollL(props) {
           <Button label={translations[selectedLanguage].Actions} icon="pi pi-shield" onClick={openRollAct} text raised disabled={!admRoll} />
         </div>
         <div className="flex flex-wrap gap-1">
-          <Button label={translations[selectedLanguage].Links} icon="pi pi-sitemap" onClick={openNew} text raised disabled={!admRoll} />
+          <Button label={translations[selectedLanguage].Links} icon="pi pi-sitemap" onClick={openRolllink} text raised disabled={!admRoll} />
         </div>
         <div className="flex flex-wrap gap-1">
-          <Button label={translations[selectedLanguage].Users} icon="pi pi-users" onClick={openNew} text raised disabled={!admRoll} />
+          <Button label={translations[selectedLanguage].Users} icon="pi pi-users" onClick={openUserpermissU } text raised disabled={!admRoll} />
         </div>
         <div className="flex-grow-1" />
         <b>{translations[selectedLanguage].RollsLista}</b>
@@ -264,7 +284,17 @@ export default function AdmRollL(props) {
     setShowMyComponent(true);
     setAdmRollactLVisible(true);
 
-  }    
+  }  
+  const setAdmRolllinkLDialog = () => {
+    setShowMyComponent(true);
+    setAdmRolllinkLVisible(true);
+
+  }  
+  const setAdmUserpermissULDialog = () => {
+    setShowMyComponent(true);
+    setAdmUserPermissULVisible(true);
+
+  }         
   //  Dialog --->
 
   const header = renderHeader();
@@ -424,6 +454,46 @@ export default function AdmRollL(props) {
           />
         )}
       </Dialog> 
+      <Dialog
+        header={translations[selectedLanguage].Rolllinks}
+        visible={admRolllinkLVisible}
+        style={{ width: '70%' }}
+        onHide={() => {
+          setAdmRolllinkLVisible(false);
+          setShowMyComponent(false);
+        }}
+      >
+        {showMyComponent && (
+          <AdmRolllinkL
+            parameter={"inputTextValue"}
+            admRoll={admRoll}
+            handleAdmRolllinkLDialogClose={handleAdmRolllinkLDialogClose}
+            setAdmRolllinkLVisible={setAdmRolllinkLVisible}
+            dialog={true}
+            lookUp={false}
+          />
+        )}
+      </Dialog>   
+      <Dialog
+        header={translations[selectedLanguage].Userspermiss}
+        visible={admUserPermissULVisible}
+        style={{ width: '70%' }}
+        onHide={() => {
+          setAdmUserPermissULVisible(false);
+          setShowMyComponent(false);
+        }}
+      >
+        {showMyComponent && (
+          <AdmUserPermissUL
+            parameter={"inputTextValue"}
+            admRoll={admRoll}
+            handleAdmUserPermissULDialogClose={handleAdmUserPermissULDialogClose}
+            setAdmUserPermissULVisible={setAdmUserPermissULVisible}
+            dialog={true}
+            lookUp={false}
+          />
+        )}
+      </Dialog>          
       <div className="p-dialog-header-icons" style={{ display: 'none' }}>
           <button className="p-dialog-header-close p-link">
             <span className="p-dialog-header-close-icon pi pi-times"></span>

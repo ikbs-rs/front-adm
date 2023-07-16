@@ -139,6 +139,7 @@ const AdmRollstr = (props) => {
 
     const onInputChange = (e, type, name) => {
         let val = ''
+
         if (type === "options") {
             switch (name) {
                 case "objtp":

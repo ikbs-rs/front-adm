@@ -2,17 +2,18 @@ import axios from 'axios';
 import env from "../../configs/env"
 import Token from "../../utilities/Token";
 
-export class AdmUserPermissService {
+export class AdmRolllinkService {
 
-  async getAdmUserPermissRoll(objId) {
+  async getAdmRolllinkRoll(objId) {
     const selectedLanguage = localStorage.getItem('sl') || 'en'
-    const url = `${env.ADM_BACK_URL}/adm/userpermiss/getallouter/usr/${objId}/?sl=${selectedLanguage}&outer=adm_roll`;
+    const url = `${env.ADM_BACK_URL}/adm/rolllink/getallouter/roll2/${objId}/?sl=${selectedLanguage}&outer=adm_roll&outerKey=roll1`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       Authorization: tokenLocal.token
     };
 
     try {
+
       const response = await axios.get(url, { headers });
       return response.data.item;
     } catch (error) {
@@ -21,23 +22,8 @@ export class AdmUserPermissService {
     }
   }
 
-  async getAdmUserpermissUser(rollObjID) {
-    const url = `${env.ADM_BACK_URL}/adm/userpermiss_vu/getall/roll/${rollObjID}`;
-    const tokenLocal = await Token.getTokensLS();
-    const headers = {
-      Authorization: tokenLocal.token
-    };
-    try {
-      const response = await axios.get(url, { headers });
-      return response.data.item;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
-  async getAdmUserPermissAllByItem(userObj) {
-    const url = `${env.ADM_BACK_URL}/adm/userpermiss_vr/getall/usr/${userObj.id}`;
+  async getAdmRolllinkAllByItem(userObj) {
+    const url = `${env.ADM_BACK_URL}/adm/rolllink_vr/getall/roll/${userObj.id}`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       Authorization: tokenLocal.token
@@ -52,14 +38,15 @@ export class AdmUserPermissService {
     }
   }
 
-  async postAdmUserPermiss(newObj) {
+  async postAdmRolllink(newObj) {
     try {
+      console.log("KKKK43", newObj)
       if (newObj.roll === null || newObj.usr === null) {
         throw new Error(
           "Items must be filled!"
         );
       }
-      const url = `${env.ADM_BACK_URL}/adm/userpermiss`;
+      const url = `${env.ADM_BACK_URL}/adm/rolllink`;
       const tokenLocal = await Token.getTokensLS();
       const headers = {
         'Content-Type': 'application/json',
@@ -75,14 +62,14 @@ export class AdmUserPermissService {
 
   }
 
-  async putAdmUserPermiss(newObj) {
+  async putAdmRolllink(newObj) {
     try {
       if (newObj.roll === null || newObj.usr === null) {
         throw new Error(
           "Items must be filled!"
         );
       }
-      const url = `${env.ADM_BACK_URL}/adm/userpermiss`;
+      const url = `${env.ADM_BACK_URL}/adm/rolllink`;
       const tokenLocal = await Token.getTokensLS();
       const headers = {
         'Content-Type': 'application/json',
@@ -99,8 +86,8 @@ export class AdmUserPermissService {
 
   }
 
-  async deleteAdmUserPermiss(newObj) {
-    const url = `${env.ADM_BACK_URL}/adm/userpermiss/${newObj.id}`;
+  async deleteAdmRolllink(newObj) {
+    const url = `${env.ADM_BACK_URL}/adm/rolllink/${newObj.id}`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       'Authorization': tokenLocal.token
