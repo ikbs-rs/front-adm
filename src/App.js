@@ -10,9 +10,9 @@ import AppMenu from './AppMenu';
 import AppRightMenu from './AppRightMenu';
 
 import UserGrp from './components/model/admUserGrpL';
+import LocTP from './components/model/cmnLoctpL';
 import User from './components/model/admUserL';
 import Roll from './components/model/admRollL';
-import Action from './components/model/admActionL';
 
 import DbParameter from './components/model/admDbParameterL';
 import Message from './components/model/admMessageL';
@@ -87,10 +87,10 @@ const App = () => {
                     label: translations[selectedLanguage].Location_administration,
                     icon: 'pi pi-fw pi-bars',
                     items: [
-                        { label: translations[selectedLanguage].Location_type, icon: 'pi pi-fw pi-calendar', to: '/usergrp' },
-                        { label: translations[selectedLanguage].Locations, icon: 'pi pi-fw pi-calendar', to: '/action'  },
-                        { label: translations[selectedLanguage].Properties_location, icon: 'pi pi-fw pi-calendar' , to: '/roll'},
-                        { label: translations[selectedLanguage].Type_of_relationship, icon: 'pi pi-fw pi-calendar' , to: '/roll'}
+                        { label: translations[selectedLanguage].Location_type, icon: 'pi pi-fw pi-calendar', to: '/loctp' },
+                        { label: translations[selectedLanguage].Locations, icon: 'pi pi-fw pi-calendar', to: '/loc'  },
+                        { label: translations[selectedLanguage].Properties_location, icon: 'pi pi-fw pi-calendar' , to: '/locatt'},
+                        { label: translations[selectedLanguage].Type_of_relationship, icon: 'pi pi-fw pi-calendar' , to: '/loclinktp'}
                     ]
                 },
                 {
@@ -450,11 +450,16 @@ const App = () => {
                         <Route path="/usergrp" element={<UserGrp />} />
                         <Route path="/user" element={<User />} />
                         <Route path="/roll" element={<Roll />} />
-                        <Route path="/action" element={<Action />} />
+                        <Route path="/action" element={<UserGrp />} />
                         <Route path="/dbparameter" element={<DbParameter />} />
                         <Route path="/message" element={<Message />} />
                         <Route path="/dbmserr" element={<DbmsErr />} />
                         <Route path="/icons" element={<IconsDemo />} />
+                        
+                        <Route path="/loctp" element={<LocTP />} />
+                        <Route path="/loc" element={<UserGrp />} />
+                        <Route path="/locatt" element={<UserGrp />} />
+                        <Route path="/loclinktp" element={<UserGrp />} />
                     </Routes>
                 </div>
 
