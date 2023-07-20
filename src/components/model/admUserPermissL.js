@@ -86,7 +86,7 @@ export default function AdmUserPermissL(props) {
 
     return index;
   };
-
+  
   const openNew = () => {
     setAdmUserPermissDialog(emptyAdmUserPermiss);
   };
