@@ -10,9 +10,10 @@ import AppMenu from './AppMenu';
 import AppRightMenu from './AppRightMenu';
 
 import UserGrp from './components/model/admUserGrpL';
+import LocTP from './components/model/cmnLoctpL';
 import User from './components/model/admUserL';
 import Roll from './components/model/admRollL';
-import Action from './components/model/admActionL';
+
 import DbParameter from './components/model/admDbParameterL';
 import Message from './components/model/admMessageL';
 import DbmsErr from './components/model/admDbmsErrL';
@@ -48,7 +49,7 @@ const App = () => {
     const [rightPanelMenuActive, setRightPanelMenuActive] = useState(null);
     const [inlineUserMenuActive, setInlineUserMenuActive] = useState(false);
     const [menuActive, setMenuActive] = useState(false);
-    const [topbarColor, setTopbarColor] = useState('layout-topbar-rose');
+    const [topbarColor, setTopbarColor] = useState('layout-topbar-bluegrey');
     const [theme, setTheme] = useState('blue');
     const [configActive, setConfigActive] = useState(false);
     const [inputStyle, setInputStyle] = useState('filled');
@@ -57,35 +58,89 @@ const App = () => {
     const location = useLocation();
     const inlineUserRef = useRef();
 
-    const menu = [  
+     const menu = [
         {
-            label: translations[selectedLanguage].ACCESS_PERMISSION,
-            icon: 'pi pi-fw pi-star-fill',
+            label: translations[selectedLanguage].Code_books,
+            icon: 'pi pi-fw pi-bars',
             items: [
-                { label: translations[selectedLanguage].Usergroups, icon: 'pi pi-fw pi-id-card', to: '/usergrp' },
-                { label: translations[selectedLanguage].Users, icon: 'pi pi-users', to: '/user' },
-                { label: translations[selectedLanguage].Rolls, icon: 'pi pi-fw pi-bookmark', to: '/roll' },
-                { label: translations[selectedLanguage].Actions, icon: 'pi pi-map-marker', to: '/action' }
-            ]
-        },
-        {
-            label: translations[selectedLanguage].Settings,
-            icon: 'pi pi-prime',
-            items: [
-                { label: translations[selectedLanguage].DBparameters, icon: 'pi pi-database', to: '/dbparameter' },
-                { label: translations[selectedLanguage].Messages, icon: 'pi pi-fw pi-clone', to: '/message' },
-                { label: translations[selectedLanguage].DBMSerrors, icon: 'pi pi-fw pi-exclamation-triangle', to: '/dbmserr' }
+                {
+                    label: translations[selectedLanguage].Business_partners_administration,
+                    icon: 'pi pi-fw pi-bars',
+                    items: [
+                        { label: translations[selectedLanguage].Type_partners, icon: 'pi pi-fw pi-calendar', to: '/usergrp' },
+                        { label: translations[selectedLanguage].Business_partners, icon: 'pi pi-fw pi-calendar', to: '/action'  },
+                        { label: translations[selectedLanguage].Properties_partners, icon: 'pi pi-fw pi-calendar' , to: '/roll'},
+                        { label: translations[selectedLanguage].Actions, icon: 'pi pi-fw pi-calendar' , to: '/roll'}
+                    ]
+                },
+                {
+                    label: translations[selectedLanguage].Territorial_administration,
+                    icon: 'pi pi-fw pi-bars',
+                    items: [
+                        { label: translations[selectedLanguage].Type_of_territory, icon: 'pi pi-fw pi-calendar', to: '/usergrp' },
+                        { label: translations[selectedLanguage].Territory, icon: 'pi pi-fw pi-calendar', to: '/action'  },
+                        { label: translations[selectedLanguage].Properties_territory, icon: 'pi pi-fw pi-calendar' , to: '/roll'},
+                        { label: translations[selectedLanguage].Type_of_relationship, icon: 'pi pi-fw pi-calendar' , to: '/roll'}
+                    ]
+                },
+                {
+                    label: translations[selectedLanguage].Location_administration,
+                    icon: 'pi pi-fw pi-bars',
+                    items: [
+                        { label: translations[selectedLanguage].Location_type, icon: 'pi pi-fw pi-calendar', to: '/loctp' },
+                        { label: translations[selectedLanguage].Locations, icon: 'pi pi-fw pi-calendar', to: '/loc'  },
+                        { label: translations[selectedLanguage].Properties_location, icon: 'pi pi-fw pi-calendar' , to: '/locatt'},
+                        { label: translations[selectedLanguage].Type_of_relationship, icon: 'pi pi-fw pi-calendar' , to: '/loclinktp'}
+                    ]
+                },
+                {
+                    label: translations[selectedLanguage].Currency_administration,
+                    icon: 'pi pi-fw pi-bars',
+                    items: [
+                        { label: translations[selectedLanguage].Currency, icon: 'pi pi-fw pi-calendar' , to: '/roll'},
+                        { label: translations[selectedLanguage].Exchange_rate, icon: 'pi pi-fw pi-calendar' , to: '/roll'}
+                    ]
+                },
+                {
+                    label: translations[selectedLanguage].Tax_system,
+                    icon: 'pi pi-fw pi-bars',
+                    items: [
+                        { label: translations[selectedLanguage].Tariff_groups, icon: 'pi pi-fw pi-calendar' , to: '/roll'},
+                        { label: translations[selectedLanguage].Taxes, icon: 'pi pi-fw pi-calendar' , to: '/roll'}
+                    ]
+                },
+                {
+                    label: translations[selectedLanguage].Objects_administration,
+                    icon: 'pi pi-prime',
+                    items: [
+                        { label: translations[selectedLanguage].Objects_type, icon: 'pi pi-database', to: '/dbparameter' },
+                        { label: translations[selectedLanguage].Objects, icon: 'pi pi-fw pi-clone', to: '/message' },
+                        { label: translations[selectedLanguage].Properties_object, icon: 'pi pi-fw pi-clone', to: '/message' },
+                        { label: translations[selectedLanguage].Group_of_properties, icon: 'pi pi-fw pi-clone', to: '/message' },
+                        { label: translations[selectedLanguage].Type_of_relationship, icon: 'pi pi-fw pi-exclamation-triangle', to: '/dbmserr' },
+                        { label: translations[selectedLanguage].Site, icon: 'pi pi-fw pi-clone', to: '/message' }
+                    ]
+                },
+                {
+                    label: translations[selectedLanguage].Other,
+                    icon: 'pi pi-prime',
+                    items: [
+                        { label: translations[selectedLanguage].Program_modules, icon: 'pi pi-database', to: '/dbparameter' },
+                        { label: translations[selectedLanguage].Menu_administration, icon: 'pi pi-fw pi-clone', to: '/message' },
+                        { label: translations[selectedLanguage].Units_of_measurement, icon: 'pi pi-fw pi-clone', to: '/message' },
+                    ]
+                }
             ]
         },
         {
             label: translations[selectedLanguage].Moduleselection,
             icon: 'pi pi-fw pi-compass',
             items: [
-                { label: translations[selectedLanguage].Back, icon: 'pi pi-sign-out', url: `${env.START_URL}` },
-                { /*label: 'Back', icon: 'pi pi-sign-out', url: `${env.START_URL}?sl=${selectedLanguage}` */}
+                { label: translations[selectedLanguage].Back, icon: 'pi pi-sign-out', url: `${env.START_URL}?sl=${selectedLanguage}` }
             ]
         }
     ];
+
 
     let topbarItemClick;
     let menuClick;
@@ -395,11 +450,16 @@ const App = () => {
                         <Route path="/usergrp" element={<UserGrp />} />
                         <Route path="/user" element={<User />} />
                         <Route path="/roll" element={<Roll />} />
-                        <Route path="/action" element={<Action />} />
+                        <Route path="/action" element={<UserGrp />} />
                         <Route path="/dbparameter" element={<DbParameter />} />
                         <Route path="/message" element={<Message />} />
                         <Route path="/dbmserr" element={<DbmsErr />} />
                         <Route path="/icons" element={<IconsDemo />} />
+                        
+                        <Route path="/loctp" element={<LocTP />} />
+                        <Route path="/loc" element={<UserGrp />} />
+                        <Route path="/locatt" element={<UserGrp />} />
+                        <Route path="/loclinktp" element={<UserGrp />} />
                     </Routes>
                 </div>
 

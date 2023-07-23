@@ -7,7 +7,7 @@ const EmptyPage = () => {
         <div className="grid">
             <div className="col-12">
                 <div className="card">
-                    <h5>{translations[selectedLanguage].SystemAdministration } </h5>
+                    <h5>{translations[selectedLanguage].Common_libraries } </h5>
                     <p>{translations[selectedLanguage]._eptyPage }</p>
                 </div>
             </div>

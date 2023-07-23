@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { classNames } from 'primereact/utils';
-import { AdmActionService } from "../../service/model/AdmActionService";
+import { CmnLoctpService } from "../../service/model/CmnLoctpService";
 import './index.css';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -9,14 +9,12 @@ import { Toast } from "primereact/toast";
 import DeleteDialog from '../dialog/DeleteDialog';
 import { translations } from "../../configs/translations";
 
-const AdmAction = (props) => {
-    //console.log("ulaz", props.admAction)
-    let i = 0
+const CmnLoctp = (props) => {
     const selectedLanguage = localStorage.getItem('sl')||'en'
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [dropdownItem, setDropdownItem] = useState(null);
     const [dropdownItems, setDropdownItems] = useState(null);
-    const [admAction, setAdmAction] = useState(props.admAction);
+    const [cmnLoctp, setCmnLoctp] = useState(props.cmnLoctp);
     const [submitted, setSubmitted] = useState(false);
 
     const toast = useRef(null);
@@ -24,29 +22,9 @@ const AdmAction = (props) => {
         { name: `${translations[selectedLanguage].Yes}`, code: '1' },
         { name: `${translations[selectedLanguage].No}`, code: '0' }
     ];
-/***   KOD ZA DOHVATANJE SLOGA IZ BAZE
+
     useEffect(() => {
-        async function fetchData() {
-            try {
-                ++i
-            if (i<2){
-              const admActionService = new AdmActionService();
-              console.log(props.admAction.id, "fetchAdmAction Props")
-              const data = await admActionService.getAdmAction(props.admAction.id); // Pretpostavljamo da postoji metoda `getAdmAction` koja vraća ažurirane podatke
-              console.log(data, 'fetchAdmAction -*-*-*-*-*-*-*-*-*-*-')
-              setAdmAction(data); // Ažurirajte `admAction` sa podacima iz baze
-                }
-            } catch (err) {
-              // Obrada greške prilikom dohvatanja podataka iz baze
-              console.error(err);
-            }
-          };
-        // Funkcija koja se poziva prilikom učitavanja komponente
-         fetchData();
-    }, []);
-*/
-    useEffect(() => {
-        setDropdownItem(findDropdownItemByCode(props.admAction.valid));
+        setDropdownItem(findDropdownItemByCode(props.cmnLoctp.valid));
     }, []);
 
     const findDropdownItemByCode = (code) => {
@@ -64,11 +42,11 @@ const AdmAction = (props) => {
 
     const handleCreateClick = async () => {
         try {
-            setSubmitted(true);
-            const admActionService = new AdmActionService();
-            const data = await admActionService.postAdmAction(admAction);
-            admAction.id = data
-            props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
+            setSubmitted(true);            
+                const cmnLoctpService = new CmnLoctpService();
+                const data = await cmnLoctpService.postCmnLoctp(cmnLoctp);
+                cmnLoctp.id = data
+                props.handleDialogClose({ obj: cmnLoctp, loctpTip: props.loctpTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -83,9 +61,9 @@ const AdmAction = (props) => {
     const handleSaveClick = async () => {
         try {
             setSubmitted(true);
-            const admActionService = new AdmActionService();
-            await admActionService.putAdmAction(admAction);
-            props.handleDialogClose({ obj: admAction, actionTip: props.actionTip });
+            const cmnLoctpService = new CmnLoctpService();
+            await cmnLoctpService.putCmnLoctp(cmnLoctp);
+            props.handleDialogClose({ obj: cmnLoctp, loctpTip: props.loctpTip });
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -104,9 +82,9 @@ const AdmAction = (props) => {
     const handleDeleteClick = async () => {
         try {
             setSubmitted(true);
-            const admActionService = new AdmActionService();
-            await admActionService.deleteAdmAction(admAction);
-            props.handleDialogClose({ obj: admAction, actionTip: 'DELETE' });
+            const cmnLoctpService = new CmnLoctpService();
+            await cmnLoctpService.deleteCmnLoctp(cmnLoctp);
+            props.handleDialogClose({ obj: cmnLoctp, loctpTip: 'DELETE' });
             props.setVisible(false);
             hideDeleteDialog();
         } catch (err) {
@@ -128,11 +106,11 @@ const AdmAction = (props) => {
             val = (e.target && e.target.value) || '';
         }
 
-        let _admAction = { ...admAction };
-        _admAction[`${name}`] = val;
-        if (name===`textx`) _admAction[`text`] = val
+        let _cmnLoctp = { ...cmnLoctp };
+        _cmnLoctp[`${name}`] = val;
+        if (name===`textx`) _cmnLoctp[`text`] = val
 
-        setAdmAction(_admAction);
+        setCmnLoctp(_cmnLoctp);
     };
 
     const hideDeleteDialog = () => {
@@ -148,26 +126,29 @@ const AdmAction = (props) => {
                         <div className="field col-12 md:col-7">
                             <label htmlFor="code">{translations[selectedLanguage].Code}</label>
                             <InputText id="code" autoFocus
-                            value={admAction && admAction.code}
-                            onChange={(e) => onInputChange(e, "text", 'code')}
-                               //value={admAction.textx} onChange={(e) => onInputChange(e, "text", 'textx')}
+                                value={cmnLoctp.code} onChange={(e) => onInputChange(e, "text", 'code')}
                                 required
-                                className={classNames({ 'p-invalid': submitted && !admAction.code })}
+                                className={classNames({ 'p-invalid': submitted && !cmnLoctp.code })}
                             />
-                            {submitted && !admAction.code && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
+                            {submitted && !cmnLoctp.code && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
                         <div className="field col-12 md:col-9">
-                            <label htmlFor="text">{translations[selectedLanguage].Text}</label>
+                            <label htmlFor="textx">{translations[selectedLanguage].Text}</label>
                             <InputText
                                 id="textx"
-                                value={admAction && admAction.textx}
-                            onChange={(e) => onInputChange(e, "text", 'textx')}
-                                //value={admAction.textx} onChange={(e) => onInputChange(e, "text", 'textx')}
+                                value={cmnLoctp.textx} onChange={(e) => onInputChange(e, "text", 'textx')}
                                 required
-                                className={classNames({ 'p-invalid': submitted && !admAction.textx })}
+                                className={classNames({ 'p-invalid': submitted && !cmnLoctp.textx })}
                             />
-                            {submitted && !admAction.textx && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
+                            {submitted && !cmnLoctp.textx && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
+                        <div className="field col-12 md:col-9">
+                            <label htmlFor="icon">{translations[selectedLanguage].Icon}</label>
+                            <InputText
+                                id="icon"
+                                value={cmnLoctp.icon} onChange={(e) => onInputChange(e, "text", 'icon')}
+                            />
+                        </div>                        
                         <div className="field col-12 md:col-4">
                             <label htmlFor="valid">{translations[selectedLanguage].Valid}</label>
                             <Dropdown id="valid"
@@ -177,10 +158,10 @@ const AdmAction = (props) => {
                                 required
                                 optionLabel="name"
                                 placeholder="Select One"
-                                className={classNames({ 'p-invalid': submitted && !admAction.valid })}
+                                className={classNames({ 'p-invalid': submitted && !cmnLoctp.valid })}
                             />
-                            {submitted && !admAction.valid && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
-                        </div>
+                            {submitted && !cmnLoctp.valid && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
+                        </div>                        
                     </div>
 
                     <div className="flex flex-wrap gap-1">
@@ -195,7 +176,7 @@ const AdmAction = (props) => {
                         ) : null}
                         <div className="flex-grow-1"></div>
                         <div className="flex flex-wrap gap-1">
-                            {(props.actionTip === 'CREATE') ? (
+                            {(props.loctpTip === 'CREATE') ? (
                                 <Button
                                     label={translations[selectedLanguage].Create}
                                     icon="pi pi-check"
@@ -204,7 +185,7 @@ const AdmAction = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.actionTip !== 'CREATE') ? (
+                            {(props.loctpTip !== 'CREATE') ? (
                                 <Button
                                     label={translations[selectedLanguage].Delete}
                                     icon="pi pi-trash"
@@ -212,8 +193,8 @@ const AdmAction = (props) => {
                                     className="p-button-outlined p-button-danger"
                                     outlined
                                 />
-                            ) : null}
-                            {(props.actionTip !== 'CREATE') ? (
+                            ) : null}                            
+                            {(props.loctpTip !== 'CREATE') ? (
                                 <Button
                                     label={translations[selectedLanguage].Save}
                                     icon="pi pi-check"
@@ -229,8 +210,7 @@ const AdmAction = (props) => {
             <DeleteDialog
                 visible={deleteDialogVisible}
                 inAction="delete"
-                item={admAction ? admAction.text : null}
-                //item={admAction.text}
+                item={cmnLoctp.text}
                 onHide={hideDeleteDialog}
                 onDelete={handleDeleteClick}
             />
@@ -238,4 +218,4 @@ const AdmAction = (props) => {
     );
 };
 
-export default AdmAction;
+export default CmnLoctp;

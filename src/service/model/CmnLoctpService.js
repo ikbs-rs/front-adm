@@ -2,10 +2,10 @@ import axios from 'axios';
 import env from "../../configs/env"
 import Token from "../../utilities/Token";
 
-export class AdmActionService {
-  async getAdmActions() {
+export class CmnLoctpService {
+  async getCmnLoctps() {
     const selectedLanguage = localStorage.getItem('sl') || 'en'
-    const url = `${env.ADM_BACK_URL}/adm/x/action/?sl=${selectedLanguage}`;
+    const url = `${env.CMN_BACK_URL}/cmn/x/loctp/?sl=${selectedLanguage}`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       Authorization: tokenLocal.token
@@ -20,9 +20,9 @@ export class AdmActionService {
     }
   }
 
-  async getAdmAction(objId) {
+  async getCmnLoctp(objId) {
     const selectedLanguage = localStorage.getItem('sl') || 'en'
-    const url = `${env.ADM_BACK_URL}/adm/x/action/${objId}/?sl=${selectedLanguage}`;
+    const url = `${env.CMN_BACK_URL}/cmn/x/loctp/${objId}/?sl=${selectedLanguage}`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       Authorization: tokenLocal.token
@@ -38,7 +38,7 @@ export class AdmActionService {
   }
 
 
-  async postAdmAction(newObj) {
+  async postCmnLoctp(newObj) {
     try {
       const selectedLanguage = localStorage.getItem('sl') || 'en'
       if (newObj.code.trim() === '' || newObj.text.trim() === '' || newObj.valid === null) {
@@ -46,7 +46,7 @@ export class AdmActionService {
           "Items must be filled!"
         );
       }
-      const url = `${env.ADM_BACK_URL}/adm/x/action/?sl=${selectedLanguage}`;
+      const url = `${env.CMN_BACK_URL}/cmn/x/loctp/?sl=${selectedLanguage}`;
       const tokenLocal = await Token.getTokensLS();
       const headers = {
         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export class AdmActionService {
 
   }
 
-  async putAdmAction(newObj) {
+  async putCmnLoctp(newObj) {
     try {
       const selectedLanguage = localStorage.getItem('sl') || 'en'
       if (newObj.code.trim() === '' || newObj.text.trim() === '' || newObj.valid === null) {
@@ -72,7 +72,7 @@ export class AdmActionService {
           "Items must be filled!"
         );
       }
-      const url = `${env.ADM_BACK_URL}/adm/x/action/?sl=${selectedLanguage}`;
+      const url = `${env.CMN_BACK_URL}/cmn/x/loctp/?sl=${selectedLanguage}`;
       const tokenLocal = await Token.getTokensLS();
       const headers = {
         'Content-Type': 'application/json',
@@ -89,9 +89,9 @@ export class AdmActionService {
 
   }
 
-  async deleteAdmAction(newObj) {
+  async deleteCmnLoctp(newObj) {
     try {
-      const url = `${env.ADM_BACK_URL}/adm/x/action/${newObj.id}`;
+      const url = `${env.CMN_BACK_URL}/cmn/x/loctp/${newObj.id}`;
       const tokenLocal = await Token.getTokensLS();
       const headers = {
         'Authorization': tokenLocal.token
