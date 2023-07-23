@@ -58,89 +58,37 @@ const App = () => {
     const location = useLocation();
     const inlineUserRef = useRef();
 
-     const menu = [
+    const menu = [  
         {
-            label: translations[selectedLanguage].Code_books,
-            icon: 'pi pi-fw pi-bars',
+            label: translations[selectedLanguage].ACCESS_PERMISSION,
+            icon: 'pi pi-fw pi-star-fill',
             items: [
-                {
-                    label: translations[selectedLanguage].Business_partners_administration,
-                    icon: 'pi pi-fw pi-bars',
-                    items: [
-                        { label: translations[selectedLanguage].Type_partners, icon: 'pi pi-fw pi-calendar', to: '/usergrp' },
-                        { label: translations[selectedLanguage].Business_partners, icon: 'pi pi-fw pi-calendar', to: '/action'  },
-                        { label: translations[selectedLanguage].Properties_partners, icon: 'pi pi-fw pi-calendar' , to: '/roll'},
-                        { label: translations[selectedLanguage].Actions, icon: 'pi pi-fw pi-calendar' , to: '/roll'}
-                    ]
-                },
-                {
-                    label: translations[selectedLanguage].Territorial_administration,
-                    icon: 'pi pi-fw pi-bars',
-                    items: [
-                        { label: translations[selectedLanguage].Type_of_territory, icon: 'pi pi-fw pi-calendar', to: '/usergrp' },
-                        { label: translations[selectedLanguage].Territory, icon: 'pi pi-fw pi-calendar', to: '/action'  },
-                        { label: translations[selectedLanguage].Properties_territory, icon: 'pi pi-fw pi-calendar' , to: '/roll'},
-                        { label: translations[selectedLanguage].Type_of_relationship, icon: 'pi pi-fw pi-calendar' , to: '/roll'}
-                    ]
-                },
-                {
-                    label: translations[selectedLanguage].Location_administration,
-                    icon: 'pi pi-fw pi-bars',
-                    items: [
-                        { label: translations[selectedLanguage].Location_type, icon: 'pi pi-fw pi-calendar', to: '/loctp' },
-                        { label: translations[selectedLanguage].Locations, icon: 'pi pi-fw pi-calendar', to: '/loc'  },
-                        { label: translations[selectedLanguage].Properties_location, icon: 'pi pi-fw pi-calendar' , to: '/locatt'},
-                        { label: translations[selectedLanguage].Type_of_relationship, icon: 'pi pi-fw pi-calendar' , to: '/loclinktp'}
-                    ]
-                },
-                {
-                    label: translations[selectedLanguage].Currency_administration,
-                    icon: 'pi pi-fw pi-bars',
-                    items: [
-                        { label: translations[selectedLanguage].Currency, icon: 'pi pi-fw pi-calendar' , to: '/roll'},
-                        { label: translations[selectedLanguage].Exchange_rate, icon: 'pi pi-fw pi-calendar' , to: '/roll'}
-                    ]
-                },
-                {
-                    label: translations[selectedLanguage].Tax_system,
-                    icon: 'pi pi-fw pi-bars',
-                    items: [
-                        { label: translations[selectedLanguage].Tariff_groups, icon: 'pi pi-fw pi-calendar' , to: '/roll'},
-                        { label: translations[selectedLanguage].Taxes, icon: 'pi pi-fw pi-calendar' , to: '/roll'}
-                    ]
-                },
-                {
-                    label: translations[selectedLanguage].Objects_administration,
-                    icon: 'pi pi-prime',
-                    items: [
-                        { label: translations[selectedLanguage].Objects_type, icon: 'pi pi-database', to: '/dbparameter' },
-                        { label: translations[selectedLanguage].Objects, icon: 'pi pi-fw pi-clone', to: '/message' },
-                        { label: translations[selectedLanguage].Properties_object, icon: 'pi pi-fw pi-clone', to: '/message' },
-                        { label: translations[selectedLanguage].Group_of_properties, icon: 'pi pi-fw pi-clone', to: '/message' },
-                        { label: translations[selectedLanguage].Type_of_relationship, icon: 'pi pi-fw pi-exclamation-triangle', to: '/dbmserr' },
-                        { label: translations[selectedLanguage].Site, icon: 'pi pi-fw pi-clone', to: '/message' }
-                    ]
-                },
-                {
-                    label: translations[selectedLanguage].Other,
-                    icon: 'pi pi-prime',
-                    items: [
-                        { label: translations[selectedLanguage].Program_modules, icon: 'pi pi-database', to: '/dbparameter' },
-                        { label: translations[selectedLanguage].Menu_administration, icon: 'pi pi-fw pi-clone', to: '/message' },
-                        { label: translations[selectedLanguage].Units_of_measurement, icon: 'pi pi-fw pi-clone', to: '/message' },
-                    ]
-                }
+                { label: translations[selectedLanguage].Usergroups, icon: 'pi pi-fw pi-id-card', to: '/usergrp' },
+                { label: translations[selectedLanguage].Users, icon: 'pi pi-users', to: '/user' },
+                { label: translations[selectedLanguage].Rolls, icon: 'pi pi-fw pi-bookmark', to: '/roll' },
+                { label: translations[selectedLanguage].Actions, icon: 'pi pi-map-marker', to: '/action' }
             ]
         },
         {
+            label: 'Settings',
+            label: translations[selectedLanguage].Settings,
+            icon: 'pi pi-prime',
+            items: [
+                { label: translations[selectedLanguage].DBparameters, icon: 'pi pi-database', to: '/dbparameter' },
+                { label: translations[selectedLanguage].Messages, icon: 'pi pi-fw pi-clone', to: '/message' },
+                { label: translations[selectedLanguage].DBMSerrors, icon: 'pi pi-fw pi-exclamation-triangle', to: '/dbmserr' }
+            ]
+        },
+        {
+            label: 'Module selection',
             label: translations[selectedLanguage].Moduleselection,
             icon: 'pi pi-fw pi-compass',
             items: [
-                { label: translations[selectedLanguage].Back, icon: 'pi pi-sign-out', url: `${env.START_URL}?sl=${selectedLanguage}` }
+                { label: translations[selectedLanguage].Back, icon: 'pi pi-sign-out', url: `${env.START_URL}` },
+                { /*label: 'Back', icon: 'pi pi-sign-out', url: `${env.START_URL}?sl=${selectedLanguage}` */}
             ]
         }
     ];
-
 
     let topbarItemClick;
     let menuClick;

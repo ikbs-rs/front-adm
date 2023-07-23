@@ -1,7 +1,7 @@
 export const translations = {
     en: {
-        _eptyPage: "The common library serves to maintain the settings used by all parts of the system.",
-        Common_libraries: "Common libraries",
+        _eptyPage: "The System Administration module enables the administration of user access rights.",
+        ACCESS_PERMISSION: "ACCESS PERMISSION",
         Action: "Action",
         Actions: "Actions",
         ActionList: "Action List",
@@ -99,8 +99,8 @@ export const translations = {
         Yes: "Yes"
     },
     sr_lat: {
-        _eptyPage: "Zajednička biblioteka služi za održavanje postavki koje koriste svi delovi sistema.",
-        Common_libraries: "Zajedničke biblioteke",
+        _eptyPage: "Modul Administracija sistema omogućava administraciju prava pristupa korisnika.",
+        ACCESS_PERMISSION: "Prava pristupa",
         Action: "Akcija",
         Actions: "Akcije",
         ActionList: "Akcija lista",
@@ -200,8 +200,8 @@ export const translations = {
         Yes: "Da"
     },
     sr_cyr: {
-        _eptyPage: "Заједничка библиотека служи за одржавање поставки које користе сви делови система.",
-        Common_libraries: "Заједничке библиотеке",
+        _eptyPage: "Модул Администрација система омогућава администрацију права приступа корисника.",
+        ACCESS_PERMISSION: "Права приступа",
         Action: "Акција",
         Actions: "Акције",
         ActionList: "Акција листа",
