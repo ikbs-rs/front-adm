@@ -54,6 +54,8 @@ export const translations = {
         ObjtpText: "ObjtipText",
         On_off: "No includes",
         Other: "Other",
+        Partner: "Partner",
+        ParuserList: "Partners List",
         Program_modules: "Program modules",
         Properties_location: "Properties location",
         Properties_object: "Properties_object",
@@ -78,6 +80,7 @@ export const translations = {
         Tariff_groups: "Tariff groups",
         Tax_system: "Tax system",
         Taxes: "Taxes",
+        Territory: "Territory",
         Territorial_administration: "Territorial administration",
         Text: "Text",
         Type: "Type",
@@ -153,6 +156,8 @@ export const translations = {
         ObjtpText: "Obj tip tekst",
         On_off: "Isključuje",
         Other: "Ostalo",
+        Partner: "Partner",
+        ParuserList: "Partneri Lista",
         Program_modules: "Programski moduli",
         Properties_location: "Osobine lokacije",
         Properties_object: "Osobine objekta",
@@ -178,7 +183,6 @@ export const translations = {
         Tax_system: "Poreski siste,",
         Taxes: "Porezi",
         Territorial_administration: "Administracija teritorija",
-        Territory: "Territory",
         Text: "Tekst",
         Territory: "Teritorija",
         Type: "Tip",
@@ -255,6 +259,8 @@ export const translations = {
         ObjtpText: "Обј тип текст",   
         On_off: "Искључује",   
         Other: "Остало",
+        Partner: "Партнер",
+        ParuserList: "Партнери Листа",
         Program_modules: "Програмски модули",
         Properties_location: "Особине локације",
         Properties_object: "Особине објекта",
@@ -298,7 +304,9 @@ export const translations = {
         UsersList: "Корисници Листа",
         Userspermiss: "Дозволе корисника",
         Valid: "Валидан",
-        Yes: "Да"
+        Yes: "Да",
+        Begda: "Датум од",
+        Endda: "Датум до", 
     }
   };
   

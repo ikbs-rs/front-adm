@@ -10,6 +10,7 @@ import { Toast } from "primereact/toast";
 import { AdmUserService } from "../../service/model/AdmUserService";
 import AdmUser from './admUser';
 import AdmUserPermissL from './admUserPermissL';
+import AdmParuserL from './admParuserL';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
@@ -29,6 +30,7 @@ export default function AdmUserL(props) {
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
   const [admUserPermissLVisible, setAdmUserPermissLVisible] = useState(false);
+  const [admParuserLVisible, setAdmParuserLVisible] = useState(false);
   const [userTip, setUserTip] = useState('');
 
   useEffect(() => {
@@ -74,6 +76,10 @@ export default function AdmUserL(props) {
     const localObj = { newObj };
   };
 
+  const handleAdmParuserLDialogClose = (newObj) => {
+    const localObj = { newObj };
+  };
+
   const findIndexById = (id) => {
     let index = -1;
 
@@ -93,6 +99,10 @@ export default function AdmUserL(props) {
 
   const openUserRoll = () => {
     setAdmUserPermissLDialog();
+  };
+
+  const openParUser = () => {
+    setAdmParuserLDialog();
   };
 
   const onRowSelect = (event) => {
@@ -161,7 +171,10 @@ export default function AdmUserL(props) {
         </div>
         <div className="flex flex-wrap gap-1">
           <Button label={translations[selectedLanguage].Roll} icon="pi pi-video"  onClick={openUserRoll} text raised disabled={!admUser}/>
-        </div>        
+        </div>  
+        <div className="flex flex-wrap gap-1">
+          <Button label={translations[selectedLanguage].Partner} icon="pi pi-user-plus"  onClick={openParUser} text raised disabled={!admUser}/>
+        </div>               
         <div className="flex-grow-1" />
         <b>{translations[selectedLanguage].UsersList}</b>
         <div className="flex-grow-1"></div>
@@ -229,6 +242,13 @@ export default function AdmUserL(props) {
     setAdmUserPermissLVisible(true);
 
   }  
+
+  const setAdmParuserLDialog = () => {
+    setShowMyComponent(true);
+    setAdmParuserLVisible(true);
+
+  }  
+
   //  Dialog --->
 
   const userTemplate = (rowData) => {
@@ -376,7 +396,27 @@ export default function AdmUserL(props) {
             lookUp={false}
           />
         )}
-      </Dialog>      
+      </Dialog>    
+      <Dialog
+        header={translations[selectedLanguage].ParuserList}
+        visible={admParuserLVisible}
+        style={{ width: '70%' }}
+        onHide={() => {
+          setAdmParuserLVisible(false);
+          setShowMyComponent(false);
+        }}
+      >
+        {showMyComponent && (
+          <AdmParuserL
+            parameter={"inputTextValue"}
+            admUser={admUser}
+            handleAdmParuserLDialogClose={handleAdmParuserLDialogClose}
+            setAdmParuserLVisible={setAdmParuserLVisible}
+            dialog={true}
+            lookUp={false}
+          />
+        )}
+      </Dialog>         
     </div>
   );
 }
