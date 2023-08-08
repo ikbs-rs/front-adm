@@ -82,6 +82,17 @@ const EmptyEntities =
       "objtp": "",
       "obj": ""
     },
+    "adm_table": {
+      "id": null,
+      "site": null,
+      "code": "",
+      "text": "",
+      "valid": null,
+      "module": "",
+      "base": "",
+      "url": "",
+      "dropdown": "0"
+    },    
     "adm_user": {
       "id": null,
       "site": null,
