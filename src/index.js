@@ -5,6 +5,7 @@ import AppWrapper from './AppWrapper';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import cors from 'cors'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

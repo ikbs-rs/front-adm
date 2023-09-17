@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
+import './index.css';
 
 import AppTopbar from './AppTopbar';
 import AppFooter from './AppFooter';
@@ -348,7 +349,7 @@ const App = () => {
 
             <AppRightMenu rightPanelMenuActive={rightPanelMenuActive} onRightMenuClick={onRightMenuClick}></AppRightMenu>
 
-            <div className="layout-menu-container" onClick={onMenuClick} >
+            <div className="layout-menu-container"  onClick={onMenuClick} >
                 {inlineUser && (
                     <div className="layout-profile">
                         <button type="button" className="p-link layout-profile-button" onClick={onInlineUserClick}>
