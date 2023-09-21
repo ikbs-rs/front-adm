@@ -307,6 +307,7 @@ export const translations = {
         Yes: "Да",
         Begda: "Датум од",
         Endda: "Датум до", 
+        Par: "Партнер"
     }
   };
   

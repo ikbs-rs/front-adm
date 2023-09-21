@@ -2,18 +2,19 @@ import axios from 'axios';
 import env from "../../configs/env"
 import Token from "../../utilities/Token";
 
-export class AdmParuserService {
+export class CmnParService {
 
     async getLista(objId) {
         const selectedLanguage = localStorage.getItem('sl') || 'en'
-        const url = `${env.ADM_BACK_URL}/adm/paruser/_v/lista/?stm=adm_paruser_v&objid=${objId}&sl=${selectedLanguage}`;
+        const url = `${env.CMN_BACK_URL}/cmn/x/par/_v/lista/?stm=cmn_par_v&objid=${objId}&sl=${selectedLanguage}`;
         const tokenLocal = await Token.getTokensLS();
         const headers = {
           Authorization: tokenLocal.token
         };
     
         try {
-          const response = await axios.get(url, { headers });
+          const response = await axios.get(url, { headers, timeout: 10000 });
+          console.log(url, "++++++++++++++++++++", response)
           return response.data.item;
         } catch (error) {
           console.error(error);
@@ -21,9 +22,9 @@ export class AdmParuserService {
         }
       }
 
-    async getAdmParusers() {
+    async getCmnPars() {
         const selectedLanguage = localStorage.getItem('sl') || 'en'
-        const url = `${env.ADM_BACK_URL}/adm/paruser/?sl=${selectedLanguage}`;
+        const url = `${env.CMN_BACK_URL}/cmn/x/par/?sl=${selectedLanguage}`;
         const tokenLocal = await Token.getTokensLS();
         const headers = {
             Authorization: tokenLocal.token
@@ -38,9 +39,9 @@ export class AdmParuserService {
         }
     }
 
-    async getAdmParuser(objId) {
+    async getCmnPar(objId) {
         const selectedLanguage = localStorage.getItem('sl') || 'en'
-        const url = `${env.ADM_BACK_URL}/adm/paruser/${objId}/?sl=${selectedLanguage}`;
+        const url = `${env.CMN_BACK_URL}/cmn/x/par/${objId}/?sl=${selectedLanguage}`;
         const tokenLocal = await Token.getTokensLS();
         const headers = {
             Authorization: tokenLocal.token
@@ -56,24 +57,23 @@ export class AdmParuserService {
     }
 
 
-    async postAdmParuser(newObj) {
+    async postCmnPar(newObj) {
         try {
-            console.log("*****---------------******+++*****", newObj )
+            console.log(newObj, "6666666666666666666666666666666666")
             const selectedLanguage = localStorage.getItem('sl') || 'en'
             if (newObj.action === null || newObj.roll === null) {
                 throw new Error(
                     "Items must be filled!"
                 );
             }
-            const url = `${env.ADM_BACK_URL}/adm/paruser/?sl=${selectedLanguage}`;
-
+            const url = `${env.CMN_BACK_URL}/cmn/x/par/?sl=${selectedLanguage}`;
             const tokenLocal = await Token.getTokensLS();
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': tokenLocal.token
             };
             const jsonObj = JSON.stringify(newObj)
-            console.log(url,"*****---------------***********", jsonObj )
+console.log("*-*-*-*-*", url, newObj, jsonObj)
             const response = await axios.post(url, jsonObj, { headers });
             return response.data.items;
         } catch (error) {
@@ -82,7 +82,7 @@ export class AdmParuserService {
         }
     }
 
-    async putAdmParuser(newObj) {
+    async putCmnPar(newObj) {
         try {
             const selectedLanguage = localStorage.getItem('sl') || 'en'
             if (newObj.action === null || newObj.roll === null)  {
@@ -90,7 +90,7 @@ export class AdmParuserService {
                     "Items must be filled!"
                 );
             }
-            const url = `${env.ADM_BACK_URL}/adm/paruser/?sl=${selectedLanguage}`;
+            const url = `${env.CMN_BACK_URL}/cmn/x/par/?sl=${selectedLanguage}`;
             const tokenLocal = await Token.getTokensLS();
             const headers = {
                 'Content-Type': 'application/json',
@@ -107,9 +107,9 @@ export class AdmParuserService {
 
     }
 
-    async deleteAdmParuser(newObj) {
+    async deleteCmnPar(newObj) {
         try {
-            const url = `${env.ADM_BACK_URL}/adm/paruser/${newObj.id}`;
+            const url = `${env.CMN_BACK_URL}/cmn/x/par/${newObj.id}`;
             const tokenLocal = await Token.getTokensLS();
             const headers = {
                 'Authorization': tokenLocal.token
@@ -122,24 +122,5 @@ export class AdmParuserService {
         }
 
     }
-
-    async  getCmnPar(cmnParCode) {
-        console.log(cmnParCode, "***************getCmnPar**************")
-        const selectedLanguage = localStorage.getItem('sl') || 'en';
-        const url = `${env.CMN_URL}/?endpoint=parend&code=${cmnParCode}&sl=${selectedLanguage}`;
-        const tokenLocal = await Token.getTokensLS();
-        const headers = {
-          Authorization: tokenLocal.token
-        };
-      
-        try {
-          console.log(url, "***************url**************")
-          const response = await axios.get(url, { headers });
-          return response.data; // Očekujemo da će ovo vratiti objekat sa ključevima 'code' i 'text'
-        } catch (error) {
-          console.error(error);
-          throw error;
-        }
-      }    
 }
 

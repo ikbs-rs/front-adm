@@ -1,4 +1,5 @@
 const env = {
+  DOMEN: 'https://dev.app.ems.rs',
     START_URL: 'https://dev.app.ems.rs/start/',
     ADM_URL: 'https://dev.app.ems.rs/adm/',
     CMN_URL: 'https://dev.app.ems.rs/cmn/',
