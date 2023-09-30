@@ -14,6 +14,7 @@ import UserGrp from './components/model/admUserGrpL';
 import LocTP from './components/model/cmnLoctpL';
 import User from './components/model/admUserL';
 import Roll from './components/model/admRollL';
+import Action from './components/model/admActionL';
 
 import DbParameter from './components/model/admDbParameterL';
 import Message from './components/model/admMessageL';
@@ -32,6 +33,7 @@ import env from "./configs/env"
 import { useDispatch } from 'react-redux';
 import { setLanguage } from './store/actions';
 import { translations } from "./configs/translations";
+import { checkPermissions } from "./security/interceptors"
 
 const App = () => {
     const dispatch = useDispatch();
@@ -96,6 +98,49 @@ const App = () => {
     let rightMenuClick;
     let userMenuClick;
     let configClick = false;
+    let iRef = useRef(0);
+
+    const [filteredMenu, setFilteredMenu] = useState([]);
+    
+    useEffect(() => {
+        iRef.current++;
+        if (iRef.current<2) {
+            async function filterMenuItems(menu) {
+                const filteredMenuL = [];
+        
+                for (const item of menu) {
+                    const filteredItem = { ...item };
+        
+                    if (item.items) {
+                        // Filtriranje podmenija
+                        const filteredSubMenu = await filterMenuItems(item.items);
+                        if (filteredSubMenu.length > 0) {
+                            filteredItem.items = filteredSubMenu;
+                        } else {
+                            delete filteredItem.items;
+                        }
+                    }
+        
+                    if (await checkPermissions(item.action)) {
+                        // Dodajemo samo ako ima akciju ili podmeni
+                        filteredMenuL.push(filteredItem);
+                    }                    
+                    // if (item.action || filteredItem.items) {
+                    //     // Dodajemo samo ako ima akciju ili podmeni
+                    //     filteredMenuL.push(filteredItem);
+                    // }
+                }
+                return filteredMenuL;
+            }
+            async function fetchData() {
+                const filteredMenuLL = await filterMenuItems(menu);
+                setFilteredMenu(filteredMenuLL); // Postavite stanje filtriranog menija
+            }
+    
+            fetchData();
+        }
+    }, [menu]);
+
 
     useEffect(() => {      
       if (selectedLanguage) {
@@ -399,7 +444,7 @@ const App = () => {
                         <Route path="/usergrp" element={<UserGrp />} />
                         <Route path="/user" element={<User />} />
                         <Route path="/roll" element={<Roll />} />
-                        <Route path="/action" element={<UserGrp />} />
+                        <Route path="/action" element={<Action />} />
                         <Route path="/dbparameter" element={<DbParameter />} />
                         <Route path="/message" element={<Message />} />
                         <Route path="/dbmserr" element={<DbmsErr />} />

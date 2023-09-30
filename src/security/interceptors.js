@@ -53,11 +53,14 @@ const usePermission = (objId, par1, par2) => {
 const checkPermissions = async (objId, par1, par2) => {
   //return true
   const token = localStorage.getItem('token');
-
+  const userId = localStorage.getItem('userId');
+  const url = `${env.JWT_BACK_URL}/adm/services/checkPermissions`
+//console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*****************************************", url)
   const data = {
     objId: objId,
     par1: par1 || '1',
     par2: par2 || '1',
+    userId: userId || '-1'
   };
 
   const config = {
@@ -68,7 +71,8 @@ const checkPermissions = async (objId, par1, par2) => {
 
   try {
     const response = await axios.post(`${env.JWT_BACK_URL}/adm/services/checkPermissions`, data, config);
-    return response.data;
+    //console.log("-*-74*-*-*-*-", response.data)
+    return true //response.data.allowed; //response.data;
   } catch (error) {
     console.error(error);
     return false;

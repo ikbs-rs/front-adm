@@ -11,6 +11,7 @@ import { translations } from "../../configs/translations";
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from "primereact/calendar";
 import DateFunction from "../../utilities/DateFunction"
+import env from '../../configs/env'
 
 const CmnPar = (props) => {
 console.log(props, "*-*-*-*-*-*-*-*****CmnPar-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
@@ -57,22 +58,25 @@ console.log(props, "*-*-*-*-*-*-*-*****CmnPar-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
     }, []);
     // Autocomplit>
 
-    // const handleCancelClick = () => {
-    //     props.setVisible(false);
-    // };
+    const handleUsrCancelClick = () => {
+        console.log(props, "************handleUsrCancelClick**************")
+        props.setCmnParVisible(false);
+    };
     const handleCancelClick = () => {
-        console.log(props, "111111111111111111111111111")
         if (props.remote) {
+            
             const dataToSend = { type: 'dataFromIframe', visible: false };
             sendToParent(dataToSend);
         } else {
+            console.log(props, "11111111111handleCancelClick111111111111111")
             props.setVisible(false);  
         }
-      };    
-      const sendToParent = (data) => {
-        const parentOrigin = 'http://ws10.ems.local:8354'; // Promenite ovo na stvarni izvor roditeljskog dokumenta
+    };    
+
+    const sendToParent = (data) => {
+        const parentOrigin = `${env.DOMEN}` // Promenite ovo na stvarni izvor roditeljskog dokumenta
         window.parent.postMessage(data, parentOrigin);
-      }
+    }
     const handleCreateClick = async () => {
         try {
             setSubmitted(true);
@@ -82,6 +86,7 @@ console.log(props, "*-*-*-*-*-*-*-*****CmnPar-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
             const data = await cmnParService.postCmnPar(cmnPar);
             cmnPar.id = data
             props.handleDialogClose({ obj: cmnPar, parTip: props.parTip });
+            props.setCmnParVisible(false);
             props.setVisible(false);
         } catch (err) {
             toast.current.show({
@@ -101,8 +106,9 @@ console.log(props, "*-*-*-*-*-*-*-*****CmnPar-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
             const cmnParService = new CmnParService();
 
             await cmnParService.putCmnPar(cmnPar);
-            props.handleDialogClose({ obj: cmnPar, parTip: props.parTip });
+            props.handleDialogClose({ obj: cmnPar, parTip: props.parTip });            
             props.setVisible(false);
+            props.setCmnParVisible(false);
         } catch (err) {
             toast.current.show({
                 severity: "error",
@@ -122,8 +128,9 @@ console.log(props, "*-*-*-*-*-*-*-*****CmnPar-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
             setSubmitted(true);
             const cmnParService = new CmnParService();
             await cmnParService.deleteCmnPar(cmnPar);
-            props.handleDialogClose({ obj: cmnPar, parTip: 'DELETE' });
+            props.handleDialogClose({ obj: cmnPar, parTip: 'DELETE' });            
             props.setVisible(false);
+            props.setCmnParVisible(false);
             hideDeleteDialog();
         } catch (err) {
             toast.current.show({
@@ -302,15 +309,24 @@ console.log(props, "*-*-*-*-*-*-*-*****CmnPar-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
                     </div>
 
                     <div className="flex flex-wrap gap-1">
-                        
+                        {(props.admParUser||false) ? (
+                            <Button
+                                label={translations[selectedLanguage].Cancel}
+                                icon="pi pi-times"
+                                className="p-button-outlined p-button-secondary"
+                                onClick={handleUsrCancelClick}
+                                outlined
+                            />
+                        ) : (
                             <Button
                                 label={translations[selectedLanguage].Cancel}
                                 icon="pi pi-times"
                                 className="p-button-outlined p-button-secondary"
                                 onClick={handleCancelClick}
                                 outlined
-                            />
-                
+                            />                            
+                        )
+                        }
                         <div className="flex-grow-1"></div>
                         <div className="flex flex-wrap gap-1">
                             {(props.parTip === 'CREATE') ? (

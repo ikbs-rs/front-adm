@@ -8,13 +8,14 @@ import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { TriStateCheckbox } from 'primereact/tristatecheckbox';
 import { Toast } from 'primereact/toast';
 import { AdmParuserService } from '../../service/model/AdmParuserService';
+import { CmnParService } from '../../service/model/CmnParService';
 import AdmParuser from './admParuser';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
 import { translations } from '../../configs/translations';
 import DateFunction from '../../utilities/DateFunction';
-import CmnPar from './cmn/component/cmnPar';
+import CmnPar from './cmnPar';
 import env from '../../configs/env';
 
 export default function AdmParuserL(props) {
@@ -197,15 +198,15 @@ export default function AdmParuserL(props) {
         setParuserTip('CREATE');
         setAdmParuser({ ...admParuser });
     };
+
     const handleParClick = async (admParuser) => {
       try {
-        
-          const cmnParCode = admParuser.par; // Pretpostavljamo da je ovde kod za cmnPar
-          const admParuserService = new AdmParuserService();
-          console.log(admParuser, "------------------handleParClick--------------------")
-          const cmnParData = await admParuserService.getCmnPar(cmnParCode);
-          setCmnParDialog()
+          const cmnParService = new CmnParService();
+          const cmnParData = await cmnParService.getCmnPar(admParuser.par);
+          console.log(admParuser, "------------------handleParClick--------------------", cmnParData)
           setCmnPar(cmnParData);
+          setParTip(cmnParData.tp)
+          setCmnParDialog()
       } catch (error) {
           console.error(error);
           toast.current.show({
@@ -258,7 +259,7 @@ export default function AdmParuserL(props) {
                     <div className="p-fluid formgrid grid">
                         <div className="field col-12 md:col-6">
                             <label htmlFor="code">{translations[selectedLanguage].Username}</label>
-                            <InputText id="code" value={props.admUser.gtext} disabled={true} />
+                            <InputText id="code" value={props.admUser.username} disabled={true} />
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="mail">{translations[selectedLanguage].Mail}</label>
@@ -329,7 +330,7 @@ export default function AdmParuserL(props) {
             <Dialog
                 header={translations[selectedLanguage].Par}
                 visible={cmnParVisible}
-                style={{ width: '90%', height: '1100px' }}
+                style={{ width: '80%', height: '1100px' }}
                 onHide={() => {
                     setCmnParVisible(false);
                     setShowMyComponent(false);
@@ -337,10 +338,13 @@ export default function AdmParuserL(props) {
             >
                 {cmnParVisible && (
                     <CmnPar
-                        remoteUrl={parDetail}
-                        queryParams={{ sl: `${selectedLanguage}`, lookUp: false, dialog: false, parentOrigin: messageDomen }} // Dodajte ostale parametre po potrebi
-                        onTaskComplete={handleCmnParDialogClose}
-                        originUrl={messageDomen}
+                      parameter={"inputTextValue"}
+                      cmnPar={cmnPar}
+                      handleDialogClose={handleDialogClose}
+                      setCmnParVisible={setCmnParVisible}
+                      dialog={true}
+                      parTip={parTip}   
+                      admParUser={true}                 
                     />
                 )}
             </Dialog>

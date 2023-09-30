@@ -2,14 +2,14 @@ import axios from 'axios';
 import env from "../../configs/env"
 import Token from "../../utilities/Token";
 
-export class AdmUserService {
-  async getAdmUserV() {
-    const url = `${env.ADM_BACK_URL}/adm/user_v`;
+export class AdmActionService {
+  async getAdmAction() {
+    const selectedLanguage = localStorage.getItem('sl') || 'en'
+    const url = `${env.ADM_BACK_URL}/adm/x/action/?sl=${selectedLanguage}`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       Authorization: tokenLocal.token
     };
-
     try {
       const response = await axios.get(url, { headers });
       return response.data.items;
@@ -19,36 +19,15 @@ export class AdmUserService {
     }
   }
 
-  async getAdmUser(objId) {
-    const url = `${env.ADM_BACK_URL}/adm/user/${objId}`;
-    const tokenLocal = await Token.getTokensLS();
-    const headers = {
-      Authorization: tokenLocal.token
-    };
-
+  async postAdmAction(newObj) {
     try {
-      const response = await axios.get(url, { headers });
-      return response.data.item;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }  
-
-  async postAdmUser(newObj) {
-    try {
-      if ((newObj.username.trim() === '' || !newObj.username)
-        || (newObj.admin.trim() === '' || !newObj.admin)
-        || (newObj.mail.trim() === '' || !newObj.mail)
-        || (newObj.usergrp.trim() === '' || !newObj.usergrp)
-        || (newObj.valid.trim() === '' || !newObj.valid)
-        ) {
+      const selectedLanguage = localStorage.getItem('sl') || 'en'
+      if (newObj.code.trim() === '' || newObj.text.trim() === '' || newObj.valid === null) {
         throw new Error(
           "Items must be filled!"
         );
       }
-      const selectedLanguage = localStorage.getItem('sl') || 'en'    
-      const url = `${env.ADM_BACK_URL}/adm/user/?sl=${selectedLanguage}`;
+      const url = `${env.ADM_BACK_URL}/adm/x/action/?sl=${selectedLanguage}`;
       const tokenLocal = await Token.getTokensLS();
       const headers = {
         'Content-Type': 'application/json',
@@ -58,6 +37,7 @@ export class AdmUserService {
 
 
       const response = await axios.post(url, jsonObj, { headers });
+      //console.log("**************"  , response, "****************")
       return response.data.items;
     } catch (error) {
       console.error(error);
@@ -66,26 +46,24 @@ export class AdmUserService {
 
   }
 
-  async putAdmUser(newObj) {
+  async putAdmAction(newObj) {
     try {
-      if ((newObj.username == null || !newObj.username)
-        || (newObj.admin.trim() === '' || !newObj.admin)
-        || (newObj.mail.trim() === '' || !newObj.mail)
-        || (newObj.usergrp.trim() === '' || !newObj.usergrp)
-        || (newObj.valid.trim() === '' || !newObj.valid)
-        ) {
+      const selectedLanguage = localStorage.getItem('sl') || 'en'
+      if (newObj.code.trim() === '' || newObj.text.trim() === '' || newObj.valid === null) {
         throw new Error(
           "Items must be filled!"
         );
       }
-      const url = `${env.ADM_BACK_URL}/adm/user`;
+      const url = `${env.ADM_BACK_URL}/adm/x/action/?sl=${selectedLanguage}`;
       const tokenLocal = await Token.getTokensLS();
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': tokenLocal.token
       };
       const jsonObj = JSON.stringify(newObj)
+
       const response = await axios.put(url, jsonObj, { headers });
+      //console.log("**************"  , response, "****************")
       return response.data.items;
     } catch (error) {
       console.error(error);
@@ -94,8 +72,8 @@ export class AdmUserService {
 
   }
 
-  async deleteAdmUser(newObj) {
-    const url = `${env.ADM_BACK_URL}/adm/user/${newObj.id}`;
+  async deleteAdmAction(newObj) {
+    const url = `${env.ADM_BACK_URL}/adm/x/action/${newObj.id}`;
     const tokenLocal = await Token.getTokensLS();
     const headers = {
       'Authorization': tokenLocal.token

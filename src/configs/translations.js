@@ -204,7 +204,7 @@ export const translations = {
         Yes: "Da"
     },
     sr_cyr: {
-        _eptyPage: "Модул Администрација система омогућава администрацију права приступа корисника.",
+        _eptyPage: "Модул Администрација корисника омогућава администрацију права приступа корисника.",
         ACCESS_PERMISSION: "Права приступа",
         Action: "Акција",
         Actions: "Акције",
@@ -281,13 +281,13 @@ export const translations = {
         Settings: "Подешавања", 
         Site: "Сајт",
         Structures: "Структурне",      
-        SystemAdministration: "Администрација система",
+        SystemAdministration: "Администрација корисника",
         Tariff_groups: "Тарифне групе",
         Tax_system: "Порески систем",
         Taxes: "Порези",
         Territorial_administration: "Администрација територија",
         Territory: "Територија",
-        Text: "Текст",
+        Text: "Назив",
         Type: "Тип",
         Type_of_relationship: "Тип везе",
         Type_of_territory: "Тип територије",
@@ -307,7 +307,18 @@ export const translations = {
         Yes: "Да",
         Begda: "Датум од",
         Endda: "Датум до", 
-        Par: "Партнер"
+        Par: "Партнер",
+        pdvnum: "ПДВ број",
+        idnum: "Матични број",
+        pib: "ПИБ",
+        activity: "Делатност",
+        tel: "Телефон",
+        postcode: "Поштански број",
+        place: "Место",
+        address: "Адреса",
+        short: "Кратки назив",   
+        Action: "Акција",
+        ActionLista: "Акција Листа",     
     }
   };
   
