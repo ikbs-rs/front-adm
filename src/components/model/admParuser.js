@@ -140,7 +140,7 @@ const AdmParuser = (props) => {
             admParuser.npar = e.value.name
             admParuser.cpar = foundItem.code
         } else if (type === "Calendar") {
-            const dateVal = DateFunction.dateGetValue(e.value)
+            //const dateVal = DateFunction.dateGetValue(e.value)
             val = (e.target && e.target.value) || '';
             switch (name) {
                 case "begda":
