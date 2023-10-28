@@ -8,6 +8,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
 import DeleteDialog from '../dialog/DeleteDialog';
 import { translations } from "../../configs/translations";
+import { checkPermissions } from '../../security/interceptors';
 
 const AdmUserGrp = (props) => {
     const selectedLanguage = localStorage.getItem('sl')||'en'
@@ -22,6 +23,20 @@ const AdmUserGrp = (props) => {
         { name: `${translations[selectedLanguage].Yes}`, code: '1' },
         { name: `${translations[selectedLanguage].No}`, code: '0' }
     ];
+    const [createButton, setCreateButton] = useState(false);
+
+    useEffect(() => {
+        async function checkPermissC() {
+            try {
+                const createButtonL = await checkPermissions('adm_usergrp', 'C');
+                setCreateButton(createButtonL);
+            } catch (error) {
+                console.error(error);
+                // Obrada greške ako je potrebna
+            }
+        }
+        checkPermissC();
+    }, []);    
 
     useEffect(() => {
         setDropdownItem(findDropdownItemByCode(props.admUserGrp.valid));
@@ -158,7 +173,7 @@ const AdmUserGrp = (props) => {
                     </div>
 
                     <div className="flex flex-wrap gap-1">
-                        {props.dialog ? (
+                        {createButton && props.dialog ? (
                             <Button
                                 label={translations[selectedLanguage].Cancel}
                                 icon="pi pi-times"

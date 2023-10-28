@@ -183,12 +183,14 @@ export default function AdmUserGrpL(props) {
 
     const validFilterTemplate = (options) => {
         return (
-            <div className="flex align-items-center gap-2">
-                <label htmlFor="verified-filter" className="font-bold">
-                    {translations[selectedLanguage].Valid}
-                </label>
-                <TriStateCheckbox inputId="verified-filter" value={options.value} onChange={(e) => options.filterCallback(e.value)} />
-            </div>
+            createButton && (
+                <div className="flex align-items-center gap-2">
+                    <label htmlFor="verified-filter" className="font-bold">
+                        {translations[selectedLanguage].Valid}
+                    </label>
+                    <TriStateCheckbox inputId="verified-filter" value={options.value} onChange={(e) => options.filterCallback(e.value)} />
+                </div>
+            )
         );
     };
 
@@ -235,8 +237,8 @@ export default function AdmUserGrpL(props) {
                 removableSort
                 filters={filters}
                 scrollable
-                scrollHeight="750px"
-                virtualScrollerOptions={{ itemSize: 46 }}
+                scrollHeight="660px"
+                virtualScrollerOptions={{ itemSize: 55 }}
                 tableStyle={{ minWidth: '50rem' }}
                 metaKeySelection={false}
                 paginator

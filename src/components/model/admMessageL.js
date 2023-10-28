@@ -202,8 +202,8 @@ export default function AdmMessageL(props) {
         removableSort
         filters={filters}
         scrollable
-        scrollHeight="750px"
-        virtualScrollerOptions={{ itemSize: 46 }}
+        scrollHeight="660px"
+        //virtualScrollerOptions={{ itemSize: 46 }}
         tableStyle={{ minWidth: "50rem" }}
         metaKeySelection={false}
         paginator
