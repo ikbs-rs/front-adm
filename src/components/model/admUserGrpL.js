@@ -29,19 +29,21 @@ export default function AdmUserGrpL(props) {
     const toast = useRef(null);
     const [visible, setVisible] = useState(false);
     const [userGrpTip, setUserGrpTip] = useState('');
-    const [createButton, setCreateButton] = useState(false);
+    const [hasCreatePermission, setHasCreatePermission] = useState(false);
 
     useEffect(() => {
-        async function checkPermissC() {
+        async function checkPermiss() {
             try {
-                const createButtonL = await checkPermissions('adm_usergrp', 'C');
-                setCreateButton(createButtonL);
+                console.log("**CREATE**")
+                const createButton = await checkPermissions('adm_usergrp', 'CREATE');
+                console.log("####", createButton)
+                setHasCreatePermission(createButton);
             } catch (error) {
                 console.error(error);
                 // Obrada greške ako je potrebna
             }
         }
-        checkPermissC();
+        checkPermiss();
     }, []);
 
     useEffect(() => {
@@ -150,7 +152,7 @@ export default function AdmUserGrpL(props) {
     const renderHeader = () => {
         return (
             <div className="flex card-container">
-                {createButton && (
+                {hasCreatePermission && (
                     <div className="flex flex-wrap gap-1">
                         <Button label={translations[selectedLanguage].New} icon="pi pi-plus" severity="success" onClick={openNew} text raised />
                     </div>
@@ -183,7 +185,8 @@ export default function AdmUserGrpL(props) {
 
     const validFilterTemplate = (options) => {
         return (
-            createButton && (
+            //createButton && 
+            (
                 <div className="flex align-items-center gap-2">
                     <label htmlFor="verified-filter" className="font-bold">
                         {translations[selectedLanguage].Valid}

@@ -8,7 +8,7 @@ import { Toast } from "primereact/toast";
 import DeleteDialog from '../dialog/DeleteDialog';
 import { translations } from "../../configs/translations";
 import { Dropdown } from 'primereact/dropdown';
-import { CmnLoctpService } from "../../service/model/CmnLoctpService"
+import { AdmActionService } from "../../service/model/AdmActionService"
 import { InputSwitch } from "primereact/inputswitch";
 
 const AdmRollact = (props) => {
@@ -29,8 +29,8 @@ const AdmRollact = (props) => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const admActionService = new CmnLoctpService();
-                const data = await admActionService.getAdmActions();
+                const admActionService = new AdmActionService();
+                const data = await admActionService.getAdmAction();
                 const dataDD = data.map(({ textx, id }) => ({ name: textx, code: id }));
                 setDdActionItems(dataDD);
                 setDdActionItem(dataDD.find((item) => item.code === props.admRollact.action) || null);

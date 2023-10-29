@@ -8,7 +8,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Toast } from "primereact/toast";
 import DeleteDialog from '../dialog/DeleteDialog';
 import { translations } from "../../configs/translations";
-import { checkPermissions } from '../../security/interceptors';
+import { usePermission, checkPermissions } from '../../security/interceptors';
 
 const AdmUserGrp = (props) => {
     const selectedLanguage = localStorage.getItem('sl')||'en'
@@ -23,20 +23,71 @@ const AdmUserGrp = (props) => {
         { name: `${translations[selectedLanguage].Yes}`, code: '1' },
         { name: `${translations[selectedLanguage].No}`, code: '0' }
     ];
-    const [createButton, setCreateButton] = useState(false);
+    //const [createButton, setCreateButton] = useState(false);
+    const [hasCreatePermission, setHasCreatePermission] = useState(false);
+    const [hasUpdatePermission, setHasUpdatePermission] = useState(false);
+    const [hasDeletePermission, setHasDeletePermission] = useState(false);
+
+    //const hasCreatePermission =  usePermission  ('adm_usergrp', 'CREATE');
+    //console.log("**01**")
+    //const hasUpdatePermission =  usePermission  ('adm_usergrp', 'UPDATE');
+    //console.log("**02**")
+    //const hasDeletePermission =  usePermission  ('adm_usergrp', 'DELETE');
+    //console.log("**03**")
 
     useEffect(() => {
-        async function checkPermissC() {
+        async function checkPermiss() {
             try {
-                const createButtonL = await checkPermissions('adm_usergrp', 'C');
-                setCreateButton(createButtonL);
+                console.log("**CREATE**")
+                const hasButton = await checkPermissions('adm_usergrp', 'CREATE');
+                setHasCreatePermission(hasButton);
             } catch (error) {
                 console.error(error);
                 // Obrada greške ako je potrebna
             }
         }
-        checkPermissC();
+        checkPermiss();
     }, []);    
+    useEffect(() => {
+        async function checkPermiss() {
+            try {
+                console.log("**UPDATE**")
+                const hasButton = await checkPermissions('adm_usergrp', 'UPDATE');
+                setHasUpdatePermission(hasButton);
+            } catch (error) {
+                console.error(error);
+                // Obrada greške ako je potrebna
+            }
+        }
+        checkPermiss();
+    }, []);    
+    useEffect(() => {
+        async function checkPermiss() {
+            try {
+                console.log("**DELETE**")
+                const hasButton = await checkPermissions('adm_usergrp', 'DELETE');
+                setHasDeletePermission(hasButton);
+            } catch (error) {
+                console.error(error);
+                // Obrada greške ako je potrebna
+            }
+        }
+        checkPermiss();
+    }, []);    
+
+    // useEffect(() => {
+    //     async function checkPermissC() {
+    //         try {
+    //             console.log("**CREATE_L**")
+    //             const createButtonL = checkPermissions('adm_usergrp', 'CREATE');
+    //             setCreateButton(createButtonL);
+    //         } catch (error) {
+    //             console.error(error);
+    //             // Obrada greške ako je potrebna
+    //         }
+    //     }
+    //     checkPermissC();
+    // }, []);     
 
     useEffect(() => {
         setDropdownItem(findDropdownItemByCode(props.admUserGrp.valid));
@@ -173,7 +224,7 @@ const AdmUserGrp = (props) => {
                     </div>
 
                     <div className="flex flex-wrap gap-1">
-                        {createButton && props.dialog ? (
+                        {props.dialog ? (
                             <Button
                                 label={translations[selectedLanguage].Cancel}
                                 icon="pi pi-times"
@@ -184,7 +235,7 @@ const AdmUserGrp = (props) => {
                         ) : null}
                         <div className="flex-grow-1"></div>
                         <div className="flex flex-wrap gap-1">
-                            {(props.userGrpTip === 'CREATE') ? (
+                            {(props.userGrpTip === 'CREATE') &&  hasCreatePermission ? (
                                 <Button
                                     label={translations[selectedLanguage].Create}
                                     icon="pi pi-check"
@@ -193,7 +244,7 @@ const AdmUserGrp = (props) => {
                                     outlined
                                 />
                             ) : null}
-                            {(props.userGrpTip !== 'CREATE') ? (
+                            {(props.userGrpTip !== 'CREATE') && hasDeletePermission ? (
                                 <Button
                                     label={translations[selectedLanguage].Delete}
                                     icon="pi pi-trash"
@@ -202,7 +253,7 @@ const AdmUserGrp = (props) => {
                                     outlined
                                 />
                             ) : null}                            
-                            {(props.userGrpTip !== 'CREATE') ? (
+                            {(props.userGrpTip !== 'CREATE') && hasUpdatePermission ? (
                                 <Button
                                     label={translations[selectedLanguage].Save}
                                     icon="pi pi-check"
