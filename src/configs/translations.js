@@ -318,7 +318,8 @@ export const translations = {
         address: "Адреса",
         short: "Кратки назив",   
         Action: "Акција",
-        ActionLista: "Акција Листа",     
+        ActionLista: "Акција Листа",  
+        Find_rolles: "Претражи роле"   
     }
   };
   
