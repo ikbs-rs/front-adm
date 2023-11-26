@@ -175,7 +175,17 @@ const AdmUser = (props) => {
                                 className={classNames({ 'p-invalid': submitted && !admUser.mail })}
                             />
                             {submitted && !admUser.mail && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
-                        </div>                        
+                        </div>     
+                        <div className="field col-12 md:col-7">
+                            <label htmlFor="password">{translations[selectedLanguage].password} *</label>
+                            <InputText
+                                id="password"
+                                value={admUser.password} onChange={(e) => onInputChange(e, "text", 'password')}
+                                required
+                                className={classNames({ 'p-invalid': submitted && !admUser.password })}
+                            />
+                            {submitted && !admUser.password && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
+                        </div>                                            
                         <div className="field col-12 md:col-6">
                             <label htmlFor="firstname">{translations[selectedLanguage].FirstName}</label>
                             <InputText

@@ -71,7 +71,7 @@ const checkPermissions = async (objId, par1, par2) => {
   };
 
   try {
-    console.log(data, "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-", par1, par2, "*****************************************", url)    
+    console.log(data, "********************", config, "######73.1######", `${env.JWT_BACK_URL}/adm/services/checkPermissions`)    
     const response = await axios.post(`${env.JWT_BACK_URL}/adm/services/checkPermissions`, data, config);
     console.log("######74######", response.data)
     return true //response.data.allowed; //response.data;

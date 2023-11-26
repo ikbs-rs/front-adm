@@ -19,13 +19,19 @@ const AdmRollstr = (props) => {
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [admRollstr, setAdmRollstr] = useState(props.admRollstr);
     const [submitted, setSubmitted] = useState(false);
+    const [dropdownItem, setDropdownItem] = useState(null);
+    const [dropdownItems, setDropdownItems] = useState(null);
     const [ddObjTpItem, setDdObjTpItem] = useState(null);
     const [ddObjTpItems, setDdObjTpItems] = useState(null);
     const [ddObjItem, setDdObjItem] = useState(null);
     const [ddObjItems, setDdObjItems] = useState(null);
-    const [onoff, setOnoff] = useState(props.admRollstr.onoff == 1);
-    const [hijerarhija, setHijerarhija] = useState(props.admRollstr.hijerarhija == 1);
+    const [onoff, setOnoff] = useState(props.admRollstr.onoff == 0);
+    const [hijerarhija, setHijerarhija] = useState(props.admRollstr.hijerarhija == 0);
 
+    const items = [
+        { name: `${translations[selectedLanguage].obj}`, code: 'cmn_obj' },
+        { name: `${translations[selectedLanguage].loc}`, code: 'cmn_loc' }
+    ];    
     const toast = useRef(null);
 
     useEffect(() => {
@@ -71,6 +77,19 @@ const AdmRollstr = (props) => {
         }
         fetchData();
     }, [admRollstr.objtp]);    
+
+    useEffect(() => {
+        setDropdownItem(findDropdownItemByCode(props.admRollstr.table));
+    }, []);    
+
+    const findDropdownItemByCode = (code) => {
+        return items.find((item) => item.code === code) || null;
+    };
+
+
+    useEffect(() => {
+        setDropdownItems(items);
+    }, []);
 
     const handleCancelClick = () => {
         props.setVisible(false);
@@ -156,6 +175,10 @@ const AdmRollstr = (props) => {
                     admRollstr.o1code= e.value.code
                     admRollstr.o1text= e.value.name                    
                     break;
+                case "table":
+                    setDropdownItem(e.value);
+                    admRollstr.table = e.value.code                  
+                    break;                    
                 default:
                     console.error("Pogresan naziv polja")
             }            
@@ -212,6 +235,19 @@ const AdmRollstr = (props) => {
             <div className="col-12">
                 <div className="card">
                     <div className="p-fluid formgrid grid">
+                    <div className="field col-12 md:col-6">
+                            <label htmlFor="table">{translations[selectedLanguage].Tp}</label>
+                            <Dropdown id="table"
+                                value={dropdownItem}
+                                options={dropdownItems}
+                                onChange={(e) => onInputChange(e, "options", 'table')}
+                                required
+                                optionLabel="name"
+                                placeholder="Select One"
+                                className={classNames({ 'p-invalid': submitted && !admRollstr.table })}
+                            />
+                            {submitted && !admRollstr.table && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
+                        </div>                         
                         <div className="field col-12 md:col-7">
                             <label htmlFor="objtp">{translations[selectedLanguage].ObjtpText} *</label>
                             <Dropdown id="objtp"

@@ -152,8 +152,8 @@ export const translations = {
         Objects_type: "Tip objekata",
         Objects: "Objekti",        
         ObjText: "Obj tekst",
-        ObjtpCode: "Obj tip šifra",
-        ObjtpText: "Obj tip tekst",
+        ObjtpCode: "Podtip",
+        ObjtpText: "Podtip",
         On_off: "Isključuje",
         Other: "Ostalo",
         Partner: "Partner",
@@ -255,8 +255,8 @@ export const translations = {
         Objects_type: "Тип објеката",
         Objects: "Објекти",
         ObjText: "Обј текст",
-        ObjtpCode: "Обј тип шифра",
-        ObjtpText: "Обј тип текст",   
+        ObjtpCode: "Подтип шифра",
+        ObjtpText: "Подтип ",   
         On_off: "Искључује",   
         Other: "Остало",
         Partner: "Партнер",
@@ -319,7 +319,11 @@ export const translations = {
         short: "Кратки назив",   
         Action: "Акција",
         ActionLista: "Акција Листа",  
-        Find_rolles: "Претражи роле"   
+        Find_rolles: "Претражи роле",
+        obj: "Објекти",
+        loc: "Локације",
+        Tp: "Тип",
+        password: "Лозинка",
     }
   };
   
