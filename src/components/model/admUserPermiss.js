@@ -26,9 +26,9 @@ const AdmUserPermiss = (props) => {
     // const [debouncedSearch, setDebouncedSearch] = useState("");
     // const [searchTimeout, setSearchTimeout] = useState(null);
 
+    const [allRolles, setAllRolles] = useState([]);
     const [rollValue, setRollValue] = useState("");
     const [filteredRolles, setFilteredRolles] = useState([]);
-    const [allRolles, setAllRolles] = useState([]);
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [searchTimeout, setSearchTimeout] = useState(null);
     const [selectedRoll, setSelectedRoll] = useState(null);
@@ -64,7 +64,7 @@ const AdmUserPermiss = (props) => {
 
     useEffect(() => {
         // Samo kada je izabrani element `null`, izvršavamo `onChange`
-
+console.log(rollValue, "----------------------####################-------------")
         setRollValue(rollValue);
     }, [rollValue, selectedRoll]);
 
