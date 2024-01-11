@@ -32,6 +32,7 @@
     "scripts": {
         "start": "copy .\\src\\configs\\env.test.local .\\src\\configs\\env.js && set PORT=8352 && react-scripts start /adm/",
         "dev": "copy .\\src\\configs\\env.dev.local .\\src\\configs\\env.js && set PORT=8352 && react-scripts start /adm/",
+        "local": "copy .\\src\\configs\\env.local.local .\\src\\configs\\env.js && set PORT=8351 && react-scripts start /start/",
         "bdev": "copy .\\src\\configs\\env.bdev.local .\\src\\configs\\env.js && set PORT=8352 && react-scripts start /adm/",
         "sdev": "copy .\\src\\configs\\env.sdev.local .\\src\\configs\\env.js && set PORT=8352 && react-scripts start /adm/",
         "boban": "copy .\\src\\configs\\env.boban.local .\\src\\configs\\env.js && set PORT=8352 && react-scripts start /adm/",
