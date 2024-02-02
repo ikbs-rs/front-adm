@@ -8,5 +8,6 @@ const env = {
     CMN_BACK_URL: 'https://82.117.213.106/bcmn',
     TIC_BACK_URL: 'https://82.117.213.106/btic',
   };
-
+  
   export default env;
+  
