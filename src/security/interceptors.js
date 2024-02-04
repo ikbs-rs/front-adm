@@ -35,11 +35,12 @@ const useTokenValidation = () => {
   return isLoggedIn;
 };
 
-const usePermission = (objId, par1, par2) => {
+const usePermission = async (objId, par1, par2) => {
   const [hasPermission, setHasPermission] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-", par1, par2)      
       const permission = await checkPermissions(objId, par1, par2);
       setHasPermission(permission);
     };
@@ -55,7 +56,7 @@ const checkPermissions = async (objId, par1, par2) => {
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
   const url = `${env.JWT_BACK_URL}/adm/services/checkPermissions`
-//console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*****************************************", url)
+
   const data = {
     objId: objId,
     par1: par1 || '1',
@@ -70,10 +71,12 @@ const checkPermissions = async (objId, par1, par2) => {
   };
 
   try {
+    console.log(data, "********************", config, "######73.1######", `${env.JWT_BACK_URL}/adm/services/checkPermissions`)    
     const response = await axios.post(`${env.JWT_BACK_URL}/adm/services/checkPermissions`, data, config);
-    //console.log("-*-74*-*-*-*-", response.data)
+    console.log("######74######", response.data)
     return true //response.data.allowed; //response.data;
   } catch (error) {
+    console.log("######75######")
     console.error(error);
     return false;
   }

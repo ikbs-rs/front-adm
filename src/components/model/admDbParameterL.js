@@ -212,8 +212,8 @@ export default function AdmDbParameterL(props) {
         removableSort
         filters={filters}
         scrollable
-        scrollHeight="750px"
-        virtualScrollerOptions={{ itemSize: 46 }}
+        scrollHeight="660px"
+        virtualScrollerOptions={{ itemSize: 55 }}
         tableStyle={{ minWidth: "50rem" }}
         metaKeySelection={false}
         paginator

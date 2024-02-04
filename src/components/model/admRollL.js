@@ -335,8 +335,8 @@ export default function AdmRollL(props) {
         scrollable
         sortField="code"
         sortOrder={1}
-        scrollHeight="750px"
-        virtualScrollerOptions={{ itemSize: 46 }}
+        scrollHeight="660px"
+        virtualScrollerOptions={{ itemSize: 55 }}
         tableStyle={{ minWidth: "50rem" }}
         metaKeySelection={false}
         paginator

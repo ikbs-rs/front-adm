@@ -302,7 +302,7 @@ export default function AdmUserpermissUL(props) {
         filters={filters}
         scrollable
         scrollHeight="550px"
-        virtualScrollerOptions={{ itemSize: 46 }}
+        //virtualScrollerOptions={{ itemSize: 46 }}
         tableStyle={{ minWidth: "50rem" }}
         metaKeySelection={false}
         paginator
