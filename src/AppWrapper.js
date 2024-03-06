@@ -36,7 +36,7 @@ const AppWrapper = (props) => {
            if (isLoggedIn) {
              //TODO idi na pocetnu stranicu
              setIsLoggedIn(true);
-            // navigate('/');
+            navigate('/');
            } else {
              //TODO vrati se na login
              navigate('/login');
