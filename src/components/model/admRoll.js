@@ -191,7 +191,14 @@ const AdmRoll = (props) => {
                                 className={classNames({ 'p-invalid': submitted && !admRoll.valid })}
                             />
                             {submitted && !admRoll.valid && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
-                        </div>                        
+                        </div>
+                        <div className="field col-12 md:col-9">
+                            <label htmlFor="xparam">{translations[selectedLanguage].Param}</label>
+                            <InputText
+                                id="xparam"
+                                value={admRoll.xparam} onChange={(e) => onInputChange(e, "text", 'xparam')}
+                            />
+                        </div>                                                
                     </div>
 
                     <div className="flex flex-wrap gap-1">

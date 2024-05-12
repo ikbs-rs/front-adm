@@ -67,7 +67,7 @@ const AdmRollstr = (props) => {
                 };
                 const response = await axios.get(url, { headers });
                 const data = response.data.item;
-                const dataDD = data.map(({ text, id }) => ({ name: text, code: id }));
+                const dataDD = data.map(({ textx, id }) => ({ name: textx, code: id }));
                 setDdObjItems(dataDD);
                 setDdObjItem(dataDD.find((item) => item.code === props.admRollstr.obj) || null);
             } catch (error) {

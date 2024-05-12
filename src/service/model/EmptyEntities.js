@@ -53,7 +53,8 @@ const EmptyEntities =
       "code": "",
       "name": "",
       "strukturna": "",
-      "valid": null
+      "valid": null,
+      "xparam": ""
     },
     "adm_rollact": {
       "id": null,

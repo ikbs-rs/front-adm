@@ -324,6 +324,7 @@ export const translations = {
         loc: "Локације",
         Tp: "Тип",
         password: "Лозинка",
+        Param: "Спец. параметар",
     }
   };
   
