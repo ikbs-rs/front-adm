@@ -10,12 +10,13 @@ import { setLanguage } from '../store/actions';
 
 export const Login = () => {
     const [checked, setChecked] = useState(false);
+    const [success, setSuccess] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    let sl = localStorage.getItem('sl')||'en'
+    let sl = localStorage.getItem('sl') || 'en'
 
     const onInputChange = (e, name) => {
-        sl= e.target.value
+        sl = e.target.value
         //setCurrentLanguage(sl)
         dispatch(setLanguage(sl));
     }
@@ -34,51 +35,55 @@ export const Login = () => {
         //dispatch(setLanguage('en')); // Postavite željeni jezik umesto 'en'
 
         try {
-            console.log(url, requestData, "*****************url*********************")
-            const response = await axios.post(url, requestData, {});
-            console.log(response, "******************response********************")
-            if (response.status === 200) {
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem('refreshToken', response.data.refreshToken);
-                sessionStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('sl', sl || "en");
-                navigate('/');
-                //const newUrl = `${window.location.pathname}?sl=${sl}`;
-                //window.location.replace(newUrl);
+            if (success) {
+                console.log(url, requestData, "*****************url*********************", env.JWT_BACK_URL)
+                const response = await axios.post(url, requestData);
+                if (response.status === 200) {
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('refreshToken', response.data.refreshToken);
+                    localStorage.setItem('userId', response.data.userId);
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('sl', sl || "sr_cyr");
+                    navigate('/');
+                } else {
+                    console.log("******************response.login********************")
+                    navigate('/login');
+                }
+                console.log("******************kraj********************")
             } else {
-                //TODO vrati se na login
+                console.error("******************reChepcha********************")
                 navigate('/login');
             }
         } catch (error) {
             console.error(error);
             // Handle error and possibly navigate back to login
             navigate('/login');
-        }       
+        }
 
-    //     axios
-    //         .post(`${env.JWT_BACK_URL}/adm/services/sign/in`, requestData)
-    //         .then((response) => {
-    //             isLoggedIn = response.status === 200; // Ako je status 200, isLoggedIn će biti true
-    //             if (isLoggedIn) {
-    //                 //TODO idi na pocetnu stranicu
-    //                 localStorage.setItem('token', response.data.token);
-    //                 localStorage.setItem('refreshToken', response.data.refreshToken);
-    //                 //const newUrl = `${window.location.pathname}?sl=${sl}`;
-    //                 //window.location.replace(newUrl);
-    //                 navigate('/');
-    //             } else {
-    //                 //TODO vrati se na login
-    //                 navigate('/login');
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             navigate('/login');
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //             isLoggedIn = false; // Ako se dogodila pogreška, isLoggedIn će biti false
-    //             //TODO vrati se na login
-    //         });
+        //     axios
+        //         .post(`${env.JWT_BACK_URL}/adm/services/sign/in`, requestData)
+        //         .then((response) => {
+        //             isLoggedIn = response.status === 200; // Ako je status 200, isLoggedIn će biti true
+        //             if (isLoggedIn) {
+        //                 //TODO idi na pocetnu stranicu
+        //                 localStorage.setItem('token', response.data.token);
+        //                 localStorage.setItem('refreshToken', response.data.refreshToken);
+        //                 //const newUrl = `${window.location.pathname}?sl=${sl}`;
+        //                 //window.location.replace(newUrl);
+        //                 navigate('/');
+        //             } else {
+        //                 //TODO vrati se na login
+        //                 navigate('/login');
+        //             }
+        //         })
+        //         .catch((error) => {
+        //             navigate('/login');
+        //         })
+        //         .catch((error) => {
+        //             console.error(error);
+        //             isLoggedIn = false; // Ako se dogodila pogreška, isLoggedIn će biti false
+        //             //TODO vrati se na login
+        //         });
     }
 
     return (
