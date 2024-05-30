@@ -39,8 +39,10 @@ const AdmUserPermiss = (props) => {
         async function fetchData() {
             const admRollService = new AdmRollService();
             const data = await admRollService.getAdmRollX();
+            console.log(data, "* setAllRolles ************************************************************************")
             setAllRolles(data);
-            setRollValue(data.find((item) => item.id === props.admUserPermiss.roll) || null);
+            const findItem = data.find((item) => item.id === props.admUserPermiss.roll) || null
+            setRollValue(findItem?.code);
         }
 
         fetchData();

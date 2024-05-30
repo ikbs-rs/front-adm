@@ -289,8 +289,8 @@ export default function AdmUserL(props) {
         tableStyle={{ minWidth: "50rem" }}
         metaKeySelection={false}
         paginator
-        rows={10}
-        rowsPerPageOptions={[5, 10, 25, 50]}
+        rows={50}
+        rowsPerPageOptions={[50, 100, 250, 500]}
         onSelectionChange={(e) => setAdmUser(e.value)}
         onRowSelect={onRowSelect}
         onRowUnselect={onRowUnselect}

@@ -340,8 +340,8 @@ export default function AdmRollL(props) {
         tableStyle={{ minWidth: "50rem" }}
         metaKeySelection={false}
         paginator
-        rows={10}
-        rowsPerPageOptions={[5, 10, 25, 50]}
+        rows={100}
+        rowsPerPageOptions={[50, 100, 250, 500]}
         onSelectionChange={(e) => setAdmRoll(e.value)}
         onRowSelect={onRowSelect}
         onRowUnselect={onRowUnselect}
