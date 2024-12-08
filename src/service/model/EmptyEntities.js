@@ -5,7 +5,8 @@ const EmptyEntities =
       "site": null,
       "code": "",
       "text": "",
-      "valid": null
+      "valid": null,
+      "maxticket01": "10"
     },
     "adm_action_v": {
       "id": null,

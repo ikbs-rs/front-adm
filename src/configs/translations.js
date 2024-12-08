@@ -325,6 +325,7 @@ export const translations = {
         Tp: "Тип",
         password: "Лозинка",
         Param: "Спец. параметар",
+        MaxTicker: "Максимални број карти"
     }
   };
   

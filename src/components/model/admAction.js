@@ -157,6 +157,16 @@ const AdmAction = (props) => {
                             />
                             {submitted && !admAction.textx && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
                         </div>
+                        <div className="field col-12 md:col-9">
+                            <label htmlFor="maxticket01">{translations[selectedLanguage].MaxTicker}</label>
+                            <InputText
+                                id="maxticket01"
+                                value={admAction.maxticket01} onChange={(e) => onInputChange(e, "text", 'maxticket01')}
+                                required
+                                className={classNames({ 'p-invalid': submitted && !admAction.maxticket01})}
+                            />
+                            {submitted && !admAction.maxticket01 && <small className="p-error">{translations[selectedLanguage].Requiredfield}</small>}
+                        </div>                        
                         <div className="field col-12 md:col-4">
                             <label htmlFor="valid">{translations[selectedLanguage].Valid}</label>
                             <Dropdown id="valid"
