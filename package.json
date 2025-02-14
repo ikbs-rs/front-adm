@@ -37,6 +37,7 @@
         "bdev": "copy .\\src\\configs\\env.bdev.local .\\src\\configs\\env.js && set PORT=8352 && react-scripts start /adm/",
         "sdev": "copy .\\src\\configs\\env.sdev.local .\\src\\configs\\env.js && set PORT=8352 && react-scripts start /adm/",
         "devTic": "cp ./src/configs/env.devTic.local ./src/configs/env.js && export PORT=8352 && react-scripts start /adm/",
+        "devTicT": "cp ./src/configs/env.devTicT.local ./src/configs/env.js && export PORT=8352 && react-scripts start /cmn/",
         "boban": "copy .\\src\\configs\\env.boban.local .\\src\\configs\\env.js && set PORT=8352 && react-scripts start /adm/",
         "prod": "copy .\\src\\configs\\env.prod.local .\\src\\configs\\env.js && set PORT=8352 && react-scripts start /adm/",
         "build": "cp ./src/configs/env.devTic.local ./src/configs/env.js && export PORT=8352 && export GENERATE_SOURCEMAP=false && react-scripts build",
