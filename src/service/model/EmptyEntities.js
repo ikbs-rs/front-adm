@@ -119,6 +119,25 @@ const EmptyEntities =
       "text": "",
       "valid": null
     },
+    "adm_useratt": {
+      "id": null,
+      "site": null,
+      "code": "",
+      "text": "",
+      "tp": "",
+      "valid": null
+    },
+    "adm_useratts": {
+      "id": null,
+      "site": null,
+      "usr": null,
+      "att": null,
+      "text": "",
+      "vrednost": "",
+      "zzcode": "",
+      "begda": "",
+      "endda": ""
+    },
     "adm_userlink": {
       "id": null,
       "site": null,

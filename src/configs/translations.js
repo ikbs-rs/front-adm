@@ -325,7 +325,13 @@ export const translations = {
         Tp: "Тип",
         password: "Лозинка",
         Param: "Спец. параметар",
-        MaxTicker: "Максимални број карти"
+        MaxTicker: "Максимални број карти",
+        Useratt: "Особина корисника",
+        UserattLista: "Особине корисника Листа",
+        Useratts: "Особина корисника",
+        UserattsList: "Особине корисника Листа",
+        zzcode: "ZZ код",
+        vrednost: "Вредност",
     }
   };
   

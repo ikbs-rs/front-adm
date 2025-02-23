@@ -11,6 +11,7 @@ import { AdmUserService } from "../../service/model/AdmUserService";
 import AdmUser from './admUser';
 import AdmUserPermissL from './admUserPermissL';
 import AdmParuserL from './admParuserL';
+import AdmUserattsL from './admUserattsL';
 import { EmptyEntities } from '../../service/model/EmptyEntities';
 import { Dialog } from 'primereact/dialog';
 import './index.css';
@@ -30,7 +31,11 @@ export default function AdmUserL(props) {
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
   const [admUserPermissLVisible, setAdmUserPermissLVisible] = useState(false);
+  const [admUserattLVisible, setAdmUserattLVisible] = useState(false);
+
   const [admParuserLVisible, setAdmParuserLVisible] = useState(false);
+  const [admUserattsLVisible, setAdmUserattsLVisible] = useState(false);
+  
   const [userTip, setUserTip] = useState('');
 
   useEffect(() => {
@@ -79,6 +84,10 @@ export default function AdmUserL(props) {
   const handleAdmParuserLDialogClose = (newObj) => {
     const localObj = { newObj };
   };
+  
+  const handleAdmUserattsLDialogClose = (newObj) => {
+    const localObj = { newObj };
+  };  
 
   const findIndexById = (id) => {
     let index = -1;
@@ -101,6 +110,9 @@ export default function AdmUserL(props) {
     setAdmUserPermissLDialog();
   };
 
+  const openUseratts = () => {
+    setAdmUserattsLDialog();
+  };
   const openParUser = () => {
     setAdmParuserLDialog();
   };
@@ -174,7 +186,10 @@ export default function AdmUserL(props) {
         </div>  
         <div className="flex flex-wrap gap-1">
           <Button label={translations[selectedLanguage].Partner} icon="pi pi-user-plus"  onClick={openParUser} text raised disabled={!admUser}/>
-        </div>               
+        </div>   
+        <div className="flex flex-wrap gap-1">
+          <Button label={translations[selectedLanguage].Useratt} icon="pi pi-user-plus"  onClick={openUseratts} text raised disabled={!admUser}/>
+        </div>                    
         <div className="flex-grow-1" />
         <b>{translations[selectedLanguage].UsersList}</b>
         <div className="flex-grow-1"></div>
@@ -242,7 +257,13 @@ export default function AdmUserL(props) {
     setAdmUserPermissLVisible(true);
 
   }  
+  
+  const setAdmUserattsLDialog = () => {
+    setShowMyComponent(true);
+    setAdmUserattsLVisible(true);
+    console.log("ATTS")
 
+  }   
   const setAdmParuserLDialog = () => {
     setShowMyComponent(true);
     setAdmParuserLVisible(true);
@@ -416,7 +437,27 @@ export default function AdmUserL(props) {
             lookUp={false}
           />
         )}
-      </Dialog>         
+      </Dialog>    
+      <Dialog
+        header={translations[selectedLanguage].UserattsList}
+        visible={admUserattsLVisible}
+        style={{ width: '70%' }}
+        onHide={() => {
+          setAdmUserattsLVisible(false);
+          setShowMyComponent(false);
+        }}
+      >
+        {admUserattsLVisible && (
+          <AdmUserattsL
+            parameter={"inputTextValue"}
+            admUser={admUser}
+            handleAdmUserattLDialogClose={handleAdmUserattsLDialogClose}
+            setAdmUserattsLVisible={setAdmUserattsLVisible}
+            dialog={true}
+            lookUp={false}
+          />
+        )}
+      </Dialog>            
     </div>
   );
 }

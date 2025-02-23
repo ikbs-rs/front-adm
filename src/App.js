@@ -11,6 +11,7 @@ import AppMenu from './AppMenu';
 import AppRightMenu from './AppRightMenu';
 
 import UserGrp from './components/model/admUserGrpL';
+import Useratt from './components/model/admUserattL';
 import LocTP from './components/model/cmnLoctpL';
 import User from './components/model/admUserL';
 import Roll from './components/model/admRollL';
@@ -66,6 +67,7 @@ const App = () => {
             label: translations[selectedLanguage].ACCESS_PERMISSION,
             icon: 'pi pi-fw pi-star-fill',
             items: [
+                { label: translations[selectedLanguage].Useratt, icon: 'pi pi-fw pi-id-card', to: '/useratt' },
                 { label: translations[selectedLanguage].Usergroups, icon: 'pi pi-fw pi-id-card', to: '/usergrp' },
                 { label: translations[selectedLanguage].Users, icon: 'pi pi-users', to: '/user' },
                 { label: translations[selectedLanguage].Rolls, icon: 'pi pi-fw pi-bookmark', to: '/roll' },
@@ -441,6 +443,7 @@ const App = () => {
                 <div className="layout-content">
                     <Routes>
                         <Route path="/" element={<EmptyPage />} />
+                        <Route path="/useratt" element={<Useratt />} />
                         <Route path="/usergrp" element={<UserGrp />} />
                         <Route path="/user" element={<User />} />
                         <Route path="/roll" element={<Roll />} />
